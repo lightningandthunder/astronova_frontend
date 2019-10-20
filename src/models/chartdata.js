@@ -1,6 +1,6 @@
 export default class Chartdata {
     constructor(data) {
-        this.name = data.local_datetime //default value
+        this.name = data.local_datetime  // default value
         this.ecliptical = data.ecliptical;
         this.mundane = data.mundane;
         this.right_ascension = data.right_ascension;
