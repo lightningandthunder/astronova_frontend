@@ -2,20 +2,16 @@ import React from 'react';
 import Cleave from 'cleave.js/react';
 
 export default class Datepicker extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {date: new Date()}
-    }
-
     render() {
         return (
-            <div className="datepicker">
+            <div>
                 <Cleave
-                    placeholder="YYYY-mm-dd"
+                className="datepicker"
+                onChange={this.props.onChange}
+                    placeholder="YYYY-mm-dd|hh:mm (please use 24h time)"
                     options={{
-                        date: true,
-                        datePattern: ['Y', 'm', 'd'],
-                        delimiter: '-',
+                        blocks: [4, 2, 2, 2, 2],
+                        delimiters: ['-', '-', 'T', ':']
                     }}
                 />
             </div>
