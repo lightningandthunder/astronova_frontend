@@ -11,6 +11,7 @@ import geosearch from './utils/geosearch';
 import RadixQuery from './models/RadixQuery';
 import RemoveButton from './removeButton';
 import { QUERY_HEADERS, API_ADDRESS } from './settings';
+import LocationInput from './LocationInput';
 
 class App extends React.Component {
     constructor(props) {
@@ -18,14 +19,16 @@ class App extends React.Component {
         this.state = {
             charts: [],
             selectedChart: undefined,
-            currentSelectedDatetime: undefined
+            currentSelectedDatetime: undefined,
+            locationInput: undefined
         }
 
-        this.postToRestApi = this.postToRestApi.bind(this);
+        this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
         this.addChartToState = this.saveChart.bind(this);
         this.onChangeSelectedChart = this.onChangeSelectedChart.bind(this);
         this.onDateTimeChange = this.onDateTimeChange.bind(this);
         this.resetCharts = this.resetCharts.bind(this);
+        this.onChangeLocation = this.onChangeLocation.bind(this);
     }
 
     componentDidMount() {
@@ -37,7 +40,7 @@ class App extends React.Component {
 
         const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
         if (selectedChartFromLS) {
-            this.setState({selectedChart: selectedChartFromLS});
+            this.setState({ selectedChart: selectedChartFromLS });
             console.log("Loaded selected chart from LS: " + selectedChartFromLS.name)
         }
         else
@@ -50,10 +53,10 @@ class App extends React.Component {
 
     saveChart(chart) {
         // Saves to both state and localStorage
-        this.setState({ charts: [...this.state.charts, chart] }, 
+        this.setState({ charts: [...this.state.charts, chart] },
             () => {
-            localStorage.setItem('charts', JSON.stringify(this.state.charts));
-            console.log("Saved charts to LS: " + this.state.charts.length);
+                localStorage.setItem('charts', JSON.stringify(this.state.charts));
+                console.log("Saved charts to LS: " + this.state.charts.length);
             }
         );
     }
@@ -68,9 +71,15 @@ class App extends React.Component {
         );
     }
 
+    onChangeLocation(e) {
+        this.setState({ locationInput: e.target.value });
+    }
+
     resetCharts() {
         localStorage.removeItem('charts');
+        localStorage.removeItem('selectedChart')
         this.setState({ charts: [] });
+        this.setState({ selectedChart: undefined })
     }
 
     onDateTimeChange(e) {
@@ -81,15 +90,25 @@ class App extends React.Component {
         this.setState({ currentSelectedDatetime: dt ? new Date(dt) : undefined });
     }
 
-    async postToRestApi() {
+    async queryBackendForRadix() {
+        // Query back end for a single chart.
+
         if (!this.state.currentSelectedDatetime) {
             alert("Invalid datetime!");
             return;
         }
+        const query = this.state.locationInput;
+        const locationResults = await geosearch(query);
+        if (!locationResults) {
+            alert("No location found!");
+            return;
+        }
+
+        console.log(locationResults);
 
         const response = await axios.post(
             API_ADDRESS + "/radix",
-            new RadixQuery(this.state.currentSelectedDatetime, "-50.0356", "60.889", "America/New_York"),
+            new RadixQuery(this.state.currentSelectedDatetime, locationResults.longitude, locationResults.latitude, locationResults.tz),
             { headers: QUERY_HEADERS }
         );
 
@@ -97,8 +116,9 @@ class App extends React.Component {
             const newChart = new Chartdata(response.data);
             // newChart.setName(name);
             this.saveChart(newChart);
-            if (this.state.charts.length === 1)
-                this.onChangeSelectedChart({ target: { value: 0 } }) // Need to figure out an alternate way eventually
+
+            // Select the new chart. Need to figure out an alternate way eventually.
+            this.onChangeSelectedChart({ target: { value: this.state.charts.length - 1 } })
         } catch (err) {
             console.log(err)
         }
@@ -107,10 +127,10 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <button onClick={geosearch}>Geosearch</button>
                 <RawChartData chart={this.state.selectedChart} />
                 <Datepicker onChange={this.onDateTimeChange} />
-                <CalcButton onClick={this.postToRestApi} />
+                <LocationInput updateLocation={this.onChangeLocation} />
+                <CalcButton onClick={this.queryBackendForRadix} />
                 <Chartlist charts={this.state.charts ? this.state.charts : []} onChange={this.onChangeSelectedChart} />
                 <RemoveButton onClick={this.resetCharts} />
             </div>

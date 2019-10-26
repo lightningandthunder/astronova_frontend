@@ -3,10 +3,12 @@
 ** originally written by Armando Magalhães
 */
 
-import axios from "axios";
+import Location from '../models/Location';
 
-export default async function geosearch (query)  {
-    const q = "san francisco, california"
+import axios from "axios";
+import tzsearch from './tzsearch';
+
+export default async function geosearch (q)  {
     const limit = "1";
     const params = new URLSearchParams({
         q,
@@ -17,9 +19,16 @@ export default async function geosearch (query)  {
 
     const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
     const res = await axios.get(endpoint);
+    if (res.data.length === 0)
+        return undefined;
+    else
+        res.data = res.data[0]; // Take the first location
+
     try {
         console.log(res);
-        return res;
+        const tz = tzsearch(res.data.lon, res.data.lat)
+        res.tz = tz;
+        return new Location(res);
     } catch (err) {
         throw new Error(`Geocoding failed: ${err}`)
     }
