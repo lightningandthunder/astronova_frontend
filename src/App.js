@@ -4,7 +4,7 @@ import Datepicker from './datepicker';
 import './App.css';
 import axios from 'axios';
 import CalcButton from './calculatebutton';
-import Chartdata from './models/chartdata';
+import Chartdata from './models/ChartData';
 import Chartlist from './chartlist';
 import RawChartData from './rawchartdata';
 import geosearch from './utils/geosearch';
@@ -34,6 +34,7 @@ class App extends React.Component {
 
     componentWillUnmount() {
         localStorage.setItem('Charts', JSON.stringify(this.state.charts));
+        console.log(localStorage.getItem('Charts'));
     }
 
     addChartToState(chart) {
@@ -58,15 +59,12 @@ class App extends React.Component {
             return;
         }
 
-        const dt = new Date(this.state.currentSelectedDatetime);
-        console.log(dt);
-
         const response = await axios.post(
             "http://localhost:5000/radix",
             {
-                local_datetime: dt,
-                longitude: "-74.0356",
-                latitude: "40.889",
+                local_datetime: this.state.currentSelectedDatetime,
+                longitude: "-50.0356",
+                latitude: "60.889",
                 tz: "America/New_York"
             },
             { headers: { "Content-Type": "application/json" } }
