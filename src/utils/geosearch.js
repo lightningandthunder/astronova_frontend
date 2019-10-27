@@ -15,17 +15,18 @@ export default async function geosearch (q)  {
         limit,
         format: "json"
     });
-    console.log(params.toString());
 
     const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
     const res = await axios.get(endpoint);
+
+    console.log(res);
+    
     if (res.data.length === 0)
         return undefined;
     else
         res.data = res.data[0]; // Take the first location
 
     try {
-        console.log(res);
         const tz = tzsearch(res.data.lon, res.data.lat)
         res.tz = tz;
         return new Location(res);

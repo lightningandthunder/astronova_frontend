@@ -4,14 +4,15 @@ import Datepicker from './datepicker';
 import './App.css';
 import axios from 'axios';
 import CalcButton from './calculatebutton';
-import Chartdata from './models/ChartData';
+import ChartManager from './managers/ChartDataManager';
 import Chartlist from './chartlist';
 import RawChartData from './rawchartdata';
 import geosearch from './utils/geosearch';
-import RadixQuery from './models/RadixQuery';
 import RemoveButton from './removeButton';
 import { QUERY_HEADERS, API_ADDRESS } from './settings';
 import LocationInput from './LocationInput';
+
+const manager = new ChartManager();
 
 class App extends React.Component {
     constructor(props) {
@@ -30,6 +31,8 @@ class App extends React.Component {
         this.resetCharts = this.resetCharts.bind(this);
         this.onChangeLocation = this.onChangeLocation.bind(this);
     }
+
+    /* ================ Lifecycle hooks ================ */
 
     componentDidMount() {
         const chartsArray = JSON.parse(localStorage.getItem('charts'));
@@ -50,6 +53,8 @@ class App extends React.Component {
     componentWillUnmount() {
     }
 
+
+    /* ================ Other methods ================ */
 
     saveChart(chart) {
         // Saves to both state and localStorage
@@ -97,24 +102,32 @@ class App extends React.Component {
             alert("Invalid datetime!");
             return;
         }
-        const query = this.state.locationInput;
-        const locationResults = await geosearch(query);
+        const locationQuery = this.state.locationInput;
+        if (locationQuery.length === 0 || locationQuery.trim().length === 0) {
+            alert("Invalid location");
+            return;
+        }
+
+        const locationResults = await geosearch(locationQuery);
         if (!locationResults) {
             alert("No location found!");
             return;
         }
-
-        console.log(locationResults);
+        
+        const radixQuery = manager.createRadixQueryFromRaw(this.state.currentSelectedDatetime,
+            locationResults.longitude,
+            locationResults.latitude,
+            locationResults.tz);
 
         const response = await axios.post(
             API_ADDRESS + "/radix",
-            new RadixQuery(this.state.currentSelectedDatetime, locationResults.longitude, locationResults.latitude, locationResults.tz),
+            radixQuery,
             { headers: QUERY_HEADERS }
         );
 
         try {
-            const newChart = new Chartdata(response.data);
-            // newChart.setName(name);
+            const newChart = manager.createChartData(response.data);
+            console.log(newChart);
             this.saveChart(newChart);
 
             // Select the new chart. Need to figure out an alternate way eventually.
@@ -122,6 +135,18 @@ class App extends React.Component {
         } catch (err) {
             console.log(err)
         }
+    }
+
+    async queryBackendForReturn() {
+        // const planet = "Sun";
+        // const harmonic = "1";
+        // const startDate = new Date("2019-12-20T00:00")
+        // const inputRadix = this.state.selectedChart;
+
+        // const response = await axios.post(
+        //     API_ADDRESS + "/returns",
+
+        // );
     }
 
     render() {

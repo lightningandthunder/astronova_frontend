@@ -13,10 +13,7 @@ export default class Chartdata {
         this.lst = data.lst;
         this.ramc = data.ramc;
         this.svp = data.svp;
+        this.local_datetime = data.local_datetime;
+        this.tz = data.tz;
     }
-
-    setName(name) {
-        this.name = name;
-    }
-
 }
