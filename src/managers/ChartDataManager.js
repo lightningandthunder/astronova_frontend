@@ -1,9 +1,11 @@
 import ChartData from "../models/ChartData";
 import RadixQuery from "../models/RadixQuery";
+import { TIMEZONES } from "../settings";
+import ReturnParams from "../models/ReturnParams";
+import ReturnQuery from "../models/ReturnQuery";
 
 export default class ChartManager {
     createChartData(data) {
-        // Validations
         const expectedProperties = [
             "local_datetime",
             "ecliptical",
@@ -42,7 +44,93 @@ export default class ChartManager {
         return this.createRadixQueryFromRaw(radix.local_datetime, radix.longitude, radix.latitude, radix.tz)
     }
 
+    createReturnParams(return_planet, return_harmonic, return_longitude,
+        return_latitude, return_start_date, tz, return_quantity) {
+        this.validateReturnParams(return_planet, return_harmonic, return_longitude,
+            return_latitude, return_start_date, tz, return_quantity);
+        return new ReturnParams(return_planet, return_harmonic, return_longitude,
+            return_latitude, return_start_date, tz, return_quantity);
+    }
+
+    createReturnQuery(radix, return_planet, return_harmonic, return_longitude,
+        return_latitude, return_start_date, tz, return_quantity) {
+
+        const radixQ = this.createRadixQueryFromChartData(radix);
+        const returnParams = this.createReturnParams(return_planet, return_harmonic, return_longitude,
+            return_latitude, return_start_date, tz, return_quantity);
+        return new ReturnQuery(radixQ, returnParams);
+    }
+
+    /* ================== Query models =================  */
+
+
+
+    /* ================== Chart models =================  */
+
+
+
     /* ================== Validations ==================  */
+
+    validateInt(initialValue, varName) {
+        let x = NaN;
+        try {
+            x = parseInt(initialValue);
+        } catch (err) {
+            throw new Error(`Error while validating ${varName} as int: ${err}`);
+        }
+
+        if (isNaN(x))
+            throw new Error(`Unable to convert ${varName} to int with value ${initialValue}`)
+    }
+
+    validateFloat(initialValue, varName) {
+        let x = NaN;
+        try {
+            x = parseFloat(initialValue);
+        } catch (err) {
+            throw new Error(`Error while validating ${varName} as float: ${err}`);
+        }
+
+        if (isNaN(x))
+            throw new Error(`Unable to convert ${varName} to float with value ${initialValue}`)
+    }
+
+    validateDate(initialValue, varName) {
+        let x = NaN;
+        try {
+            x = new Date(initialValue);
+        } catch (err) {
+            throw new Error(`Error while validating ${varName} as date: ${err}`);
+        }
+
+        if (isNaN(x) || x.toString() === "Invalid Date")
+            throw new Error(`Unable to convert ${varName} to date with value ${initialValue}`);
+    }
+
+    validateTz(tz) {
+        if (!TIMEZONES.has(tz))
+            throw new Error(`${tz} is not a valid timezone`);
+    }
+
+    validateReturnParams(return_planet, return_harmonic, return_longitude,
+        return_latitude, return_start_date, tz, return_quantity) {
+        if (!(return_planet === "Sun" || return_planet === "Moon"))
+            throw new Error(`Valid inputs for returns are "Sun" or "Moon"; received ${return_planet}`);
+
+        this.validateInt(return_harmonic, "return_harmonic");
+        this.validateFloat(return_longitude, "return_longitude");
+        this.validateFloat(return_latitude, "return_latitude");
+        this.validateDate(return_start_date, "return_start_date")
+        this.validateTz(tz);
+        this.validateInt(return_quantity, "return_quantity");
+    }
+
+    validateRadixQuery(local_dt, longitude, latitude, tz) {
+        this.validateDate(local_dt, "local_dt");
+        this.validateFloat(longitude, "longitude");
+        this.validateFloat(latitude, "latitude");
+        this.validateTz(tz);
+    }
 
     validateExpectedProperties(expectedProperties, obj) {
         if (!(expectedProperties instanceof Array))
@@ -54,37 +142,5 @@ export default class ChartManager {
             else if (!obj[p])
                 throw new Error(`Data has null or undefined property: ${p}`);
         });
-    }
-
-    validateRadixQuery(local_dt, longitude, latitude, tz) {
-        /* These "conversions" will work even if the variable is already the correct type.
-        ** Everything will get stringified into JSON for communication with the back end, 
-        ** of course, but if we can't parse a date from this local_dt value, for instance, 
-        ** neither can the back end. 
-        */
-
-        try {
-            local_dt = new Date(local_dt);
-        } catch (err) {
-            throw new Error("local_dt cannot be converted to date: " + err);
-        }
-
-        try {
-            longitude = parseFloat(longitude);
-        } catch (err) {
-            throw new Error("longitude cannot be converted to float: " + err);
-        }
-
-        try {
-            latitude = parseFloat(latitude);
-        } catch (err) {
-            throw new Error("latitude cannot be converted to float: " + err);
-        }
-
-        if (typeof (tz) !== "string") {
-            throw new Error("tz must be a string");
-        } else if (tz.trim().length === 0) {
-            throw new Error("tz cannot be empty string");
-        }
     }
 }

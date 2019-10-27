@@ -30,6 +30,7 @@ class App extends React.Component {
         this.onDateTimeChange = this.onDateTimeChange.bind(this);
         this.resetCharts = this.resetCharts.bind(this);
         this.onChangeLocation = this.onChangeLocation.bind(this);
+        this.queryBackendForReturn = this.queryBackendForReturn.bind(this);
     }
 
     /* ================ Lifecycle hooks ================ */
@@ -113,7 +114,7 @@ class App extends React.Component {
             alert("No location found!");
             return;
         }
-        
+
         const radixQuery = manager.createRadixQueryFromRaw(this.state.currentSelectedDatetime,
             locationResults.longitude,
             locationResults.latitude,
@@ -138,15 +139,23 @@ class App extends React.Component {
     }
 
     async queryBackendForReturn() {
-        // const planet = "Sun";
-        // const harmonic = "1";
-        // const startDate = new Date("2019-12-20T00:00")
-        // const inputRadix = this.state.selectedChart;
+        const planet = "Sun";
+        const harmonic = "1";
+        const startDate = new Date("2019-12-20T00:00")
+        const inputRadix = this.state.selectedChart;
+        if (!inputRadix)
+            alert("No base chart selected!");
+            
+        const query = manager.createReturnQuery(inputRadix, planet, harmonic, inputRadix.longitude,
+            inputRadix.latitude, startDate, inputRadix.tz, 1)
 
-        // const response = await axios.post(
-        //     API_ADDRESS + "/returns",
+        const response = await axios.post(
+            API_ADDRESS + "/returns",
+            query,
+            { headers: QUERY_HEADERS }
+        );
 
-        // );
+        console.log(response);
     }
 
     render() {
@@ -158,6 +167,7 @@ class App extends React.Component {
                 <CalcButton onClick={this.queryBackendForRadix} />
                 <Chartlist charts={this.state.charts ? this.state.charts : []} onChange={this.onChangeSelectedChart} />
                 <RemoveButton onClick={this.resetCharts} />
+                <button onClick={this.queryBackendForReturn}>Returns</button>
             </div>
         );
     }
