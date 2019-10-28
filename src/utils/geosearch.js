@@ -19,7 +19,7 @@ export default async function geosearch (q)  {
     const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
     const res = await axios.get(endpoint);
 
-    console.log(res);
+    console.log(`Geosearch result: ${res}`);
     
     if (res.data.length === 0)
         return undefined;

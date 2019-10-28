@@ -1,11 +1,16 @@
-import ChartData from "../models/ChartData";
+import Uniwheel from "../models/Uniwheel";
+import Biwheel from "../models/Biwheel";
 import RadixQuery from "../models/RadixQuery";
 import { TIMEZONES } from "../settings";
 import ReturnParams from "../models/ReturnParams";
 import ReturnQuery from "../models/ReturnQuery";
+import moment from "moment";
 
 export default class ChartManager {
-    createChartData(data) {
+
+    /* ================== Chart models =================  */
+
+    createUniwheel(data) {
         const expectedProperties = [
             "local_datetime",
             "ecliptical",
@@ -24,15 +29,52 @@ export default class ChartManager {
         ];
 
         this.validateExpectedProperties(expectedProperties, data);
-        return new ChartData(data);
+        const uniwheel = new Uniwheel(data);
+        uniwheel.name = `${moment(data.local_datetime).format("YYYY/MM/DD")}`
+        return uniwheel;
     }
+
+    createBiwheel(data) {
+        const expectedPropertiesTopLevel = [
+            "radix",
+            "return_chart"
+        ];
+
+        this.validateExpectedProperties(expectedPropertiesTopLevel, data);
+        const expectedProperties = [
+            "local_datetime",
+            "ecliptical",
+            "mundane",
+            "right_ascension",
+            "angles",
+            "cusps",
+            "julian_day",
+            "latitude",
+            "longitude",
+            "obliquity",
+            "lst",
+            "ramc",
+            "svp",
+            "tz"
+        ];
+
+        this.validateExpectedProperties(expectedProperties, data.radix);
+        this.validateExpectedProperties(expectedProperties, data.return_chart);
+        const radix = this.createUniwheel(data.radix);
+        const returnChart = this.createUniwheel(data.return_chart);
+        const biwheel = new Biwheel(radix, returnChart);
+        biwheel.name = `${radix.name} return ${moment(returnChart.local_datetime).format("YYYY/MM/DD")}`;
+        return biwheel;
+    }
+
+    /* ================== Query models =================  */
 
     createRadixQueryFromRaw(local_dt, longitude, latitude, tz) {
         this.validateRadixQuery(local_dt, longitude, latitude, tz);
         return new RadixQuery(local_dt, longitude, latitude, tz);
     }
 
-    createRadixQueryFromChartData(radix) {
+    createRadixQueryFromUniwheel(radix) {
         const expectedProperties = [
             "local_datetime",
             "longitude",
@@ -55,19 +97,11 @@ export default class ChartManager {
     createReturnQuery(radix, return_planet, return_harmonic, return_longitude,
         return_latitude, return_start_date, tz, return_quantity) {
 
-        const radixQ = this.createRadixQueryFromChartData(radix);
+        const radixQ = this.createRadixQueryFromUniwheel(radix);
         const returnParams = this.createReturnParams(return_planet, return_harmonic, return_longitude,
             return_latitude, return_start_date, tz, return_quantity);
         return new ReturnQuery(radixQ, returnParams);
     }
-
-    /* ================== Query models =================  */
-
-
-
-    /* ================== Chart models =================  */
-
-
 
     /* ================== Validations ==================  */
 

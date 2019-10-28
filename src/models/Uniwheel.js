@@ -1,6 +1,5 @@
-export default class Chartdata {
+export default class Uniwheel {
     constructor(data) {
-        this.name = data.name ? data.name : data.local_datetime  // default value
         this.ecliptical = data.ecliptical;
         this.mundane = data.mundane;
         this.right_ascension = data.right_ascension;
@@ -15,5 +14,8 @@ export default class Chartdata {
         this.svp = data.svp;
         this.local_datetime = data.local_datetime;
         this.tz = data.tz;
+        this.type = "Uniwheel";
+        this.name = "Uniwheel" // default value
     }
 }
+

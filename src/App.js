@@ -55,7 +55,7 @@ class App extends React.Component {
     }
 
 
-    /* ================ Other methods ================ */
+    /* ================ onChange methods ================ */
 
     saveChart(chart) {
         // Saves to both state and localStorage
@@ -77,15 +77,13 @@ class App extends React.Component {
         );
     }
 
-    onChangeLocation(e) {
-        this.setState({ locationInput: e.target.value });
+    setSelectedChartToNewest() {
+        // Select the new chart. Need to figure out an alternate way eventually.
+        this.onChangeSelectedChart({ target: { value: this.state.charts.length - 1 } });
     }
 
-    resetCharts() {
-        localStorage.removeItem('charts');
-        localStorage.removeItem('selectedChart')
-        this.setState({ charts: [] });
-        this.setState({ selectedChart: undefined })
+    onChangeLocation(e) {
+        this.setState({ locationInput: e.target.value });
     }
 
     onDateTimeChange(e) {
@@ -96,6 +94,16 @@ class App extends React.Component {
         this.setState({ currentSelectedDatetime: dt ? new Date(dt) : undefined });
     }
 
+    // This should be in another section; will eventually reorganize
+    resetCharts() {
+        localStorage.removeItem('charts');
+        localStorage.removeItem('selectedChart')
+        this.setState({ charts: [] });
+        this.setState({ selectedChart: undefined })
+    }
+
+    /* ================ Query methods ================ */
+
     async queryBackendForRadix() {
         // Query back end for a single chart.
 
@@ -104,7 +112,7 @@ class App extends React.Component {
             return;
         }
         const locationQuery = this.state.locationInput;
-        if (locationQuery.length === 0 || locationQuery.trim().length === 0) {
+        if (!locationQuery || locationQuery.length === 0 || locationQuery.trim().length === 0) {
             alert("Invalid location");
             return;
         }
@@ -127,27 +135,25 @@ class App extends React.Component {
         );
 
         try {
-            const newChart = manager.createChartData(response.data);
+            const newChart = manager.createUniwheel(response.data);
             console.log(newChart);
             this.saveChart(newChart);
-
-            // Select the new chart. Need to figure out an alternate way eventually.
-            this.onChangeSelectedChart({ target: { value: this.state.charts.length - 1 } })
+            this.setSelectedChartToNewest();
         } catch (err) {
             console.log(err)
         }
     }
 
     async queryBackendForReturn() {
-        const planet = "Sun";
-        const harmonic = "1";
+        const planet = "Moon";
+        const harmonic = "4";
         const startDate = new Date("2019-12-20T00:00")
         const inputRadix = this.state.selectedChart;
         if (!inputRadix)
             alert("No base chart selected!");
-            
+
         const query = manager.createReturnQuery(inputRadix, planet, harmonic, inputRadix.longitude,
-            inputRadix.latitude, startDate, inputRadix.tz, 1)
+            inputRadix.latitude, startDate, inputRadix.tz, 4)
 
         const response = await axios.post(
             API_ADDRESS + "/returns",
@@ -155,7 +161,22 @@ class App extends React.Component {
             { headers: QUERY_HEADERS }
         );
 
-        console.log(response);
+        let charts = response.data;
+        try {
+            if (charts.length === 0) {
+                alert("No charts to create!");
+                return;
+            }
+            console.log(charts);
+            for (let c = 0; c < charts.length; c++) {
+                const newChart = manager.createBiwheel(charts[c]);
+                this.saveChart(newChart);
+            }
+
+            this.setSelectedChartToNewest();
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     render() {
