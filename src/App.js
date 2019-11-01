@@ -11,6 +11,7 @@ import geosearch from './utils/geosearch';
 import RemoveButton from './removeButton';
 import { QUERY_HEADERS, API_ADDRESS } from './settings';
 import LocationInput from './LocationInput';
+import NewChartPopup from './NewChartPopup';
 
 const manager = new ChartManager();
 
@@ -182,6 +183,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
+                <NewChartPopup />
                 <RawChartData chart={this.state.selectedChart} />
                 <Datepicker onChange={this.onDateTimeChange} />
                 <LocationInput updateLocation={this.onChangeLocation} />
