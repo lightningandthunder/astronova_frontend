@@ -1,16 +1,13 @@
 import React from 'react';
 // import Chart from './chart';
-import './App.css';
-import axios from 'axios';
-import ChartManager from './managers/ChartDataManager';
+import './styles/App.css';
 import Chartlist from './chartlist';
 import RawChartData from './rawchartdata';
 import RemoveButton from './removeButton';
-import { QUERY_HEADERS, API_ADDRESS } from './settings';
 import NewChartPopup from './NewChartPopup';
+import ReturnChartPopup from './ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
 
-const manager = new ChartManager();
 
 class App extends React.Component {
     constructor(props) {
@@ -22,7 +19,6 @@ class App extends React.Component {
 
         this.addChartToState = this.saveChart.bind(this);
         this.onChangeSelectedChart = this.onChangeSelectedChart.bind(this);
-        this.queryBackendForReturn = this.queryBackendForReturn.bind(this);
         this.resetCharts = this.resetCharts.bind(this);
         this.saveChart = this.saveChart.bind(this);
         this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
@@ -83,42 +79,6 @@ class App extends React.Component {
         this.setState({ selectedChart: undefined })
     }
 
-    /* ================ Query methods ================ */
-
-    async queryBackendForReturn() {
-        const planet = "Moon";
-        const harmonic = "4";
-        const startDate = new Date("2019-12-20T00:00")
-        const inputRadix = this.state.selectedChart;
-        if (!inputRadix)
-            alert("No base chart selected!");
-
-        const query = manager.createReturnQuery(inputRadix, planet, harmonic, inputRadix.longitude,
-            inputRadix.latitude, startDate, inputRadix.tz, 4)
-
-        const response = await axios.post(
-            API_ADDRESS + "/returns",
-            query,
-            { headers: QUERY_HEADERS }
-        );
-
-        let charts = response.data;
-        try {
-            if (charts.length === 0) {
-                alert("No charts to create!");
-                return;
-            }
-            logIfDevelopment(charts);
-            for (let c = 0; c < charts.length; c++) {
-                const newChart = manager.createBiwheel(charts[c]);
-                this.saveChart(newChart);
-            }
-
-            this.setSelectedChartToNewest();
-        } catch (err) {
-            logIfDevelopment(err)
-        }
-    }
 
     render() {
         return (
@@ -132,8 +92,16 @@ class App extends React.Component {
                     saveChart={this.saveChart}
                     setSelectedChartToNewest={this.setSelectedChartToNewest}
                 />
+                { this.state.selectedChart 
+                ?
+                    <ReturnChartPopup
+                        saveChart={this.saveChart}
+                        setSelectedChartToNewest={this.setSelectedChartToNewest}
+                        selectedChart={this.state.selectedChart}
+                    />
+                    : <div></div>
+                }
                 <RemoveButton onClick={this.resetCharts} />
-                <button onClick={this.queryBackendForReturn}>Returns</button>
             </div>
         );
     }

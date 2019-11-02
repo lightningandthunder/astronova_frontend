@@ -60,6 +60,7 @@ export default class NewChartPopup extends React.Component {
 
     async queryBackendForRadix() {
         // Query back end for a single chart.
+        
         if (!this.validateDateTime()) {
             this.handleError("Invalid datetime!");
             return;

@@ -75,6 +75,9 @@ export default class ChartManager {
     }
 
     createRadixQueryFromUniwheel(radix) {
+        if (radix.type !== "Uniwheel")
+            throw new Error(`Radix must be instance of Uniwheel, not ${radix.type}`);
+
         const expectedProperties = [
             "local_datetime",
             "longitude",
@@ -172,7 +175,7 @@ export default class ChartManager {
 
         expectedProperties.forEach(p => {
             if (!obj.hasOwnProperty(p))
-                throw new Error(`Data is missing expected property: ${p}. Data: ${obj}`);
+                throw new Error(`Data is missing expected property: ${p}. Data: ${obj.toString()}`);
             else if (!obj[p])
                 throw new Error(`Data has null or undefined property: ${p}`);
         });
