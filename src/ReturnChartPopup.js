@@ -152,6 +152,7 @@ export default class ReturnChartPopup extends React.Component {
         const query = manager.createReturnQuery(inputRadix, planet, harmonic, locationResults.longitude,
             locationResults.latitude, this.state.currentSelectedDatetime, locationResults.tz, quantity)
 
+        logIfDevelopment("Return query: ", query);
         const response = await axios.post(
             API_ADDRESS + "/returns",
             query,
@@ -200,16 +201,16 @@ export default class ReturnChartPopup extends React.Component {
                         </select>
                         <select label="Harmonic" onChange={this.handleHarmonicChange}>
                             {this.state.planetInput === "Sun"
-                                ? [1, 2, 4, 9, 36].map((item, index) => (
-                                    <option value={index} key={index}>{item}</option>
+                                ? [1, 2, 4, 9, 36].map((item) => (
+                                    <option value={item} key={item}>{item}</option>
                                 ))
-                                : [1, 2, 4].map((item, index) => (
-                                    <option value={index} key={index}>{item}</option>
+                                : [1, 2, 4].map((item) => (
+                                    <option value={item} key={item}>{item}</option>
                                 ))}
                         </select>
                         <select onChange={this.handleQuantityChange}>
-                            {this.createQuantityRange().map((item, index) => (
-                                <option value={index} key={index}>{item}</option>
+                            {this.createQuantityRange().map((item) => (
+                                <option value={item} key={item}>{item}</option>
                             ))}
                         </select>
                         <div>

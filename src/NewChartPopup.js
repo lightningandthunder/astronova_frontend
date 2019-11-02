@@ -60,7 +60,7 @@ export default class NewChartPopup extends React.Component {
 
     async queryBackendForRadix() {
         // Query back end for a single chart.
-        
+
         if (!this.validateDateTime()) {
             this.handleError("Invalid datetime!");
             return;
@@ -82,6 +82,7 @@ export default class NewChartPopup extends React.Component {
             locationResults.latitude,
             locationResults.tz);
 
+        logIfDevelopment("Radix query: ", radixQuery);
         const response = await axios.post(
             API_ADDRESS + "/radix",
             radixQuery,

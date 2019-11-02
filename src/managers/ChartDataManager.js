@@ -103,6 +103,7 @@ export default class ChartManager {
         const radixQ = this.createRadixQueryFromUniwheel(radix);
         const returnParams = this.createReturnParams(return_planet, return_harmonic, return_longitude,
             return_latitude, return_start_date, tz, return_quantity);
+
         return new ReturnQuery(radixQ, returnParams);
     }
 
