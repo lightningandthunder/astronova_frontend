@@ -160,7 +160,11 @@ export default class ReturnChartPopup extends React.Component {
         );
 
         // Handle response
-
+        const err = response.data.err;
+        if (err) {
+            this.handleError(err);
+            return;
+        }
         let charts = response.data;
         try {
             if (charts.length === 0) {

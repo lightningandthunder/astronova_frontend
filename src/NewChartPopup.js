@@ -89,6 +89,12 @@ export default class NewChartPopup extends React.Component {
             { headers: QUERY_HEADERS }
         );
 
+        const err = response.data.err;
+        if (err) {
+            this.handleError(err);
+            return;
+        }
+        
         try {
             const newChart = manager.createUniwheel(response.data);
             logIfDevelopment("New chart: ", newChart);
