@@ -6,6 +6,7 @@ import { QUERY_HEADERS, API_ADDRESS } from './settings';
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
 import axios from 'axios';
+import logIfDevelopment from "./utils/logIfDevelopment";
 
 const manager = new ChartManager();
 
@@ -17,13 +18,14 @@ export default class NewChartPopup extends React.Component {
             currentSelectedDatetime: undefined,
             locationInput: undefined
         }
-        this.onDateTimeChange = this.onDateTimeChange.bind(this);
+        this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
         this.validateDateTime = this.validateDateTime.bind(this);
-        this.onChangeLocation = this.onChangeLocation.bind(this);
+        this.handleLocationChange = this.handleLocationChange.bind(this);
         this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
         this.openPopup = this.openPopup.bind(this);
         this.closePopup = this.closePopup.bind(this);
         this.handleError = this.handleError.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     };
 
     openPopup() {
@@ -32,11 +34,11 @@ export default class NewChartPopup extends React.Component {
     closePopup() {
         this.setState({ isOpen: false })
     }
-    onChangeLocation(e) {
-        this.setState({ locationInput: e.target.value });
+    handleLocationChange(event) {
+        this.setState({ locationInput: event.target.value });
     }
-    onDateTimeChange(e) {
-        this.setState({ currentSelectedDatetime: e.target.value });
+    handleDateTimeChange(event) {
+        this.setState({ currentSelectedDatetime: event.target.value });
     }
 
     handleError(err) {
@@ -44,7 +46,13 @@ export default class NewChartPopup extends React.Component {
         alert(err.toString());
     }
 
-    validateDateTime(){
+    handleKeyDown(event) {
+        // Recognize pressing return key
+        if (event.keyCode === 13 && this.state.isOpen === true)
+            this.queryBackendForRadix();
+    }
+
+    validateDateTime() {
         // YYYY-mm-ddThh:mm in military time
         const dtRegex = /^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/;
         return dtRegex.exec(this.state.currentSelectedDatetime) ? true : false;
@@ -64,7 +72,7 @@ export default class NewChartPopup extends React.Component {
 
         const locationResults = await geosearch(locationQuery);
         if (!locationResults) {
-            this.handleError("No location found!");
+            this.handleError("No location found! Please try a different location.");
             return;
         }
 
@@ -81,19 +89,19 @@ export default class NewChartPopup extends React.Component {
 
         try {
             const newChart = manager.createUniwheel(response.data);
-            console.log(newChart);
+            logIfDevelopment("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
             this.closePopup();
         } catch (err) {
-            console.log(err)
+            this.handleError(err);
         }
     }
 
 
     render() {
         return (
-            <div>
+            <div onKeyDown={this.handleKeyDown}>
                 <button onClick={this.openPopup}>New Chart</button>
                 <Popup
                     className="popup"
@@ -104,8 +112,8 @@ export default class NewChartPopup extends React.Component {
                     onClose={this.closePopup}
                 >
                     <div className="actions">
-                        <Datepicker onChange={this.onDateTimeChange} />
-                        <LocationInput updateLocation={this.onChangeLocation} />
+                        <Datepicker onChange={this.handleDateTimeChange} />
+                        <LocationInput updateLocation={this.handleLocationChange} />
                         <div>
                             <button onClick={this.queryBackendForRadix}>Calculate</button>
                         </div>

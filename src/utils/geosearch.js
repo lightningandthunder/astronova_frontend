@@ -7,8 +7,9 @@ import Location from '../models/Location';
 
 import axios from "axios";
 import tzsearch from './tzsearch';
+import logIfDevelopment from '../utils/logIfDevelopment';
 
-export default async function geosearch (q)  {
+export default async function geosearch(q) {
     const limit = "1";
     const params = new URLSearchParams({
         q,
@@ -18,9 +19,8 @@ export default async function geosearch (q)  {
 
     const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
     const res = await axios.get(endpoint);
+    logIfDevelopment("Geosearch result: ", res);
 
-    console.log(`Geosearch result: ${res}`);
-    
     if (res.data.length === 0)
         return undefined;
     else

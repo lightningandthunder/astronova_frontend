@@ -8,6 +8,7 @@ import RawChartData from './rawchartdata';
 import RemoveButton from './removeButton';
 import { QUERY_HEADERS, API_ADDRESS } from './settings';
 import NewChartPopup from './NewChartPopup';
+import logIfDevelopment from './utils/logIfDevelopment';
 
 const manager = new ChartManager();
 
@@ -34,20 +35,16 @@ class App extends React.Component {
         if (chartsArray)
             this.setState({ charts: [...chartsArray] });
         else
-            console.log("Found no charts in LS to load");
+            logIfDevelopment("Found no charts in LS to load");
 
         const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
         if (selectedChartFromLS) {
             this.setState({ selectedChart: selectedChartFromLS });
-            console.log("Loaded selected chart from LS: " + selectedChartFromLS.name)
+            logIfDevelopment("Loaded selected chart from LS: " + selectedChartFromLS.name);
         }
         else
-            console.log("Found no selected chart in LS");
+            logIfDevelopment("Found no selected chart in LS");
     }
-
-    componentWillUnmount() {
-    }
-
 
     /* ================ onChange methods ================ */
 
@@ -56,7 +53,7 @@ class App extends React.Component {
         this.setState({ charts: [...this.state.charts, chart] },
             () => {
                 localStorage.setItem('charts', JSON.stringify(this.state.charts));
-                console.log("Saved charts to LS: " + this.state.charts.length);
+                logIfDevelopment("Saved charts to LS: " + this.state.charts.length);
             }
         );
     }
@@ -66,7 +63,7 @@ class App extends React.Component {
         this.setState({ selectedChart: this.state.charts[e.target.value] },
             () => {
                 localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
-                console.log("Saved current selection to LS: " + this.state.selectedChart.name);
+                logIfDevelopment("Saved current selection to LS: " + this.state.selectedChart.name);
             }
         );
     }
@@ -111,7 +108,7 @@ class App extends React.Component {
                 alert("No charts to create!");
                 return;
             }
-            console.log(charts);
+            logIfDevelopment(charts);
             for (let c = 0; c < charts.length; c++) {
                 const newChart = manager.createBiwheel(charts[c]);
                 this.saveChart(newChart);
@@ -119,7 +116,7 @@ class App extends React.Component {
 
             this.setSelectedChartToNewest();
         } catch (err) {
-            console.log(err)
+            logIfDevelopment(err)
         }
     }
 
