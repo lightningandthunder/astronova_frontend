@@ -16,6 +16,7 @@ class App extends React.Component {
         this.state = {
             charts: [],
             selectedChart: undefined,
+            view: "ecliptical"
         }
 
         this.addChartToState = this.saveChart.bind(this);
@@ -23,6 +24,7 @@ class App extends React.Component {
         this.resetCharts = this.resetCharts.bind(this);
         this.saveChart = this.saveChart.bind(this);
         this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
+        this.handleViewChange = this.handleViewChange.bind(this);
     }
 
     /* ================ Lifecycle hooks ================ */
@@ -70,6 +72,10 @@ class App extends React.Component {
         this.onChangeSelectedChart({ target: { value: this.state.charts.length - 1 } });
     }
 
+    handleViewChange(e) {
+        this.setState({ view: e.target.value });
+    }
+
 
 
     // This should be in another section; will eventually reorganize
@@ -85,7 +91,23 @@ class App extends React.Component {
         return (
             <div className="App">
                 <div id="chart">
-                    <UniwheelChart height={window.innerHeight / 1} width={window.innerWidth / 1} />
+                    {
+                        this.state.selectedChart && this.state.view &&
+                        <UniwheelChart
+                            width={window.innerWidth}
+                            height={window.innerHeight}
+                            cusps={this.state.view === "ecliptical" ? this.state.selectedChart["cusps"] : null}
+                            coords={this.state.selectedChart[this.state.view]}
+                        />
+                    }
+                    <div>
+                        <input type="radio" id="ecliptical" value={"ecliptical"} checked={this.state.view === "ecliptical"} onChange={this.handleViewChange} />
+                        <label>Ecliptical</label>
+                        <input type="radio" id="mundane" value={"mundane"} checked={this.state.view === "mundane"} onChange={this.handleViewChange} />
+                        <label>Mundane</label>
+                        <input type="radio" id="right_ascension" value="right_ascension" checked={this.state.view === "right_ascension"} onChange={this.handleViewChange} />
+                        <label>RightAscension</label>
+                    </div>
                 </div>
                 <div>
                     <RawChartData className="rawchartdata" chart={this.state.selectedChart} />
