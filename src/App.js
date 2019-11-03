@@ -7,6 +7,7 @@ import RemoveButton from './removeButton';
 import NewChartPopup from './NewChartPopup';
 import ReturnChartPopup from './ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
+import UniwheelChart from './UniwheelChart';
 
 
 class App extends React.Component {
@@ -83,6 +84,9 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
+                <div id="chart">
+                    <UniwheelChart height={window.innerHeight / 1} width={window.innerWidth / 1} />
+                </div>
                 <div>
                     <RawChartData className="rawchartdata" chart={this.state.selectedChart} />
                 </div>
@@ -92,8 +96,8 @@ class App extends React.Component {
                     saveChart={this.saveChart}
                     setSelectedChartToNewest={this.setSelectedChartToNewest}
                 />
-                { this.state.selectedChart 
-                ?
+                {this.state.selectedChart
+                    ?
                     <ReturnChartPopup
                         saveChart={this.saveChart}
                         setSelectedChartToNewest={this.setSelectedChartToNewest}
