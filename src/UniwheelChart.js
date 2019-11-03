@@ -13,27 +13,40 @@ export default function UniwheelChart(props) {
     const originX = props.width / 4;
     const originY = props.height / 2;
 
-    // Set ring radii
-    const signRingOuterRadius = 300;
-    const signRingInnerRadius = 270;
+    /* ==== Set ring radii ==== */
+    // Signs
+    const signRingOuterRadius = 330;
+    const signGlyphRadius = 285;
+    const signRingInnerRadius = 300;
+
+    // Planetary ring
+    const planetRadius = 280;
+    const planetDegreeRadius = 240;
+    const planetSignRadius = 220;
+    const planetMinuteRadious = 200;
+
+    // House ring
     const houseRingOuterRadius = 170;
     const houseRingInnerRadius = 140;
-    const planetRadius = 240;
-
+    const houseNumberRadius = 155;
 
     // House positions
-    const ONE = props.cusps ? props.cusps["1"] : 0
-    const TWO = props.cusps ? props.cusps["2"] : 30
-    const THREE = props.cusps ? props.cusps["3"] : 60
-    const FOUR = props.cusps ? props.cusps["4"] : 90
-    const FIVE = props.cusps ? props.cusps["5"] : 120
-    const SIX = props.cusps ? props.cusps["6"] : 150
-    const SEVEN = props.cusps ? props.cusps["7"] : 180
-    const EIGHT = props.cusps ? props.cusps["8"] : 210
-    const NINE = props.cusps ? props.cusps["9"] : 240
-    const TEN = props.cusps ? props.cusps["10"] : 270
-    const ELEVEN = props.cusps ? props.cusps["11"] : 300
-    const TWELVE = props.cusps ? props.cusps["12"] : 330
+    const CUSPS = {
+        "1": props.cusps ? props.cusps["1"] : 0,
+        "2": props.cusps ? props.cusps["2"] : 30,
+        "3": props.cusps ? props.cusps["3"] : 60,
+        "4": props.cusps ? props.cusps["4"] : 90,
+        "5": props.cusps ? props.cusps["5"] : 120,
+        "6": props.cusps ? props.cusps["6"] : 150,
+        "7": props.cusps ? props.cusps["7"] : 180,
+        "8": props.cusps ? props.cusps["8"] : 210,
+        "9": props.cusps ? props.cusps["9"] : 240,
+        "10": props.cusps ? props.cusps["10"] : 270,
+        "11": props.cusps ? props.cusps["11"] : 300,
+        "12": props.cusps ? props.cusps["12"] : 330
+    }
+
+
 
     // Calculate any point on the circle with an angle ("position") and circle radius
     const point = (pos, radius, rotationalOffset = props.rotationalOffset) => {
@@ -49,10 +62,10 @@ export default function UniwheelChart(props) {
 
     /* ================= Chart points ================= */
 
-    const cusp = (cuspNum, cuspId) => {
+    const cuspLine = (cuspNum, cuspId) => {
         const rotationalOffset = props.rotateCusps ? props.rotationalOffset : 0
         return (
-            <Line id={cuspId}
+            <Line id={cuspId} key={cuspId}
                 points={[...point(cuspNum, houseRingInnerRadius, rotationalOffset), ...point(cuspNum, signRingInnerRadius, rotationalOffset)]}
                 stroke={'black'}
                 strokeWidth={1}
@@ -62,20 +75,46 @@ export default function UniwheelChart(props) {
         )
     }
 
-    const planet = (p, coord) => {
-        const color = PLANET_COLORS[p];
-
+    const planet = (planetName, coord) => {
         return (
-            <Text
+            <Text id={planetName} key={planetName}
                 x={point(coord, planetRadius)[0]}
                 y={point(coord, planetRadius)[1]}
-                text={PLANET_UNICODE[p]}
+                text={PLANET_UNICODE[planetName]}
                 fontSize={20}
-                stroke={PLANET_COLORS[p]}
+                stroke={PLANET_COLORS[planetName]}
                 strokeWidth={1}
             />
         )
     }
+
+    const houseNumber = (num, coord) => {
+        const rotationalOffset = props.rotateCusps ? props.rotationalOffset : 0
+        return (
+            <Text id={num} key={num}
+                x={point(coord, houseNumberRadius, rotationalOffset)[0]}
+                y={point(coord, houseNumberRadius, rotationalOffset)[1]}
+                text={num}
+                fontSize={16}
+                strokeWidth={1}
+            />
+        )
+    }
+
+    const avgCoords = (pos1, pos2) => {
+        // Adjust coordinates to account for wrapping 360 around to 0.
+        const normalizedPos2 = Math.abs(pos1 - pos2) > 180 ? pos2 + 360 : pos2;
+        const midpoint = (pos1 + normalizedPos2) / 2;
+        return midpoint >= 360 ? midpoint - 360 : midpoint;
+    }
+
+    // Object.keys(CUSPS).forEach((el, index) => {
+    //     console.log(el);
+    //     console.log(CUSPS[index % 11 + 2]);
+    //     console.log(CUSPS[index % 11 + 1]);
+    //     console.log(avgCoords(CUSPS[index % 11 + 2], CUSPS[index % 11 + 1]));
+    // })
+
 
     return (
         <Stage width={props.width} height={props.height}>
@@ -100,30 +139,22 @@ export default function UniwheelChart(props) {
                 />
             </Layer>
             <Layer>
-                {cusp(ONE, "cuspOne")}
-                {cusp(TWO, "cuspTwo")}
-                {cusp(THREE, "cuspThree")}
-                {cusp(FOUR, "cuspFour")}
-                {cusp(FIVE, "cuspFive")}
-                {cusp(SIX, "cuspSix")}
-                {cusp(SEVEN, "cuspSeven")}
-                {cusp(EIGHT, "cuspEight")}
-                {cusp(NINE, "cuspNine")}
-                {cusp(TEN, "cuspTen")}
-                {cusp(ELEVEN, "cuspEleven")}
-                {cusp(TWELVE, "cuspTwelve")}
+                {Object.keys(CUSPS).map((cusp) => (
+                    cuspLine(CUSPS[cusp], cusp)
+                ))}
+
             </Layer>
             <Layer>
-                {planet("Sun", props.coords["Sun"])}
-                {planet("Moon", props.coords["Moon"])}
-                {planet("Mercury", props.coords["Mercury"])}
-                {planet("Venus", props.coords["Venus"])}
-                {planet("Mars", props.coords["Mars"])}
-                {planet("Jupiter", props.coords["Jupiter"])}
-                {planet("Saturn", props.coords["Saturn"])}
-                {planet("Uranus", props.coords["Uranus"])}
-                {planet("Neptune", props.coords["Neptune"])}
-                {planet("Pluto", props.coords["Pluto"])}
+                {Object.keys(CUSPS).map((cusp, index) => (
+                    // 1-index and wrap 13 back around to 1, i.e. 2,1; 3,2... 12,11; 1,12.
+                    houseNumber(cusp, avgCoords(CUSPS[((index + 1) % 12) + 1], CUSPS[index + 1]))
+                ))}
+            </Layer>
+            <Layer>
+                {Object.keys(props.coords).map((coord) => (
+                    planet(coord, props.coords[coord.toString()])
+                ))}
+
             </Layer>
         </Stage>
     );

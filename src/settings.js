@@ -11,7 +11,7 @@ const PLANET_COLORS = {
     "Saturn": "indigo",
     "Uranus": "blue",
     "Neptune": "cyan",
-    "Pluto": "black"
+    "Pluto": "crimson"
 }
 
 const PLANET_UNICODE = {
