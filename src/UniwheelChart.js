@@ -1,7 +1,8 @@
-import React from 'react';
-import { Stage, Layer, Ring, Line, Text, Group } from 'react-konva';
+import React from "react";
+import { Stage, Layer, Ring, Line, Text, Group } from "react-konva";
 
-import { toRads } from './utils/geometry';
+import { toRads } from "./utils/geometry";
+import { PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE } from "./settings";
 
 export default function UniwheelChart(props) {
     if (!props.coords) {
@@ -17,6 +18,8 @@ export default function UniwheelChart(props) {
     const signRingInnerRadius = 270;
     const houseRingOuterRadius = 170;
     const houseRingInnerRadius = 140;
+    const planetRadius = 240;
+
 
     // House positions
     const ONE = props.cusps ? props.cusps["1"] : 0
@@ -60,45 +63,17 @@ export default function UniwheelChart(props) {
     }
 
     const planet = (p, coord) => {
-        let color;
-        if (p === 'Sun')
-            color = 'yellow';
-        else if (p === 'Moon')
-            color = 'silver';
-        else if (p === 'Mercury')
-            color = 'orange';
-        else if (p === 'Venus')
-            color = 'green';
-        else if (p === 'Mars')
-            color = 'red';
-        else if (p === 'Jupiter')
-            color = 'purple';
-        else if (p === 'Saturn')
-            color = 'indigo';
-        else if (p === 'Uranus')
-            color = 'blue';
-        else if (p === 'Neptune')
-            color = 'cyan';
-        else if (p === 'Pluto')
-            color = 'black';
+        const color = PLANET_COLORS[p];
 
         return (
-            <Group>
-                <Ring
-                    x={point(coord, signRingInnerRadius)[0]}
-                    y={point(coord, signRingInnerRadius)[1]}
-                    outerRadius={10}
-                    innerRadius={5}
-                    fill={'white'}
-                    stroke={color}
-                    strokeWidth={1}
-                />
-                <Text
-                    x={point(coord, signRingInnerRadius)[0]}
-                    y={point(coord, signRingInnerRadius)[1]}
-                    text={p}
-                />
-            </Group>
+            <Text
+                x={point(coord, planetRadius)[0]}
+                y={point(coord, planetRadius)[1]}
+                text={PLANET_UNICODE[p]}
+                fontSize={20}
+                stroke={PLANET_COLORS[p]}
+                strokeWidth={1}
+            />
         )
     }
 

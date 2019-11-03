@@ -1,6 +1,61 @@
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
 
+const PLANET_COLORS = {
+    "Sun": "yellow",
+    "Moon": "silver",
+    "Mercury": "orange",
+    "Venus": "green",
+    "Mars": "red",
+    "Jupiter": "purple",
+    "Saturn": "indigo",
+    "Uranus": "blue",
+    "Neptune": "cyan",
+    "Pluto": "black"
+}
+
+const PLANET_UNICODE = {
+    "Sun": "\u2609",
+    "Moon": "\u263D",
+    "Mercury": "\u263F",
+    "Venus": "\u2640",
+    "Mars": "\u2642",
+    "Jupiter": "\u2643",
+    "Saturn": "\u2644",
+    "Uranus": "\u2645",
+    "Neptune": "\u2646",
+    "Pluto": "\u2647"
+}
+
+const SIGN_COLORS = {
+    "Ari": "red",
+    "Tau": "green",
+    "Gem": "cyan",
+    "Can": "blue",
+    "Leo": "red",
+    "Vir": "green",
+    "Lib": "cyan",
+    "Sco": "blue",
+    "Sag": "red",
+    "Cap": "green",
+    "Aqu": "cyan",
+    "Pis": "blue"
+}
+
+const SIGN_UNICODE = {
+    "Ari": "\u2648",
+    "Tau": "\u2649",
+    "Gem": "\u264A",
+    "Can": "\u264B",
+    "Leo": "\u264C",
+    "Vir": "\u264D",
+    "Lib": "\u264E",
+    "Sco": "\u264F",
+    "Sag": "\u2650",
+    "Cap": "\u2651",
+    "Aqu": "\u2652",
+    "Pis": "\u2653"
+}
 
 // IANA-recognized timezones
 const TIMEZONES = new Set([
@@ -599,4 +654,4 @@ const TIMEZONES = new Set([
 ]);
 
 
-export { QUERY_HEADERS, API_ADDRESS, TIMEZONES };
+export { QUERY_HEADERS, API_ADDRESS, TIMEZONES, PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE };
