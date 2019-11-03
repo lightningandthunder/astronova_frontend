@@ -12,10 +12,10 @@ export default function UniwheelChart(props) {
     const originY = (offSetY * 2) - offSetY;
 
     // Set ring radii
-    const signRingOuterRadius = 220;
-    const signRingInnerRadius = 250;
-    const houseRingOuterRadius = 110;
-    const houseRingInnerRadius = 140;
+    const signRingOuterRadius = 250;
+    const signRingInnerRadius = 220;
+    const houseRingOuterRadius = 140;
+    const houseRingInnerRadius = 110;
 
     return (
         <Stage width={props.width} height={props.height}>
@@ -41,14 +41,21 @@ export default function UniwheelChart(props) {
             </Layer>
             <Layer>
                 <Line id="cuspOne"
-                    points={[signRingInnerRadius, originY, houseRingInnerRadius, originY]}
+                    points={[originX - houseRingInnerRadius, originY, originX - signRingInnerRadius, originY]}
                     stroke={'black'}
                     strokeWidth={1}
                     lineCap={'round'}
                     lineJoin={'round'}
                 />
                 <Line id="cuspFour"
-                    points={[originX, originY + houseRingInnerRadius, originX, originY + signRingOuterRadius]}
+                    points={[originX, originY + houseRingInnerRadius, originX, originY + signRingInnerRadius]}
+                    stroke={'black'}
+                    strokeWidth={1}
+                    lineCap={'round'}
+                    lineJoin={'round'}
+                />
+                <Line id="cuspSeven"
+                    points={[originX + houseRingInnerRadius, originY, originX + signRingInnerRadius, originY]}
                     stroke={'black'}
                     strokeWidth={1}
                     lineCap={'round'}
@@ -56,13 +63,6 @@ export default function UniwheelChart(props) {
                 />
                 <Line id="cuspNine"
                     points={[originX, originY - houseRingInnerRadius, originX, originY - signRingInnerRadius]}
-                    stroke={'black'}
-                    strokeWidth={1}
-                    lineCap={'round'}
-                    lineJoin={'round'}
-                />
-                <Line id="cuspSeven"
-                    points={[originX + signRingInnerRadius, originY, originX + houseRingInnerRadius, originY]}
                     stroke={'black'}
                     strokeWidth={1}
                     lineCap={'round'}
