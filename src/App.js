@@ -1,13 +1,13 @@
 import React from 'react';
-// import Chart from './chart';
 import './styles/App.css';
+
 import Chartlist from './chartlist';
 import RawChartData from './rawchartdata';
 import RemoveButton from './removeButton';
 import NewChartPopup from './NewChartPopup';
 import ReturnChartPopup from './ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
-import UniwheelChart from './UniwheelChart';
+import Chart from './Chart';
 
 
 class App extends React.Component {
@@ -90,24 +90,20 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <div id="chart">
-                    {
-                        this.state.selectedChart && this.state.view &&
-                        <UniwheelChart
-                            width={window.innerWidth}
-                            height={window.innerHeight}
-                            cusps={this.state.view === "ecliptical" ? this.state.selectedChart["cusps"] : null}
-                            coords={this.state.selectedChart[this.state.view]}
-                        />
-                    }
-                    <div>
-                        <input type="radio" id="ecliptical" value={"ecliptical"} checked={this.state.view === "ecliptical"} onChange={this.handleViewChange} />
-                        <label>Ecliptical</label>
-                        <input type="radio" id="mundane" value={"mundane"} checked={this.state.view === "mundane"} onChange={this.handleViewChange} />
-                        <label>Mundane</label>
-                        <input type="radio" id="right_ascension" value="right_ascension" checked={this.state.view === "right_ascension"} onChange={this.handleViewChange} />
-                        <label>RightAscension</label>
-                    </div>
+                {
+                    this.state.selectedChart &&
+                    <Chart
+                        chart={this.state.selectedChart}
+                        view={this.state.view}
+                    />
+                }
+                <div>
+                    <input type="radio" id="ecliptical" value={"ecliptical"} checked={this.state.view === "ecliptical"} onChange={this.handleViewChange} />
+                    <label>Ecliptical</label>
+                    <input type="radio" id="mundane" value={"mundane"} checked={this.state.view === "mundane"} onChange={this.handleViewChange} />
+                    <label>Mundane</label>
+                    <input type="radio" id="right_ascension" value="right_ascension" checked={this.state.view === "right_ascension"} onChange={this.handleViewChange} />
+                    <label>RightAscension</label>
                 </div>
                 <div>
                     <RawChartData className="rawchartdata" chart={this.state.selectedChart} />
@@ -118,17 +114,18 @@ class App extends React.Component {
                     saveChart={this.saveChart}
                     setSelectedChartToNewest={this.setSelectedChartToNewest}
                 />
-                {this.state.selectedChart
-                    ?
-                    <ReturnChartPopup
-                        saveChart={this.saveChart}
-                        setSelectedChartToNewest={this.setSelectedChartToNewest}
-                        selectedChart={this.state.selectedChart}
-                    />
-                    : <div></div>
+                {
+                    this.state.selectedChart
+                        ?
+                        <ReturnChartPopup
+                            saveChart={this.saveChart}
+                            setSelectedChartToNewest={this.setSelectedChartToNewest}
+                            selectedChart={this.state.selectedChart}
+                        />
+                        : <div></div>
                 }
                 <RemoveButton onClick={this.resetCharts} />
-            </div>
+            </div >
         );
     }
 }

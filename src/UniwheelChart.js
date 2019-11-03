@@ -13,10 +13,10 @@ export default function UniwheelChart(props) {
     const originY = props.height / 2;
 
     // Set ring radii
-    const signRingOuterRadius = 250;
-    const signRingInnerRadius = 220;
-    const houseRingOuterRadius = 140;
-    const houseRingInnerRadius = 110;
+    const signRingOuterRadius = 300;
+    const signRingInnerRadius = 270;
+    const houseRingOuterRadius = 170;
+    const houseRingInnerRadius = 140;
 
     // House positions
     const ONE = props.cusps ? props.cusps["1"] : 0
@@ -33,8 +33,8 @@ export default function UniwheelChart(props) {
     const TWELVE = props.cusps ? props.cusps["12"] : 330
 
     // Calculate any point on the circle with an angle ("position") and circle radius
-    const point = (pos, radius) => {
-        const angleRotated = pos - ONE;
+    const point = (pos, radius, rotationalOffset = props.rotationalOffset) => {
+        const angleRotated = pos - rotationalOffset;
         const angleNormalized = angleRotated >= 0 ? toRads(angleRotated) : toRads(angleRotated + 360);
 
         // Mirror across Y axis; 0 begins at left side for us, not right side.
@@ -47,9 +47,10 @@ export default function UniwheelChart(props) {
     /* ================= Chart points ================= */
 
     const cusp = (cuspNum, cuspId) => {
+        const rotationalOffset = props.rotateCusps ? props.rotationalOffset : 0
         return (
             <Line id={cuspId}
-                points={[...point(cuspNum, houseRingInnerRadius), ...point(cuspNum, signRingInnerRadius)]}
+                points={[...point(cuspNum, houseRingInnerRadius, rotationalOffset), ...point(cuspNum, signRingInnerRadius, rotationalOffset)]}
                 stroke={'black'}
                 strokeWidth={1}
                 lineCap={'round'}
