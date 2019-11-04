@@ -13,7 +13,7 @@ export default function Chart(props) {
     const coords = props.chart[props.view];
     let cusps;
     let rotationalOffset;
-    let rotateCusps;
+    let cuspOffset;
     const origin = { x: props.width / 2, y: props.height / 2 }
 
 
@@ -21,18 +21,18 @@ export default function Chart(props) {
         // Lock left side of chart to Ascendant
         cusps = props.chart.cusps;
         rotationalOffset = cusps["1"];
-        rotateCusps = true;
+        cuspOffset = cusps["1"];
     }
     else if (props.view === "mundane") {
         cusps = null;
         rotationalOffset = 0;
-        rotateCusps = false;
+        cuspOffset = null;
     }
     else if (props.view === "right_ascension") {
         cusps = null;
         // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
         rotationalOffset = props.chart.ramc - 270 >= 0 ? props.chart.ramc - 270 : props.chart.ramc + 90;
-        rotateCusps = false;
+        cuspOffset = null;
     }
     else {
         throw new Error(`Invalid view selected: ${props.view}`)
@@ -43,7 +43,7 @@ export default function Chart(props) {
             <Stage width={props.width} height={props.height}>
                 <Layer>
                     <Rings origin={origin} />
-                    <Houses origin={origin} coords={coords} cusps={cusps} rotateCusps={rotateCusps} rotationalOffset={rotationalOffset} />
+                    <Houses origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
                     <Planets origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
                 </Layer>
             </Stage>

@@ -26,7 +26,7 @@ export default function Houses(props) {
     const cuspSign = (coord) => {
 
         const sign = parseSign(coord);
-        const [x, y] = point(props.origin, coord, cuspSignRadius);
+        const [x, y] = point(props.origin, coord, cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${sign}-${coord}`}
                 x={x}
@@ -44,7 +44,7 @@ export default function Houses(props) {
 
     const cuspDegrees = (coord) => {
         const adjustedCoordPos = Math.trunc(coord - 4);
-        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius);
+        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${coord}-${adjustedCoordPos}`}
                 x={x}
@@ -65,7 +65,7 @@ export default function Houses(props) {
 
         const mins = coord - Math.trunc(coord);
         const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
-        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius);
+        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${coord}-${minsAsInt}`}
                 x={x}
@@ -82,8 +82,7 @@ export default function Houses(props) {
     }
 
     const houseNumber = (num, coord) => {
-        const rotationalOffset = props.rotateCusps ? props.rotationalOffset : 0
-        const [x, y] = point(props.origin, coord, houseNumberRadius, rotationalOffset)
+        const [x, y] = point(props.origin, coord, houseNumberRadius, props.cuspOffset)
         return (
             <Text key={num}
                 x={x}
@@ -100,10 +99,9 @@ export default function Houses(props) {
     }
 
     const cuspLine = (pos, cuspId) => {
-        const rotationalOffset = props.rotateCusps ? props.rotationalOffset : 0
         return (
             <Line key={cuspId}
-                points={[...point(props.origin, pos, houseRingInnerRadius, rotationalOffset), ...point(props.origin, pos, signRingInnerRadius, rotationalOffset)]}
+                points={[...point(props.origin, pos, houseRingInnerRadius, props.cuspOffset), ...point(props.origin, pos, signRingInnerRadius, props.cuspOffset)]}
                 stroke={'black'}
                 strokeWidth={1}
                 lineCap={'round'}
