@@ -1,12 +1,12 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import ChartManager from './managers/ChartDataManager';
-import geosearch from './utils/geosearch';
-import { QUERY_HEADERS, API_ADDRESS } from './settings';
+import ChartManager from '../../managers/ChartDataManager';
+import geosearch from '../../utils/geosearch';
+import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
 import axios from 'axios';
-import logIfDevelopment from "./utils/logIfDevelopment";
+import logIfDevelopment from "../../utils/logIfDevelopment";
 
 const manager = new ChartManager();
 

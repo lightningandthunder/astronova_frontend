@@ -1,15 +1,21 @@
 import React from "react";
-import UniwheelChart from "./UniwheelChart";
+
+import { Stage, Layer } from "react-konva";
+
+import Houses from "./views/chartComponents/houses";
+import Planets from "./views/chartComponents/planets";
+import Rings from "./views/chartComponents/rings";
 
 export default function Chart(props) {
     if (!props.chart) {
         throw new Error("Missing chart data!")
     }
-
     const coords = props.chart[props.view];
-    let cusps; 
+    let cusps;
     let rotationalOffset;
     let rotateCusps;
+    const origin = { x: props.width / 2, y: props.height / 2 }
+
 
     if (props.view === "ecliptical") {
         // Lock left side of chart to Ascendant
@@ -34,14 +40,17 @@ export default function Chart(props) {
 
     return (
         <div id="chart">
-            <UniwheelChart
-                width={window.innerWidth}
-                height={window.innerHeight}
-                cusps={cusps}
-                coords={coords}
-                rotationalOffset={rotationalOffset}
-                rotateCusps={rotateCusps}
-            />
+            <Stage width={props.width} height={props.height}>
+                <Layer>
+                    <Rings origin={origin} />
+                </Layer>
+                <Layer>
+                    <Houses origin={origin} cusps={cusps} rotateCusps={rotateCusps} coords={coords} />
+                </Layer>
+                <Layer>
+                    <Planets origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
+                </Layer>
+            </Stage>
         </div>
     )
 }

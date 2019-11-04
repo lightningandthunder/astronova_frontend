@@ -4,8 +4,8 @@ import './styles/App.css';
 import Chartlist from './chartlist';
 import RawChartData from './rawchartdata';
 import RemoveButton from './removeButton';
-import NewChartPopup from './NewChartPopup';
-import ReturnChartPopup from './ReturnChartPopup';
+import NewChartPopup from './views/modals/NewChartPopup';
+import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
 import Chart from './Chart';
 
@@ -93,6 +93,8 @@ class App extends React.Component {
                 {
                     this.state.selectedChart &&
                     <Chart
+                        width={window.innerWidth}
+                        height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
                     />

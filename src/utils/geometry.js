@@ -14,6 +14,18 @@ export function avgCoords(pos1, pos2) {
     return midpoint >= 360 ? midpoint - 360 : midpoint;
 }
 
+// Calculate any point on the circle with an angle ("position") and circle radius
+export function point(origin, pos, radius, rotationalOffset = 0) {
+    const angleRotated = pos - rotationalOffset;
+    const angleNormalized = angleRotated >= 0 ? toRads(angleRotated) : toRads(angleRotated + 360);
+
+    // Mirror across Y axis; 0 begins at left side for us, not right side.
+    const x = origin.x + (-1 * radius * Math.cos(angleNormalized));
+    const y = origin.y + (radius * Math.sin(angleNormalized));
+
+    return [x, y];
+}
+
 export function parseSign(coord) {
     return SIGN_UNICODE[SIGNS[Math.trunc(coord / 30)]];
 }
