@@ -97,12 +97,27 @@ class App extends React.Component {
                         view={this.state.view}
                     />
                 }
-                <div>
-                    <input type="radio" id="ecliptical" value={"ecliptical"} checked={this.state.view === "ecliptical"} onChange={this.handleViewChange} />
+                <div className="radioButtons">
+                    <input type="radio"
+                        id="ecliptical"
+                        value="ecliptical"
+                        checked={this.state.view === "ecliptical"}
+                        onChange={this.handleViewChange}
+                    />
                     <label>Ecliptical</label>
-                    <input type="radio" id="mundane" value={"mundane"} checked={this.state.view === "mundane"} onChange={this.handleViewChange} />
+                    <input type="radio"
+                        id="mundane"
+                        value="mundane"
+                        checked={this.state.view === "mundane"}
+                        onChange={this.handleViewChange}
+                    />
                     <label>Mundane</label>
-                    <input type="radio" id="right_ascension" value="right_ascension" checked={this.state.view === "right_ascension"} onChange={this.handleViewChange} />
+                    <input type="radio"
+                        id="right_ascension"
+                        value="right_ascension"
+                        checked={this.state.view === "right_ascension"}
+                        onChange={this.handleViewChange}
+                    />
                     <label>RightAscension</label>
                 </div>
                 <div>

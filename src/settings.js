@@ -1,6 +1,8 @@
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
 
+const SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
+
 const PLANET_COLORS = {
     "Sun": "yellow",
     "Moon": "silver",
@@ -654,4 +656,4 @@ const TIMEZONES = new Set([
 ]);
 
 
-export { QUERY_HEADERS, API_ADDRESS, TIMEZONES, PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE };
+export { QUERY_HEADERS, API_ADDRESS, TIMEZONES, PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE, SIGNS };
