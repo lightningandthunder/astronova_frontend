@@ -2,7 +2,9 @@ import React from "react";
 
 import { Stage, Layer } from "react-konva";
 
-import Houses from "./views/chartComponents/houses";
+import HouseNumbers from "./views/chartComponents/houseNumbers";
+import CuspCoords from "./views/chartComponents/cuspCoords";
+import CuspLines from "./views/chartComponents/cuspLines";
 import Planets from "./views/chartComponents/planets";
 import Rings from "./views/chartComponents/rings";
 
@@ -10,12 +12,12 @@ export default function Chart(props) {
     if (!props.chart) {
         throw new Error("Missing chart data!")
     }
+    const origin = { x: props.width / 2, y: props.height / 2 }
     const coords = props.chart[props.view];
+    
     let cusps;
     let rotationalOffset;
     let cuspOffset;
-    const origin = { x: props.width / 2, y: props.height / 2 }
-
 
     if (props.view === "ecliptical") {
         // Lock left side of chart to Ascendant
@@ -24,12 +26,18 @@ export default function Chart(props) {
         cuspOffset = cusps["1"];
     }
     else if (props.view === "mundane") {
-        cusps = null;
+        cusps = {
+            "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
+            "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
+        };
         rotationalOffset = 0;
         cuspOffset = null;
     }
     else if (props.view === "right_ascension") {
-        cusps = null;
+        cusps = {
+            "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
+            "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
+        };
         // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
         rotationalOffset = props.chart.ramc - 270 >= 0 ? props.chart.ramc - 270 : props.chart.ramc + 90;
         cuspOffset = null;
@@ -43,7 +51,9 @@ export default function Chart(props) {
             <Stage width={props.width} height={props.height}>
                 <Layer>
                     <Rings origin={origin} />
-                    <Houses origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <CuspLines origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <CuspCoords origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <HouseNumbers origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
                     <Planets origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
                 </Layer>
             </Stage>

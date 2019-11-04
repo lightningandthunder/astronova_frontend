@@ -12,8 +12,6 @@ export default function Planets(props) {
     const planetSignRadius = 235;
     const planetMinuteRadius = 210;
 
-    /* ================= Chart points ================= */
-
     const planet = (planetName, coord) => {
         const [x, y] = point(props.origin, coord, planetRadius, props.rotationalOffset)
         return (
@@ -36,7 +34,7 @@ export default function Planets(props) {
     const planetDegrees = (coord) => {
         const [x, y] = point(props.origin, coord, planetDegreeRadius, props.rotationalOffset);
         return (
-            <Text key={coord}
+            <Text key={`PlanetDegrees-${coord}`}
                 x={x}
                 y={y}
                 text={`${Math.trunc(coord) % 30}\u00B0`}
@@ -54,7 +52,7 @@ export default function Planets(props) {
         const sign = parseSign(coord);
         const [x, y] = point(props.origin, coord, planetSignRadius, props.rotationalOffset);
         return (
-            <Text key={coord}
+            <Text key={`PlanetSign-${coord}`}
                 x={x}
                 y={y}
                 text={sign}
@@ -73,7 +71,7 @@ export default function Planets(props) {
         const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
         const [x, y] = point(props.origin, coord, planetMinuteRadius, props.rotationalOffset);
         return (
-            <Text key={coord}
+            <Text key={`PlanetMinutes-${coord}`}
                 x={x}
                 y={y}
                 text={`${minsAsInt}'`}
@@ -89,16 +87,10 @@ export default function Planets(props) {
     return (
         <Group>
             {Object.keys(props.coords).map((coord) => (
-                planet(coord, props.coords[coord.toString()])
-            ))}
-            {Object.keys(props.coords).map((planet) => (
-                planetDegrees(props.coords[planet])
-            ))}
-            {Object.keys(props.coords).map((planet) => (
-                planetSign(props.coords[planet])
-            ))}
-            {Object.keys(props.coords).map((planet) => (
-                planetMinutes(props.coords[planet])
+                [planet(coord, props.coords[coord]),
+                planetDegrees(props.coords[coord]),
+                planetSign(props.coords[coord]),
+                planetMinutes(props.coords[coord])]
             ))}
         </Group>
     )
