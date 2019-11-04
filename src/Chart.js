@@ -43,11 +43,7 @@ export default function Chart(props) {
             <Stage width={props.width} height={props.height}>
                 <Layer>
                     <Rings origin={origin} />
-                </Layer>
-                <Layer>
-                    <Houses origin={origin} cusps={cusps} rotateCusps={rotateCusps} coords={coords} />
-                </Layer>
-                <Layer>
+                    <Houses origin={origin} coords={coords} cusps={cusps} rotateCusps={rotateCusps} rotationalOffset={rotationalOffset} />
                     <Planets origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
                 </Layer>
             </Stage>
