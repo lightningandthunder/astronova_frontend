@@ -22,7 +22,7 @@ export default function CuspCoords(props) {
     }
 
     const cuspDegrees = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord - 4);
+        const adjustedCoordPos = Math.trunc(coord - (4 * props.scaleFactor));
         const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${coord}-${adjustedCoordPos}`}
@@ -38,7 +38,7 @@ export default function CuspCoords(props) {
     }
 
     const cuspMins = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord + 5);
+        const adjustedCoordPos = Math.trunc(coord + (5 * props.scaleFactor));
 
         const mins = coord - Math.trunc(coord);
         const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
