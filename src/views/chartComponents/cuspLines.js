@@ -3,8 +3,8 @@ import { Line, Group } from "react-konva";
 import { point } from "../../utils/geometry";
 
 export default function CuspLines(props) {
-    const signRingInnerRadius = 300;
-    const houseRingInnerRadius = 140;
+    const signRingInnerRadius = 300 * props.scaleFactor;
+    const houseRingInnerRadius = 140 * props.scaleFactor;
 
     const cuspLine = (pos, cuspId) => {
         return (

@@ -3,7 +3,7 @@ import { Text, Group } from "react-konva";
 import { point, parseSign } from "../../utils/geometry";
 
 export default function CuspCoords(props) {
-    const cuspSignRadius = 315;
+    const cuspSignRadius = 315 * props.scaleFactor;
 
     const cuspSign = (coord) => {
         const sign = parseSign(coord);
@@ -13,10 +13,10 @@ export default function CuspCoords(props) {
                 x={x}
                 y={y}
                 text={sign}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
@@ -29,10 +29,10 @@ export default function CuspCoords(props) {
                 x={x}
                 y={y}
                 text={`${Math.trunc(coord % 30)}\u00B0`}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
@@ -48,10 +48,10 @@ export default function CuspCoords(props) {
                 x={x}
                 y={y}
                 text={`${minsAsInt}'`}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }

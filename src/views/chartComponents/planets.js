@@ -7,10 +7,10 @@ import { PLANET_COLORS, PLANET_UNICODE } from "../../settings";
 
 export default function Planets(props) {
 
-    const planetRadius = 280;
-    const planetDegreeRadius = 260;
-    const planetSignRadius = 235;
-    const planetMinuteRadius = 210;
+    const planetRadius = 280 * props.scaleFactor;
+    const planetDegreeRadius = 260 * props.scaleFactor;
+    const planetSignRadius = 235 * props.scaleFactor;
+    const planetMinuteRadius = 210 * props.scaleFactor;
 
     const planet = (planetName, coord) => {
         const [x, y] = point(props.origin, coord, planetRadius, props.rotationalOffset)
@@ -20,11 +20,11 @@ export default function Planets(props) {
                 y={y}
                 text={PLANET_UNICODE[planetName]}
                 align={"center"}
-                fontSize={22}
+                fontSize={22 * props.scaleFactor}
                 stroke={PLANET_COLORS[planetName]}
                 strokeWidth={1}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
@@ -38,12 +38,12 @@ export default function Planets(props) {
                 x={x}
                 y={y}
                 text={`${Math.trunc(coord) % 30}\u00B0`}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
                 align={"center"}
                 verticalAlign={"middle"}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
@@ -56,12 +56,12 @@ export default function Planets(props) {
                 x={x}
                 y={y}
                 text={sign}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
                 align={"center"}
                 verticalAlign={"middle"}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
@@ -75,12 +75,12 @@ export default function Planets(props) {
                 x={x}
                 y={y}
                 text={`${minsAsInt}'`}
-                fontSize={14}
+                fontSize={14 * props.scaleFactor}
                 strokeWidth={1}
                 align={"center"}
                 verticalAlign={"middle"}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }

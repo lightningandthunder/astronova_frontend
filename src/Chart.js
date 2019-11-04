@@ -14,7 +14,8 @@ export default function Chart(props) {
     }
     const origin = { x: props.width / 2, y: props.height / 2 }
     const coords = props.chart[props.view];
-    
+    const scaleFactor = props.scaleFactor;
+
     let cusps;
     let rotationalOffset;
     let cuspOffset;
@@ -50,11 +51,11 @@ export default function Chart(props) {
         <div id="chart">
             <Stage width={props.width} height={props.height}>
                 <Layer>
-                    <Rings origin={origin} />
-                    <CuspLines origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <CuspCoords origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <HouseNumbers origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <Planets origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
+                    <Rings scaleFactor={scaleFactor} origin={origin} />
+                    <CuspLines scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <CuspCoords scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <HouseNumbers scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <Planets scaleFactor={scaleFactor} origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
                 </Layer>
             </Stage>
         </div>

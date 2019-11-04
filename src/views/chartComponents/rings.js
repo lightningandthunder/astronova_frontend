@@ -3,12 +3,12 @@ import { Ring, Group } from "react-konva";
 
 export default function Rings(props) {
     // Signs
-    const signRingOuterRadius = 330;
-    const signRingInnerRadius = 300;
+    const signRingOuterRadius = 330 * props.scaleFactor;
+    const signRingInnerRadius = 300 * props.scaleFactor;
 
     // House ring
-    const houseRingOuterRadius = 170;
-    const houseRingInnerRadius = 140;
+    const houseRingOuterRadius = 170 * props.scaleFactor;
+    const houseRingInnerRadius = 140 * props.scaleFactor;
 
     return (
         <Group>

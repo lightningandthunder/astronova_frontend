@@ -97,6 +97,7 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
+                        scaleFactor={1.0}
                     />
                 }
                 <div className="radioButtons">

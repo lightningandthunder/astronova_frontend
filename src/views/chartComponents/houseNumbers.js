@@ -3,7 +3,7 @@ import { Text, Group } from "react-konva";
 import { point, avgCoords } from "../../utils/geometry";
 
 export default function HouseNumbers(props) {
-    const houseNumberRadius = 155;
+    const houseNumberRadius = 155 * props.scaleFactor;
 
     const houseNumber = (num, coord) => {
         const [x, y] = point(props.origin, coord, houseNumberRadius, props.cuspOffset)
@@ -12,10 +12,10 @@ export default function HouseNumbers(props) {
                 x={x}
                 y={y}
                 text={num}
-                fontSize={16}
+                fontSize={16 * props.scaleFactor}
                 strokeWidth={1}
-                offsetX={8}
-                offsetY={8}
+                offsetX={8 * props.scaleFactor}
+                offsetY={8 * props.scaleFactor}
             />
         )
     }
