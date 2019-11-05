@@ -15,7 +15,7 @@ export function avgCoords(pos1, pos2) {
 }
 
 // Calculate any point on the circle with an angle ("position") and circle radius
-export function point(origin, pos, radius, rotationalOffset = 0) {
+export function derivePoint(origin, pos, radius, rotationalOffset = 0) {
     const angleRotated = pos - rotationalOffset;
     const angleNormalized = angleRotated >= 0 ? toRads(angleRotated) : toRads(angleRotated + 360);
 
@@ -28,4 +28,8 @@ export function point(origin, pos, radius, rotationalOffset = 0) {
 
 export function parseSign(coord) {
     return SIGN_UNICODE[SIGNS[Math.trunc(coord / 30)]];
+}
+
+export function parseAspect(longitude1, longitude2) {
+    throw new Error("Not implemented yet!");
 }

@@ -1,57 +1,55 @@
 import React from "react";
 import { Text, Group } from "react-konva";
-import { point, parseSign } from "../../utils/geometry";
+import { derivePoint, parseSign } from "../../utils/geometry";
 
 export default function CuspCoords(props) {
-    const cuspSignRadius = 315 * props.scaleFactor;
-
     const cuspSign = (coord) => {
         const sign = parseSign(coord);
-        const [x, y] = point(props.origin, coord, cuspSignRadius, props.cuspOffset);
+        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${sign}-${coord}`}
                 x={x}
                 y={y}
                 text={sign}
-                fontSize={14 * props.scaleFactor}
+                fontSize={props.scale.cuspSignFontSize}
                 strokeWidth={1}
-                offsetX={8 * props.scaleFactor}
-                offsetY={8 * props.scaleFactor}
+                offsetX={props.scale.cuspSignOffsetX}
+                offsetY={props.scale.cuspSignOffsetY}
             />
         )
     }
 
     const cuspDegrees = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord - (4 * props.scaleFactor));
-        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius, props.cuspOffset);
+        const adjustedCoordPos = Math.trunc(coord + props.scale.cuspDegreesRotationalOffset);
+        const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${coord}-${adjustedCoordPos}`}
                 x={x}
                 y={y}
                 text={`${Math.trunc(coord % 30)}\u00B0`}
-                fontSize={14 * props.scaleFactor}
+                fontSize={props.scale.cuspDegreesFontSize}
                 strokeWidth={1}
-                offsetX={8 * props.scaleFactor}
-                offsetY={8 * props.scaleFactor}
+                offsetX={props.scale.cuspDegreesOffsetX}
+                offsetY={props.scale.cuspDegreesOffsetY}
             />
         )
     }
 
     const cuspMins = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord + (5 * props.scaleFactor));
+        const adjustedCoordPos = Math.trunc(coord + props.scale.cuspMinutesRotationalOffset);
 
         const mins = coord - Math.trunc(coord);
         const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
-        const [x, y] = point(props.origin, adjustedCoordPos, cuspSignRadius, props.cuspOffset);
+        const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
         return (
             <Text key={`${coord}-${minsAsInt}`}
                 x={x}
                 y={y}
                 text={`${minsAsInt}'`}
-                fontSize={14 * props.scaleFactor}
+                fontSize={props.scale.cuspMinsFontSize}
                 strokeWidth={1}
-                offsetX={8 * props.scaleFactor}
-                offsetY={8 * props.scaleFactor}
+                offsetX={props.scale.cuspMinsOffsetX}
+                offsetY={props.scale.cuspMinsOffsetY}
             />
         )
     }

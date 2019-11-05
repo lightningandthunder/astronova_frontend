@@ -3,6 +3,95 @@ const API_ADDRESS = "http://localhost:5000";
 
 const SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
 
+const CHART_SCALE_DEFAULTS = {
+    outerRingRadii: {
+        signRingOuterRadius: 330,
+        cuspSignRadius: 315,
+        signRingInnerRadius: 300
+    },
+    uniwheelRadii: {
+        planetRingRadii: {
+            planetRadius: 280,
+            planetDegreeRadius: 260,
+            planetSignRadius: 235,
+            planetMinuteRadius: 210,
+        },
+        houseRingRadii: {
+            houseRingOuterRadius: 170,
+            houseNumberRadius: 155,
+            houseRingInnerRadius: 140,
+        },
+    },
+    biWheelOuterRadii: {
+        planetRingRadii: {
+            planetRadius: 280,
+            planetDegreeRadius: 260,
+            planetSignRadius: 235,
+            planetMinuteRadius: 210,
+        },
+        houseRingRadii: {
+            houseRingOuterRadius: 170,
+            houseNumberRadius: 155,
+            houseRingInnerRadius: 140,
+        },
+    },
+    biWheelInnerRadii: {
+        planetRingRadii: {
+            planetRadius: 280,
+            planetDegreeRadius: 260,
+            planetSignRadius: 235,
+            planetMinuteRadius: 210,
+        },
+        houseRingRadii: {
+            houseRingOuterRadius: 170,
+            houseNumberRadius: 155,
+            houseRingInnerRadius: 140,
+        },
+    },
+    dividerRadii: {
+        dividerRadiusBiwheel: 5,
+        dividerRadiusTriwheelOuter: 7,
+        dividerRadiusTriwheelInner: 4
+    },
+    fontsAndOffsets: {
+        planetFontSize: 22,
+        planetOffsetX: 8,
+        planetOffsetY: 8,
+
+        planetSignFontSize: 14,
+        planetSignOffsetX: 8,
+        planetSignOffsetY: 8,
+
+        planetDegreesFontSize: 14,
+        planetDegreesOffsetX: 8,
+        planetDegreesOffsetY: 8,
+
+        planetMinutesFontSize: 14,
+        planetMinutesOffsetX: 8,
+        planetMinutesOffsetY: 8,
+
+        cuspSignFontSize: 14,
+        cuspSignOffsetX: 8,
+        cuspSignOffsetY: 8,
+
+        cuspDegreesFontSize: 14,
+        cuspDegreesOffsetX: 8,
+        cuspDegreesOffsetY: 8,
+        cuspDegreesRotationalOffset: -4,
+        cuspMinutesRotationalOffset: 5,
+
+        cuspMinsFontSize: 14,
+        cuspMinsOffsetX: 8,
+        cuspMinsOffsetY: 8,
+
+        houseNumberFontSize: 16,
+        houseNumberOffsetX: 8,
+        houseNumberOffsetY: 8,
+    }
+}
+
+
+
 const PLANET_COLORS = {
     "Sun": "yellow",
     "Moon": "silver",
@@ -656,4 +745,14 @@ const TIMEZONES = new Set([
 ]);
 
 
-export { QUERY_HEADERS, API_ADDRESS, TIMEZONES, PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE, SIGNS };
+export {
+    QUERY_HEADERS,
+    API_ADDRESS,
+    TIMEZONES,
+    PLANET_COLORS,
+    PLANET_UNICODE,
+    SIGN_COLORS,
+    SIGN_UNICODE,
+    SIGNS,
+    CHART_SCALE_DEFAULTS
+};

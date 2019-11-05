@@ -1,15 +1,13 @@
 import React from "react";
 import { Line, Group } from "react-konva";
-import { point } from "../../utils/geometry";
+import { derivePoint } from "../../utils/geometry";
 
 export default function CuspLines(props) {
-    const signRingInnerRadius = 300 * props.scaleFactor;
-    const houseRingInnerRadius = 140 * props.scaleFactor;
-
     const cuspLine = (pos, cuspId) => {
         return (
             <Line key={cuspId}
-                points={[...point(props.origin, pos, houseRingInnerRadius, props.cuspOffset), ...point(props.origin, pos, signRingInnerRadius, props.cuspOffset)]}
+                points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
+                ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
                 stroke={'black'}
                 strokeWidth={1}
                 lineCap={'round'}

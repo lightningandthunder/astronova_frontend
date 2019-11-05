@@ -1,21 +1,19 @@
 import React from "react";
 import { Text, Group } from "react-konva";
-import { point, avgCoords } from "../../utils/geometry";
+import { derivePoint, avgCoords } from "../../utils/geometry";
 
 export default function HouseNumbers(props) {
-    const houseNumberRadius = 155 * props.scaleFactor;
-
     const houseNumber = (num, coord) => {
-        const [x, y] = point(props.origin, coord, houseNumberRadius, props.cuspOffset)
+        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.houseNumberRadius, props.cuspOffset)
         return (
             <Text key={num}
                 x={x}
                 y={y}
                 text={num}
-                fontSize={16 * props.scaleFactor}
+                fontSize={props.scale.houseNumberFontSize}
                 strokeWidth={1}
-                offsetX={8 * props.scaleFactor}
-                offsetY={8 * props.scaleFactor}
+                offsetX={props.scale.houseNumberOffsetX}
+                offsetY={props.scale.houseNumberOffsetY}
             />
         )
     }

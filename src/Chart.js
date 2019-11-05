@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Stage, Layer } from "react-konva";
 
 import HouseNumbers from "./views/chartComponents/houseNumbers";
@@ -7,14 +6,16 @@ import CuspCoords from "./views/chartComponents/cuspCoords";
 import CuspLines from "./views/chartComponents/cuspLines";
 import Planets from "./views/chartComponents/planets";
 import Rings from "./views/chartComponents/rings";
+import { ScaleManager } from "./managers/ScaleManager";
+
 
 export default function Chart(props) {
+
     if (!props.chart) {
         throw new Error("Missing chart data!")
     }
-    const origin = { x: props.width / 2, y: props.height / 2 }
+
     const coords = props.chart[props.view];
-    const scaleFactor = props.scaleFactor;
 
     let cusps;
     let rotationalOffset;
@@ -47,15 +48,17 @@ export default function Chart(props) {
         throw new Error(`Invalid view selected: ${props.view}`)
     }
 
+    const manager = new ScaleManager();
+    const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
     return (
         <div id="chart">
             <Stage width={props.width} height={props.height}>
                 <Layer>
-                    <Rings scaleFactor={scaleFactor} origin={origin} />
-                    <CuspLines scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <CuspCoords scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <HouseNumbers scaleFactor={scaleFactor} origin={origin} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                    <Planets scaleFactor={scaleFactor} origin={origin} coords={coords} rotationalOffset={rotationalOffset} />
+                    <Rings scale={scale} />
+                    <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                    <Planets scale={scale} coords={coords} rotationalOffset={rotationalOffset} />
                 </Layer>
             </Stage>
         </div>
