@@ -1,5 +1,5 @@
 export default class Scale {
-    constructor(origin, outerRingRadius, wheelRadius, dividerRadius, fontsAndOffsets) {
+    constructor(origin, outerRingRadius, wheelParams, dividerRadius, fontsAndOffsets) {
         // These initializations can be done in a few lines with for loops, 
         // but that's much less clear about what properties this model actually has.
 
@@ -8,34 +8,34 @@ export default class Scale {
         this.cuspSignRadius = outerRingRadius.cuspSignRadius;
         this.signRingInnerRadius = outerRingRadius.signRingInnerRadius;
 
-        this.planetRadius = wheelRadius.planetRadius;
-        this.planetDegreeRadius = wheelRadius.planetDegreeRadius;
-        this.planetSignRadius = wheelRadius.planetSignRadius;
-        this.planetMinuteRadius = wheelRadius.planetMinuteRadius;
+        this.planetRadius = wheelParams.planetRadius;
+        this.planetDegreeRadius = wheelParams.planetDegreeRadius;
+        this.planetSignRadius = wheelParams.planetSignRadius;
+        this.planetMinuteRadius = wheelParams.planetMinuteRadius;
 
-        this.houseRingOuterRadius = wheelRadius.houseRingOuterRadius;
-        this.houseNumberRadius = wheelRadius.houseNumberRadius;
-        this.houseRingInnerRadius = wheelRadius.houseRingInnerRadius;
+        this.houseRingOuterRadius = wheelParams.houseRingOuterRadius;
+        this.houseNumberRadius = wheelParams.houseNumberRadius;
+        this.houseRingInnerRadius = wheelParams.houseRingInnerRadius;
 
         this.dividerRadiusBiwheel = dividerRadius.dividerRadiusBiwheel;
         this.dividerRadiusTriwheelOuter = dividerRadius.dividerRadiusTriwheelOuter;
         this.dividerRadiusTriwheelInner = dividerRadius.dividerRadiusTriwheelInner;
 
-        this.planetFontSize = fontsAndOffsets.planetFontSize;
-        this.planetOffsetX = fontsAndOffsets.planetOffsetX;
-        this.planetOffsetY = fontsAndOffsets.planetOffsetY;
+        this.planetFontSize = wheelParams.planetFontSize;
+        this.planetOffsetX = wheelParams.planetOffsetX;
+        this.planetOffsetY = wheelParams.planetOffsetY;
 
-        this.planetSignFontSize = fontsAndOffsets.planetSignFontSize;
-        this.planetSignOffsetX = fontsAndOffsets.planetSignOffsetX;
-        this.planetSignOffsetY = fontsAndOffsets.planetSignOffsetY;
+        this.planetSignFontSize = wheelParams.planetSignFontSize;
+        this.planetSignOffsetX = wheelParams.planetSignOffsetX;
+        this.planetSignOffsetY = wheelParams.planetSignOffsetY;
 
-        this.planetDegreesFontSize = fontsAndOffsets.planetDegreesFontSize;
-        this.planetDegreesOffsetX = fontsAndOffsets.planetDegreesOffsetX;
-        this.planetDegreesOffsetY = fontsAndOffsets.planetDegreesOffsetY;
+        this.planetDegreesFontSize = wheelParams.planetDegreesFontSize;
+        this.planetDegreesOffsetX = wheelParams.planetDegreesOffsetX;
+        this.planetDegreesOffsetY = wheelParams.planetDegreesOffsetY;
 
-        this.planetMinutesFontSize = fontsAndOffsets.planetMinutesFontSize;
-        this.planetMinutesOffsetX = fontsAndOffsets.planetMinutesOffsetX;
-        this.planetMinutesOffsetY = fontsAndOffsets.planetMinutesOffsetY;
+        this.planetMinutesFontSize = wheelParams.planetMinutesFontSize;
+        this.planetMinutesOffsetX = wheelParams.planetMinutesOffsetX;
+        this.planetMinutesOffsetY = wheelParams.planetMinutesOffsetY;
 
         this.cuspSignFontSize = fontsAndOffsets.cuspSignFontSize;
         this.cuspSignOffsetX = fontsAndOffsets.cuspSignOffsetX;
@@ -51,8 +51,8 @@ export default class Scale {
         this.cuspMinsOffsetX = fontsAndOffsets.cuspMinsOffsetX;
         this.cuspMinsOffsetY = fontsAndOffsets.cuspMinsOffsetY;
 
-        this.houseNumberFontSize = fontsAndOffsets.houseNumberFontSize;
-        this.houseNumberOffsetX = fontsAndOffsets.houseNumberOffsetX;
-        this.houseNumberOffsetY = fontsAndOffsets.houseNumberOffsetY;
+        this.houseNumberFontSize = wheelParams.houseNumberFontSize;
+        this.houseNumberOffsetX = wheelParams.houseNumberOffsetX;
+        this.houseNumberOffsetY = wheelParams.houseNumberOffsetY;
     }
 }

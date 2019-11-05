@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 
-import { derivePoint, parseSign } from "../../utils/geometry";
+import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
 import { PLANET_COLORS, PLANET_UNICODE } from "../../settings";
 
 export default function Planets(props) {
@@ -53,14 +53,13 @@ export default function Planets(props) {
     }
 
     const planetMinutes = (coord) => {
-        const mins = coord - Math.trunc(coord);
-        const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
+        const mins = degToMin(coord)
         const [x, y] = derivePoint(props.scale.origin, coord, props.scale.planetMinuteRadius, props.rotationalOffset);
         return (
             <Text key={`PlanetMinutes-${coord}`}
                 x={x}
                 y={y}
-                text={`${minsAsInt}'`}
+                text={`${mins}'`}
                 fontSize={props.scale.planetMinutesFontSize}
                 strokeWidth={1}
                 offsetX={props.scale.planetMinutesOffsetX}

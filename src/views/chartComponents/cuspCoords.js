@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, Group } from "react-konva";
-import { derivePoint, parseSign } from "../../utils/geometry";
+import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
 
 export default function CuspCoords(props) {
     const cuspSign = (coord) => {
@@ -37,15 +37,13 @@ export default function CuspCoords(props) {
 
     const cuspMins = (coord) => {
         const adjustedCoordPos = Math.trunc(coord + props.scale.cuspMinutesRotationalOffset);
-
-        const mins = coord - Math.trunc(coord);
-        const minsAsInt = Math.trunc(((mins).toFixed(2)) * 100);
+        const mins = degToMin(coord);
         const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text key={`${coord}-${minsAsInt}`}
+            <Text key={`${coord}-${mins}`}
                 x={x}
                 y={y}
-                text={`${minsAsInt}'`}
+                text={`${mins}'`}
                 fontSize={props.scale.cuspMinsFontSize}
                 strokeWidth={1}
                 offsetX={props.scale.cuspMinsOffsetX}

@@ -25,51 +25,77 @@ const CHART_SCALE_DEFAULTS = {
     biWheelOuterRadii: {
         planetRingRadii: {
             planetRadius: 280,
-            planetDegreeRadius: 260,
+            planetDegreeRadius: 255,
             planetSignRadius: 235,
-            planetMinuteRadius: 210,
+            planetMinuteRadius: 215,
         },
         houseRingRadii: {
-            houseRingOuterRadius: 170,
-            houseNumberRadius: 155,
-            houseRingInnerRadius: 140,
+            houseRingOuterRadius: 105,
+            houseNumberRadius: 90,
+            houseRingInnerRadius: 75,
         },
+        fontsAndOffsets: {
+            planetFontSize: 22,
+            planetOffsetX: 8,
+            planetOffsetY: 8,
+
+            planetSignFontSize: 14,
+            planetSignOffsetX: 8,
+            planetSignOffsetY: 8,
+
+            planetDegreesFontSize: 14,
+            planetDegreesOffsetX: 8,
+            planetDegreesOffsetY: 8,
+
+            planetMinutesFontSize: 14,
+            planetMinutesOffsetX: 8,
+            planetMinutesOffsetY: 8,
+
+            houseNumberFontSize: 16,
+            houseNumberOffsetX: 8,
+            houseNumberOffsetY: 8,
+        }
     },
     biWheelInnerRadii: {
         planetRingRadii: {
-            planetRadius: 280,
-            planetDegreeRadius: 260,
-            planetSignRadius: 235,
-            planetMinuteRadius: 210,
+            planetRadius: 190,
+            planetDegreeRadius: 165,
+            planetSignRadius: 140,
+            planetMinuteRadius: 115,
         },
         houseRingRadii: {
-            houseRingOuterRadius: 170,
-            houseNumberRadius: 155,
-            houseRingInnerRadius: 140,
+            houseRingOuterRadius: 105,
+            houseNumberRadius: 90,
+            houseRingInnerRadius: 75,
         },
+        fontsAndOffsets: {
+            planetFontSize: 22,
+            planetOffsetX: 8,
+            planetOffsetY: 8,
+
+            planetSignFontSize: 14,
+            planetSignOffsetX: 8,
+            planetSignOffsetY: 8,
+
+            planetDegreesFontSize: 14,
+            planetDegreesOffsetX: 8,
+            planetDegreesOffsetY: 8,
+
+            planetMinutesFontSize: 14,
+            planetMinutesOffsetX: 8,
+            planetMinutesOffsetY: 8,
+
+            houseNumberFontSize: 16,
+            houseNumberOffsetX: 8,
+            houseNumberOffsetY: 8,
+        }
     },
     dividerRadii: {
-        dividerRadiusBiwheel: 5,
+        dividerRadiusBiwheel: 205,
         dividerRadiusTriwheelOuter: 7,
         dividerRadiusTriwheelInner: 4
     },
-    fontsAndOffsets: {
-        planetFontSize: 22,
-        planetOffsetX: 8,
-        planetOffsetY: 8,
-
-        planetSignFontSize: 14,
-        planetSignOffsetX: 8,
-        planetSignOffsetY: 8,
-
-        planetDegreesFontSize: 14,
-        planetDegreesOffsetX: 8,
-        planetDegreesOffsetY: 8,
-
-        planetMinutesFontSize: 14,
-        planetMinutesOffsetX: 8,
-        planetMinutesOffsetY: 8,
-
+    cuspFontsAndOffsets: {
         cuspSignFontSize: 14,
         cuspSignOffsetX: 8,
         cuspSignOffsetY: 8,
@@ -83,10 +109,6 @@ const CHART_SCALE_DEFAULTS = {
         cuspMinsFontSize: 14,
         cuspMinsOffsetX: 8,
         cuspMinsOffsetY: 8,
-
-        houseNumberFontSize: 16,
-        houseNumberOffsetX: 8,
-        houseNumberOffsetY: 8,
     }
 }
 

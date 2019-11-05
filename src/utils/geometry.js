@@ -4,6 +4,10 @@ export function toRads(deg) {
     return deg * (Math.PI / 180);
 }
 
+export function degToMin(deg) {
+    return Math.trunc((deg - Math.trunc(deg)) * 60)
+}
+
 export function avgCoords(pos1, pos2) {
     // Unwrap 0 back around to 360 for easier math
     const normalizedPos2 = Math.abs(pos1 - pos2) > 180 ? pos2 + 360 : pos2;

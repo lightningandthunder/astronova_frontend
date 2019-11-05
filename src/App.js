@@ -92,6 +92,18 @@ class App extends React.Component {
             <div className="App">
                 {
                     this.state.selectedChart &&
+                    this.state.selectedChart.type === "Uniwheel" &&
+                    <Chart
+                        width={window.innerWidth}
+                        height={window.innerHeight}
+                        chart={this.state.selectedChart}
+                        view={this.state.view}
+                        scaleFactor={1}
+                    />
+                }
+                {
+                    this.state.selectedChart &&
+                    this.state.selectedChart.type === "Biwheel" &&
                     <Chart
                         width={window.innerWidth}
                         height={window.innerHeight}
