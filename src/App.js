@@ -1,13 +1,13 @@
 import React from 'react';
 import './styles/App.css';
 
-import Chartlist from './chartlist';
-import RawChartData from './rawchartdata';
-import RemoveButton from './removeButton';
+import Chartlist from './views/chartlist';
+import RawChartData from './views/rawchartdata';
+import RemoveButton from './views/removeButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
-import Chart from './Chart';
+import Chart from './views/Chart';
 
 
 class App extends React.Component {

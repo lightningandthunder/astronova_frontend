@@ -1,12 +1,12 @@
 import React from "react";
 import { Stage, Layer } from "react-konva";
 
-import HouseNumbers from "./views/chartComponents/houseNumbers";
-import CuspCoords from "./views/chartComponents/cuspCoords";
-import CuspLines from "./views/chartComponents/cuspLines";
-import Planets from "./views/chartComponents/planets";
-import Rings from "./views/chartComponents/rings";
-import { ScaleManager } from "./managers/ScaleManager";
+import HouseNumbers from "./chartComponents/houseNumbers";
+import CuspCoords from "./chartComponents/cuspCoords";
+import CuspLines from "./chartComponents/cuspLines";
+import Planets from "./chartComponents/planets";
+import Rings from "./chartComponents/rings";
+import { ScaleManager } from "../managers/ScaleManager";
 
 
 export default function Chart(props) {
