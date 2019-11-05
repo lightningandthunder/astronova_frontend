@@ -21,6 +21,27 @@ const CHART_SCALE_DEFAULTS = {
             houseNumberRadius: 155,
             houseRingInnerRadius: 140,
         },
+        fontsAndOffsets: {
+            planetFontSize: 22,
+            planetOffsetX: 8,
+            planetOffsetY: 8,
+
+            planetSignFontSize: 14,
+            planetSignOffsetX: 8,
+            planetSignOffsetY: 8,
+
+            planetDegreesFontSize: 14,
+            planetDegreesOffsetX: 8,
+            planetDegreesOffsetY: 8,
+
+            planetMinutesFontSize: 14,
+            planetMinutesOffsetX: 8,
+            planetMinutesOffsetY: 8,
+
+            houseNumberFontSize: 16,
+            houseNumberOffsetX: 8,
+            houseNumberOffsetY: 8,
+        }
     },
     biWheelOuterRadii: {
         planetRingRadii: {

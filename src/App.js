@@ -98,7 +98,7 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
-                        scaleFactor={1}
+                        scaleFactor={1.4}
                     />
                 }
                 {
@@ -109,7 +109,7 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
-                        scaleFactor={1}
+                        scaleFactor={1.4}
                     />
                 }
                 <div className="radioButtons">

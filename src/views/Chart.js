@@ -1,5 +1,5 @@
 import React from "react";
-import { Stage, Layer } from "react-konva";
+import { Stage, Layer, Group } from "react-konva";
 
 import HouseNumbers from "./chartComponents/houseNumbers";
 import CuspCoords from "./chartComponents/cuspCoords";
@@ -50,17 +50,13 @@ export default function Chart(props) {
             throw new Error(`Invalid view selected: ${props.view}`)
         }
         return (
-            <div id="chart">
-                <Stage width={props.width} height={props.height}>
-                    <Layer>
-                        <Rings scale={scale} />
-                        <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                        <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                        <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                        <Planets scale={scale} coords={coords} rotationalOffset={rotationalOffset} />
-                    </Layer>
-                </Stage>
-            </div>
+            <Group>
+                <Rings scale={scale} />
+                <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
+                <Planets scale={scale} coords={coords} rotationalOffset={rotationalOffset} />
+            </Group>
         )
     }
 
@@ -101,24 +97,27 @@ export default function Chart(props) {
             throw new Error(`Invalid view selected: ${props.view}`)
         }
         return (
-            <div id="chart">
-                <Stage width={props.width} height={props.height}>
-                    <Layer>
-                        <Rings scale={scaleInner} />
-                        <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                        <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                        <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                        <Planets scale={scaleInner} coords={coordsInner} rotationalOffset={rotationalOffset} />
-                        <Planets scale={scaleOuter} coords={coordsOuter} rotationalOffset={rotationalOffset} />
-                        <BiwheelDivider scale={scaleOuter} />
-                    </Layer>
-                </Stage>
-            </div>
+            <Group>
+                <Rings scale={scaleInner} />
+                <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
+                <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
+                <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
+                <Planets scale={scaleInner} coords={coordsInner} rotationalOffset={rotationalOffset} />
+                <Planets scale={scaleOuter} coords={coordsOuter} rotationalOffset={rotationalOffset} />
+                <BiwheelDivider scale={scaleOuter} />
+            </Group>
         )
     }
 
-    return (props.chart.type === "Uniwheel"
-        ? showUniwheel()
-        : showBiwheel()
+    return (
+        <div id="chart">
+            <Stage width={props.width} height={props.height}>
+                <Layer>
+                    {props.chart.type === "Uniwheel"
+                        ? showUniwheel()
+                        : showBiwheel()}
+                </Layer>
+            </Stage>
+        </div>
     )
 }
