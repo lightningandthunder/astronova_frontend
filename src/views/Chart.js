@@ -16,18 +16,20 @@ export default function Chart(props) {
         throw new Error("Missing cart data!")
 
     const showUniwheel = () => {
-        const coords = props.chart[props.view];
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
 
         let cusps;
         let rotationalOffset;
         let cuspOffset;
+        let coords;
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
             cusps = props.chart.cusps;
             rotationalOffset = cusps["1"];
             cuspOffset = cusps["1"];
+            coords = Object.assign(props.chart[props.view]);
+
         }
         else if (props.view === "mundane") {
             cusps = {
@@ -36,6 +38,7 @@ export default function Chart(props) {
             };
             rotationalOffset = 0;
             cuspOffset = null;
+            coords = Object.assign(props.chart[props.view]);
         }
         else if (props.view === "right_ascension") {
             cusps = {
@@ -43,8 +46,11 @@ export default function Chart(props) {
                 "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
             };
             // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
-            rotationalOffset = props.chart.ramc - 270 >= 0 ? props.chart.ramc - 270 : props.chart.ramc + 90;
+            rotationalOffset = 0;
             cuspOffset = null;
+            coords = {...props.chart[props.view]}
+            Object.keys(coords).forEach(k => coords[k] -= (props.chart.ramc - 270));
+            console.log(props.chart.ramc)
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
@@ -90,8 +96,9 @@ export default function Chart(props) {
                 "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
             };
             // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
-            rotationalOffset = props.chart.returnChart.ramc - 270 >= 0 ? props.chart.returnChart.ramc - 270 : props.chart.returnChart.ramc + 90;
+            rotationalOffset = props.chart.returnChart.ramc - 270;
             cuspOffset = null;
+
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
