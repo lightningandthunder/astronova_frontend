@@ -11,46 +11,43 @@ import { ScaleManager } from "../managers/ScaleManager";
 
 
 export default function Chart(props) {
-    const manager = new ScaleManager();
     if (!props.chart)
         throw new Error("Missing cart data!")
+
+    const manager = new ScaleManager();
+    
+    const defaultCusps = {
+        "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
+        "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
+    };
+
+    const rotateCoordinatesInRA = (coords, ramc) => {
+        Object.keys(coords).forEach(k => {
+            let rotated = coords[k] - (ramc - 270);
+            coords[k] = rotated >= 0 ? rotated : rotated + 360;
+        })
+    }
 
     const showUniwheel = () => {
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
 
         let cusps;
-        let rotationalOffset;
-        let cuspOffset;
-        let coords;
+        let displayOffset;
+        let coords = { ...props.chart[props.view] };
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
             cusps = props.chart.cusps;
-            rotationalOffset = cusps["1"];
-            cuspOffset = cusps["1"];
-            coords = Object.assign(props.chart[props.view]);
-
+            displayOffset = cusps["1"];
         }
         else if (props.view === "mundane") {
-            cusps = {
-                "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
-                "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
-            };
-            rotationalOffset = 0;
-            cuspOffset = null;
-            coords = Object.assign(props.chart[props.view]);
+            cusps = defaultCusps;
+            displayOffset = 0;
         }
         else if (props.view === "right_ascension") {
-            cusps = {
-                "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
-                "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
-            };
-            // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
-            rotationalOffset = 0;
-            cuspOffset = null;
-            coords = {...props.chart[props.view]}
-            Object.keys(coords).forEach(k => coords[k] -= (props.chart.ramc - 270));
-            console.log(props.chart.ramc)
+            cusps = defaultCusps;
+            displayOffset = 0;
+            rotateCoordinatesInRA(coords, props.chart.ramc); // Rotate to RAMC - 270
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
@@ -58,47 +55,38 @@ export default function Chart(props) {
         return (
             <Group>
                 <Rings scale={scale} />
-                <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={cuspOffset} />
-                <Planets scale={scale} coords={coords} rotationalOffset={rotationalOffset} />
+                <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} />
             </Group>
         )
     }
 
     const showBiwheel = () => {
-        const coordsInner = props.chart.returnChart[props.view];
-        const coordsOuter = props.chart.radix[props.view];
+        const coordsInner = { ...props.chart.returnChart[props.view] }
+        const coordsOuter = { ...props.chart.radix[props.view] }
         const scaleInner = manager.getChartScale(props.width, props.height, "Biwheel Inner", props.scaleFactor);
         const scaleOuter = manager.getChartScale(props.width, props.height, "Biwheel Outer", props.scaleFactor);
 
         let cusps;
-        let rotationalOffset;
-        let cuspOffset;
+        let displayOffset;
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
             cusps = props.chart.returnChart.cusps;
-            rotationalOffset = cusps["1"];
-            cuspOffset = cusps["1"];
+            displayOffset = cusps["1"];
         }
         else if (props.view === "mundane") {
-            cusps = {
-                "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
-                "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
-            };
-            rotationalOffset = 0;
-            cuspOffset = null;
+            cusps = defaultCusps;
+            displayOffset = 0;
         }
         else if (props.view === "right_ascension") {
-            cusps = {
-                "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
-                "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
-            };
-            // Lock left side of chart to 90º west of RAMC, rotating planets relative to that
-            rotationalOffset = props.chart.returnChart.ramc - 270;
-            cuspOffset = null;
-
+            cusps = defaultCusps;
+            displayOffset = 0;
+            // Rotate to RAMC - 270
+            rotateCoordinatesInRA(coordsInner, props.chart.returnChart.ramc);
+            rotateCoordinatesInRA(coordsOuter, props.chart.returnChart.ramc);
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
@@ -106,11 +94,11 @@ export default function Chart(props) {
         return (
             <Group>
                 <Rings scale={scaleInner} />
-                <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={cuspOffset} />
-                <Planets scale={scaleInner} coords={coordsInner} rotationalOffset={rotationalOffset} />
-                <Planets scale={scaleOuter} coords={coordsOuter} rotationalOffset={rotationalOffset} />
+                <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                <Planets scale={scaleInner} coords={coordsInner} rotationalOffset={displayOffset} />
+                <Planets scale={scaleOuter} coords={coordsOuter} rotationalOffset={displayOffset} />
                 <BiwheelDivider scale={scaleOuter} />
             </Group>
         )
