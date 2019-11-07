@@ -9,6 +9,12 @@ import Rings from "./chartComponents/rings";
 import BiwheelDivider from "./chartComponents/BiwheelDivider"
 import { ScaleManager } from "../managers/ScaleManager";
 
+const defaultCusps = {
+    "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
+    "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
+};
+
+
 
 export default function Chart(props) {
     if (!props.chart)
@@ -16,11 +22,6 @@ export default function Chart(props) {
 
     const manager = new ScaleManager();
     
-    const defaultCusps = {
-        "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
-        "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
-    };
-
     const rotateCoordinatesInRA = (coords, ramc) => {
         Object.keys(coords).forEach(k => {
             let rotated = coords[k] - (ramc - 270);
@@ -28,6 +29,8 @@ export default function Chart(props) {
         })
     }
 
+    // ================== Chart display functions ==================
+    
     const showUniwheel = () => {
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
 

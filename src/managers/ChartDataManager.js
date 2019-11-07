@@ -10,7 +10,7 @@ export default class ChartManager {
 
     /* ================== Chart models =================  */
 
-    createUniwheel(data) {
+    createUniwheel(data, name=undefined) {
         const expectedProperties = [
             "local_datetime",
             "ecliptical",
@@ -30,11 +30,11 @@ export default class ChartManager {
 
         this.validateExpectedProperties(expectedProperties, data);
         const uniwheel = new Uniwheel(data);
-        uniwheel.name = `${moment(data.local_datetime).format("YYYY/MM/DD")}`
+        uniwheel.name = name ? name : `${moment(data.local_datetime).format("YYYY/MM/DD")}`
         return uniwheel;
     }
 
-    createBiwheel(data) {
+    createBiwheel(data, name=undefined) {
         const expectedPropertiesTopLevel = [
             "radix",
             "return_chart"
@@ -63,7 +63,7 @@ export default class ChartManager {
         const radix = this.createUniwheel(data.radix);
         const returnChart = this.createUniwheel(data.return_chart);
         const biwheel = new Biwheel(radix, returnChart);
-        biwheel.name = `${radix.name} return ${moment(returnChart.local_datetime).format("YYYY/MM/DD")}`;
+        biwheel.name = `${name || radix.name} return ${moment(returnChart.local_datetime).format("YYYY/MM/DD")}`;
         return biwheel;
     }
 

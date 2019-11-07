@@ -1,11 +1,13 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import ChartManager from '../../managers/ChartDataManager';
-import geosearch from '../../utils/geosearch';
-import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
-import LocationInput from './LocationInput';
-import Datepicker from './datepicker';
-import axios from 'axios';
+import axios from "axios";
+
+import ChartManager from "../../managers/ChartDataManager";
+import geosearch from "../../utils/geosearch";
+import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
+import LocationInput from "./LocationInput";
+import Datepicker from "./datepicker";
+import NameInput from "./NameInput";
 import logIfDevelopment from "../../utils/logIfDevelopment";
 
 const manager = new ChartManager();
@@ -15,6 +17,7 @@ export default class NewChartPopup extends React.Component {
         super(props);
         this.state = {
             isOpen: false,
+            nameInput: undefined,
             currentSelectedDatetime: undefined,
             locationInput: undefined
         }
@@ -24,6 +27,7 @@ export default class NewChartPopup extends React.Component {
         this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
         this.openPopup = this.openPopup.bind(this);
         this.closePopup = this.closePopup.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
         this.handleError = this.handleError.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
     };
@@ -33,6 +37,9 @@ export default class NewChartPopup extends React.Component {
     }
     closePopup() {
         this.setState({ isOpen: false })
+    }
+    handleNameChange(event) {
+        this.setState({ nameInput: event.target.value });
     }
     handleLocationChange(event) {
         this.setState({ locationInput: event.target.value });
@@ -48,8 +55,15 @@ export default class NewChartPopup extends React.Component {
 
     handleKeyDown(event) {
         // Recognize pressing return key
-        if (event.keyCode === 13 && this.state.isOpen === true)
-            this.queryBackendForRadix();
+        if (event.keyCode === 13 && this.state.isOpen === true) {
+            if (this.state.nameInput === "debug") {
+                window.novaDebugMode = true;
+                logIfDevelopment("Wizard mode activated");
+                this.closePopup();
+            } else {
+                this.queryBackendForRadix();
+            }
+        }
     }
 
     validateDateTime() {
@@ -94,9 +108,9 @@ export default class NewChartPopup extends React.Component {
             this.handleError(err);
             return;
         }
-        
+
         try {
-            const newChart = manager.createUniwheel(response.data);
+            const newChart = manager.createUniwheel(response.data, this.state.nameInput);
             logIfDevelopment("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
@@ -120,6 +134,7 @@ export default class NewChartPopup extends React.Component {
                     onClose={this.closePopup}
                 >
                     <div className="actions">
+                        < NameInput onChange={this.handleNameChange} />
                         <Datepicker onChange={this.handleDateTimeChange} />
                         <LocationInput updateLocation={this.handleLocationChange} />
                         <div>

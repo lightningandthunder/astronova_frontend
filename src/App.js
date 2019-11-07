@@ -30,6 +30,7 @@ class App extends React.Component {
     /* ================ Lifecycle hooks ================ */
 
     componentDidMount() {
+        window.novaDebugMode = false;
         const chartsArray = JSON.parse(localStorage.getItem('charts'));
         if (chartsArray)
             this.setState({ charts: [...chartsArray] });

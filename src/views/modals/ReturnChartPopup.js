@@ -173,7 +173,7 @@ export default class ReturnChartPopup extends React.Component {
             }
             logIfDevelopment("Radix & return charts: ", charts);
             for (let c = 0; c < charts.length; c++) {
-                const newChart = manager.createBiwheel(charts[c]);
+                const newChart = manager.createBiwheel(charts[c], inputRadix.name);
                 this.props.saveChart(newChart);
             }
 
