@@ -4,3 +4,4 @@ export default function logIfDevelopment(...data) {
         || window.novaDebugMode)
         console.log(...data);
 }
+
