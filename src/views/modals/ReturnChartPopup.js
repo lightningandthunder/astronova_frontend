@@ -64,7 +64,7 @@ export default class ReturnChartPopup extends React.Component {
     }
     validateDateTime() {
         // YYYY-mm-ddThh:mm in military time
-        const dtRegex = /^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/;
+        const dtRegex = /^[1-3]\d{3}-[01]\d-[0-3]\d/;
         return dtRegex.exec(this.state.currentSelectedDatetime) ? true : false;
     }
 

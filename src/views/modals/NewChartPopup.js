@@ -10,7 +10,6 @@ import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
 import logIfDevelopment from "../../utils/logIfDevelopment";
 import APMToggle from "./APMToggle";
-import moment from "moment";
 
 const manager = new ChartManager();
 
@@ -97,7 +96,6 @@ export default class NewChartPopup extends React.Component {
             d.setHours(0)
         else if (0 < hour < 12 && apm === "PM")
             d.setHours(hour + 12);
-
         return d.toISOString();
     }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/App.css';
 
 import Chartlist from './views/chartlist';
-import RawChartData from './views/rawchartdata';
+// import RawChartData from './views/rawchartdata';
 import RemoveButton from './views/removeButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
@@ -58,9 +58,10 @@ class App extends React.Component {
         );
     }
 
-    onChangeSelectedChart(e) {
+    onChangeSelectedChart(chart) {
         // Saves to both state and localStorage
-        this.setState({ selectedChart: this.state.charts[e.target.value] },
+
+        this.setState({ selectedChart: chart },
             () => {
                 localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
                 logIfDevelopment("Saved current selection to LS: " + this.state.selectedChart.name);
@@ -69,8 +70,7 @@ class App extends React.Component {
     }
 
     setSelectedChartToNewest() {
-        // Select the new chart. Need to figure out an alternate way eventually.
-        this.onChangeSelectedChart({ target: { value: this.state.charts.length - 1 } });
+        this.onChangeSelectedChart(this.state.charts[this.state.charts.length - 1]);
     }
 
     handleViewChange(e) {
@@ -136,11 +136,13 @@ class App extends React.Component {
                     />
                     <label>RightAscension</label>
                 </div>
-                <div>
-                    <RawChartData className="rawchartdata" chart={this.state.selectedChart} />
-                </div>
+                {/* <RawChartData className="rawchartdata" chart={this.state.selectedChart} /> */}
 
-                <Chartlist charts={this.state.charts ? this.state.charts : []} onChange={this.onChangeSelectedChart} />
+                <Chartlist className="chartList"
+                    charts={this.state.charts ? this.state.charts : []}
+                    selectedChart={this.state.selectedChart}
+                    onChangeSelectedChart={this.onChangeSelectedChart}
+                />
                 <NewChartPopup
                     saveChart={this.saveChart}
                     setSelectedChartToNewest={this.setSelectedChartToNewest}

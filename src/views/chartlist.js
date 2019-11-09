@@ -1,11 +1,19 @@
 import React from 'react';
+import ChartItem from "./chartItem";
 
 export default function ChartList(props) {
     return (
-        <select onChange={props.onChange}>
-            {props.charts.map( (item, index) => (
-                <option value={index} key={index}>{item.name}</option>
+        <div className="chartList">
+            {props.charts.map((item, index) => (
+                <ChartItem
+                    value={index}
+                    key={index}
+                    chart={item}
+                    onChangeSelectedChart={props.onChangeSelectedChart}
+                    selected={item === props.selectedChart}
+                />
             ))}
-        </select>
+        </div>
+
     )
 }

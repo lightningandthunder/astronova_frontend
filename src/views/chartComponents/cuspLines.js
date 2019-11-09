@@ -3,35 +3,31 @@ import { Line, Group, Arrow } from "react-konva";
 import { derivePoint } from "../../utils/geometry";
 
 export default function CuspLines(props) {
+    const boldCusps = [1, 4, 7, 10];
+
     const cuspLine = (pos, cuspId) => {
         return (
-            <Line key={cuspId}
-                points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
-                ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
-                stroke={"black"}
-                strokeWidth={1}
-            />
-        )
-    }
+            cuspId === 10
+                ? <Arrow key={cuspId}
+                    points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
+                    ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
+                    stroke={"black"}
+                    strokeWidth={2}
+                    fill={"black"} />
 
-    const mcArrow = (pos, cuspId) => {
-        return (
-            <Arrow key={cuspId}
-                points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
-                ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
-                stroke={"black"}
-                strokeWidth={1}
-                fill={"black"}
-            />
+                : <Line key={cuspId}
+                    points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
+                    ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
+                    stroke={"black"}
+                    strokeWidth={boldCusps.indexOf(cuspId) >= 0 ? 2 : 1}
+                />
         )
     }
 
     return (
         <Group>
-            {Object.keys(props.cusps).map((cusp, index) => (
-                cusp === "10"  // 10th house cusp, as MC, typically has arrow
-                    ? mcArrow(props.cusps["10"], "Arrow")
-                    : cuspLine(props.cusps[index + 1], index + 1)
+            {Object.keys(props.cusps).map((_, index) => (
+                cuspLine(props.cusps[index + 1], index + 1)
             ))}
         </Group>
     )

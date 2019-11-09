@@ -18,7 +18,13 @@
 /* Chart List
 */
 
-
+.chartList{
+    float: "left";
+    height: 500px;
+    width: 500px;
+    background-color: rgb(237, 240, 245);
+    overflow-y: scroll;
+}
 
 
 /* Title
