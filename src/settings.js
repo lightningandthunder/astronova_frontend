@@ -1,3 +1,16 @@
+import aries from "./assets/aries.jpg";
+import taurus from "./assets/taurus.jpg";
+import gemini from "./assets/gemini.jpg";
+import cancer from "./assets/cancer.jpg";
+import leo from "./assets/leo.jpg";
+import virgo from "./assets/virgo.jpg";
+import libra from "./assets/libra.jpg";
+import scorpio from "./assets/scorpio.jpg";
+import sagittarius from "./assets/sagittarius.jpg";
+import capricorn from "./assets/capricorn.jpg";
+import aquarius from "./assets/aquarius.jpg";
+import pisces from "./assets/pisces.jpg";
+
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
 const VERSION = "0.1.0a"
@@ -193,19 +206,19 @@ const SIGN_UNICODE = {
     "Pis": "\u2653"
 }
 
-const SIGN_URLS = {
-    "Ari": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Aries.svg",
-    "Tau": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Taurus.svg",
-    "Gem": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Gemini.svg",
-    "Can": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Cancer.svg",
-    "Leo": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Leo.svg",
-    "Vir": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Virgo.svg",
-    "Lib": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Libra.svg",
-    "Sco": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Scorpio.svg",
-    "Sag": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Sagittarius.svg",
-    "Cap": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Capricorn.svg",
-    "Aqu": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Aquarius.svg",
-    "Pis": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Pisces.svg"
+const SIGN_URIS = {
+    "Ari": aries,
+    "Tau": taurus,
+    "Gem": gemini,
+    "Can": cancer,
+    "Leo": leo,
+    "Vir": virgo,
+    "Lib": libra,
+    "Sco": scorpio,
+    "Sag": sagittarius,
+    "Cap": capricorn,
+    "Aqu": aquarius,
+    "Pis": pisces
 }
 
 // IANA-recognized timezones
@@ -813,7 +826,7 @@ export {
     PLANET_UNICODE,
     SIGN_COLORS,
     SIGN_UNICODE,
-    SIGN_URLS,
+    SIGN_URIS,
     SIGNS,
     CHART_SCALE_DEFAULTS,
     VERSION,

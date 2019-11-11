@@ -1,18 +1,23 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
+import SignImage from "./SignImage";
+import { SIGN_URIS } from "../../settings";
 
 export default function CuspCoords(props) {
     const cuspSign = (cusp, coord) => {
         const sign = parseSign(coord);
+        const signUri = SIGN_URIS[sign];
         const [x, y] = derivePoint(props.scale.origin, coord, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text key={`${cusp}-Sign`}
+            <SignImage
+                key={`${cusp}-Sign`}
+                image={signUri}
                 x={x}
                 y={y}
-                text={sign}
-                fontSize={props.scale.cuspSignFontSize}
-                strokeWidth={1}
+                width={20}
+                height={20}
+                stroke={"red"}
                 offsetX={props.scale.cuspSignOffsetX}
                 offsetY={props.scale.cuspSignOffsetY}
             />

@@ -1,11 +1,11 @@
 import React from "react";
-import { Text, Group, Image } from "react-konva";
+import { Text, Group } from "react-konva";
 
 import { derivePoint, parseSign, degToMin, fixOverlap } from "../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE, SIGN_URLS } from "../../settings";
+import { PLANET_COLORS, PLANET_UNICODE, SIGN_URIS } from "../../settings";
 import PlanetCoords from "../../models/PlanetCoords";
 import SignImage from "./SignImage";
-import aries from "../assets/aries.jpg";
+
 
 export default function Planets(props) {
     const adjustedCoords = fixOverlap(new PlanetCoords(props.coords));
@@ -43,36 +43,22 @@ export default function Planets(props) {
 
     const planetSign = (planetInfo) => {
         const sign = parseSign(planetInfo.rawCoord);
-        const signUrl = SIGN_URLS[sign];
+        const signUri = SIGN_URIS[sign];
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetSignRadius, props.rotationalOffset);
         return (
             <SignImage
-                image={aries}
+                key={`${planetInfo.name}-Sign`}
+                image={signUri}
                 x={x}
                 y={y}
                 width={20}
                 height={20}
                 stroke={"red"}
             />
-            // <Image
-            //     x={x}
-            //     y={y}
-            //     image={new window.Image()}
-            //     src={signUrl}
-            //     width={50}
-            //     height={50}
-            // />
+
         )
     }
-    // <Text key={`${planetInfo.name}-Sign`}
-    //     x={x}
-    //     y={y}
-    //     text={sisignImagegn}
-    //     fontSize={props.scale.planetSignFontSize}
-    //     strokeWidth={1}
-    //     offsetX={props.scale.planetSignOffsetX}
-    //     offsetY={props.scale.planetSignOffsetY}
-    // />
+
 
     const planetMinutes = (planetInfo) => {
         const mins = degToMin(planetInfo.rawCoord)
