@@ -5,6 +5,7 @@ import { derivePoint, parseSign, degToMin, fixOverlap } from "../../utils/geomet
 import { PLANET_COLORS, PLANET_UNICODE, SIGN_URLS } from "../../settings";
 import PlanetCoords from "../../models/PlanetCoords";
 import SignImage from "./SignImage";
+import aries from "../assets/aries.jpg";
 
 export default function Planets(props) {
     const adjustedCoords = fixOverlap(new PlanetCoords(props.coords));
@@ -45,7 +46,13 @@ export default function Planets(props) {
         const signUrl = SIGN_URLS[sign];
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetSignRadius, props.rotationalOffset);
         return (
-            <SignImage image={signUrl}
+            <SignImage
+                image={aries}
+                x={x}
+                y={y}
+                width={20}
+                height={20}
+                stroke={"red"}
             />
             // <Image
             //     x={x}
