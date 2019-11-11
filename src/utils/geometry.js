@@ -5,7 +5,30 @@ export function toRads(deg) {
 }
 
 export function degToMin(deg) {
-    return Math.trunc((deg - Math.trunc(deg)) * 60)
+    return Math.trunc((deg - Math.trunc(deg)) * 60);
+}
+
+export function fixOverlap(coords) {
+    const fixedAnglePlacement = 10;
+    let adjustedAngles = Object.assign(coords);
+
+    let previousKey = null;
+    Object.keys(coords).forEach((key) => {
+        let first = coords[key].renderCoord;
+        if (!previousKey) {
+            previousKey = key;
+            return;
+        }
+
+        let second = coords[previousKey].renderCoord;
+        let diff = Math.abs(first - second);
+        if (diff < fixedAnglePlacement || diff > 360 - fixedAnglePlacement) {
+            console.log(`Found diff ${diff}; Making adjustment between ${key} and ${previousKey}`)
+            adjustedAngles[key].renderCoord += (fixedAnglePlacement - diff);
+        }
+        previousKey = key;
+    });
+    return adjustedAngles;
 }
 
 export function avgCoords(pos1, pos2) {
@@ -31,7 +54,7 @@ export function derivePoint(origin, pos, radius, rotationalOffset = 0) {
 }
 
 export function parseSign(coord) {
-    return SIGN_UNICODE[SIGNS[Math.trunc(coord / 30)]];
+    return SIGNS[Math.trunc(coord / 30)];
 }
 
 export function parseAspect(longitude1, longitude2) {

@@ -8,6 +8,8 @@ import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
 import Chart from './views/Chart';
+import ViewButtons from "./views/ViewButtons";
+import { TITLE } from "./settings";
 
 
 class App extends React.Component {
@@ -30,6 +32,7 @@ class App extends React.Component {
     /* ================ Lifecycle hooks ================ */
 
     componentDidMount() {
+        document.title = TITLE;
         window.novaDebugMode = false;
         const chartsArray = JSON.parse(localStorage.getItem('charts'));
         if (chartsArray)
@@ -60,7 +63,6 @@ class App extends React.Component {
 
     onChangeSelectedChart(chart) {
         // Saves to both state and localStorage
-
         this.setState({ selectedChart: chart },
             () => {
                 localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
@@ -77,8 +79,6 @@ class App extends React.Component {
         this.setState({ view: e.target.value });
     }
 
-
-
     // This should be in another section; will eventually reorganize
     resetCharts() {
         localStorage.removeItem('charts');
@@ -87,10 +87,10 @@ class App extends React.Component {
         this.setState({ selectedChart: undefined })
     }
 
-
     render() {
         return (
             <div className="App">
+                {/* ======== Uniwheel ======== */}
                 {
                     this.state.selectedChart &&
                     this.state.selectedChart.type === "Uniwheel" &&
@@ -99,9 +99,11 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
-                        scaleFactor={1.4}
+                        scaleFactor={1.2}
                     />
                 }
+
+                {/* ======== Biwheel ======== */}
                 {
                     this.state.selectedChart &&
                     this.state.selectedChart.type === "Biwheel" &&
@@ -110,34 +112,13 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
-                        scaleFactor={1.4}
+                        scaleFactor={1.2}
                     />
                 }
-                <div className="radioButtons">
-                    <input type="radio"
-                        id="ecliptical"
-                        value="ecliptical"
-                        checked={this.state.view === "ecliptical"}
-                        onChange={this.handleViewChange}
-                    />
-                    <label>Ecliptical</label>
-                    <input type="radio"
-                        id="mundane"
-                        value="mundane"
-                        checked={this.state.view === "mundane"}
-                        onChange={this.handleViewChange}
-                    />
-                    <label>Mundane</label>
-                    <input type="radio"
-                        id="right_ascension"
-                        value="right_ascension"
-                        checked={this.state.view === "right_ascension"}
-                        onChange={this.handleViewChange}
-                    />
-                    <label>RightAscension</label>
-                </div>
-                {/* <RawChartData className="rawchartdata" chart={this.state.selectedChart} /> */}
-
+                <ViewButtons
+                    view={this.state.view}
+                    onChangeView={this.handleViewChange}
+                />
                 <Chartlist className="chartList"
                     charts={this.state.charts ? this.state.charts : []}
                     selectedChart={this.state.selectedChart}
@@ -147,10 +128,11 @@ class App extends React.Component {
                     saveChart={this.saveChart}
                     setSelectedChartToNewest={this.setSelectedChartToNewest}
                 />
+
+                {/* ======== Button for solunar return chart ======== */}
                 {
                     this.state.selectedChart
-                        ?
-                        <ReturnChartPopup
+                        ? <ReturnChartPopup
                             saveChart={this.saveChart}
                             setSelectedChartToNewest={this.setSelectedChartToNewest}
                             selectedChart={this.state.selectedChart}

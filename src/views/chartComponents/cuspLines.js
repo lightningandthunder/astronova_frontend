@@ -8,7 +8,7 @@ export default function CuspLines(props) {
     const cuspLine = (pos, cuspId) => {
         return (
             cuspId === 10
-                ? <Arrow key={cuspId}
+                ? <Arrow key={`${cuspId}-Line`}
                     points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
                     ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
                     stroke={"black"}

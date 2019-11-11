@@ -3,11 +3,11 @@ import { Text, Group } from "react-konva";
 import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
 
 export default function CuspCoords(props) {
-    const cuspSign = (coord) => {
+    const cuspSign = (cusp, coord) => {
         const sign = parseSign(coord);
         const [x, y] = derivePoint(props.scale.origin, coord, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text key={`${sign}-${coord}`}
+            <Text key={`${cusp}-Sign`}
                 x={x}
                 y={y}
                 text={sign}
@@ -19,11 +19,15 @@ export default function CuspCoords(props) {
         )
     }
 
-    const cuspDegrees = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord + props.scale.cuspDegreesRotationalOffset);
+    const cuspDegrees = (cusp, coord) => {
+        // Cusps 7-12 need to have degrees and minutes in opposite places for readability
+        const offset = cusp <= 6
+            ? props.scale.cuspDegreesRotationalOffset
+            : props.scale.cuspMinutesRotationalOffset
+        const adjustedCoordPos = Math.trunc(coord + offset);
         const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text key={`${coord}-${adjustedCoordPos}`}
+            <Text key={`${cusp}-Degrees`}
                 x={x}
                 y={y}
                 text={`${Math.trunc(coord % 30)}\u00B0`}
@@ -35,12 +39,16 @@ export default function CuspCoords(props) {
         )
     }
 
-    const cuspMins = (coord) => {
-        const adjustedCoordPos = Math.trunc(coord + props.scale.cuspMinutesRotationalOffset);
+    const cuspMins = (cusp, coord) => {
+        // Cusps 7-12 need to have degrees and minutes in opposite places for readability
+        const offset = cusp <= 6
+            ? props.scale.cuspMinutesRotationalOffset
+            : props.scale.cuspDegreesRotationalOffset
+        const adjustedCoordPos = Math.trunc(coord + offset);
         const mins = degToMin(coord);
         const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text key={`${coord}-${mins}`}
+            <Text key={`${cusp}-Minutes`}
                 x={x}
                 y={y}
                 text={`${mins}'`}
@@ -55,9 +63,9 @@ export default function CuspCoords(props) {
     return (
         <Group>
             {Object.keys(props.cusps).map((cusp, index) => (
-                [cuspSign(props.cusps[index + 1]),
-                cuspDegrees(props.cusps[index + 1]),
-                cuspMins(props.cusps[index + 1])]
+                [cuspSign(cusp, props.cusps[index + 1]),
+                cuspDegrees(cusp, props.cusps[index + 1]),
+                cuspMins(cusp, props.cusps[index + 1])]
             ))}
         </Group>
     )

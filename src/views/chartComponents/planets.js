@@ -1,19 +1,23 @@
 import React from "react";
-import { Text, Group } from "react-konva";
+import { Text, Group, Image } from "react-konva";
 
-import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE } from "../../settings";
+import { derivePoint, parseSign, degToMin, fixOverlap } from "../../utils/geometry";
+import { PLANET_COLORS, PLANET_UNICODE, SIGN_URLS } from "../../settings";
+import PlanetCoords from "../../models/PlanetCoords";
+import SignImage from "./SignImage";
 
 export default function Planets(props) {
-    const planet = (planetName, coord) => {
-        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.planetRadius, props.rotationalOffset)
+    const adjustedCoords = fixOverlap(new PlanetCoords(props.coords));
+
+    const planetSymbol = (planetInfo) => {
+        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetRadius, props.rotationalOffset)
         return (
-            <Text key={planetName}
+            <Text key={`${planetInfo.name}-Symbol`}
                 x={x}
                 y={y}
-                text={PLANET_UNICODE[planetName]}
+                text={PLANET_UNICODE[planetInfo.name]}
                 fontSize={props.scale.planetFontSize}
-                stroke={PLANET_COLORS[planetName]}
+                stroke={PLANET_COLORS[planetInfo.name]}
                 strokeWidth={1}
                 offsetX={props.scale.planetOffsetX}
                 offsetY={props.scale.planetOffsetY}
@@ -21,13 +25,13 @@ export default function Planets(props) {
         )
     }
 
-    const planetDegrees = (coord) => {
-        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.planetDegreeRadius, props.rotationalOffset);
+    const planetDegrees = (planetInfo) => {
+        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetDegreeRadius, props.rotationalOffset);
         return (
-            <Text key={`PlanetDegrees-${coord}`}
+            <Text key={`${planetInfo.name}-Degrees`}
                 x={x}
                 y={y}
-                text={`${Math.trunc(coord) % 30}\u00B0`}
+                text={`${Math.trunc(planetInfo.rawCoord) % 30}\u00B0`}
                 fontSize={props.scale.planetDegreesFontSize}
                 strokeWidth={1}
                 offsetX={props.scale.planetDegreesOffsetX}
@@ -36,27 +40,38 @@ export default function Planets(props) {
         )
     }
 
-    const planetSign = (coord) => {
-        const sign = parseSign(coord);
-        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.planetSignRadius, props.rotationalOffset);
+    const planetSign = (planetInfo) => {
+        const sign = parseSign(planetInfo.rawCoord);
+        const signUrl = SIGN_URLS[sign];
+        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetSignRadius, props.rotationalOffset);
         return (
-            <Text key={`PlanetSign-${coord}`}
-                x={x}
-                y={y}
-                text={sign}
-                fontSize={props.scale.planetSignFontSize}
-                strokeWidth={1}
-                offsetX={props.scale.planetSignOffsetX}
-                offsetY={props.scale.planetSignOffsetY}
+            <SignImage image={signUrl}
             />
+            // <Image
+            //     x={x}
+            //     y={y}
+            //     image={new window.Image()}
+            //     src={signUrl}
+            //     width={50}
+            //     height={50}
+            // />
         )
     }
+    // <Text key={`${planetInfo.name}-Sign`}
+    //     x={x}
+    //     y={y}
+    //     text={sisignImagegn}
+    //     fontSize={props.scale.planetSignFontSize}
+    //     strokeWidth={1}
+    //     offsetX={props.scale.planetSignOffsetX}
+    //     offsetY={props.scale.planetSignOffsetY}
+    // />
 
-    const planetMinutes = (coord) => {
-        const mins = degToMin(coord)
-        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.planetMinuteRadius, props.rotationalOffset);
+    const planetMinutes = (planetInfo) => {
+        const mins = degToMin(planetInfo.rawCoord)
+        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetMinuteRadius, props.rotationalOffset);
         return (
-            <Text key={`PlanetMinutes-${coord}`}
+            <Text key={`${planetInfo.name}-Minutes`}
                 x={x}
                 y={y}
                 text={`${mins}'`}
@@ -67,13 +82,21 @@ export default function Planets(props) {
             />
         )
     }
+
+    const planetAndCoords = (planetInfo) => {
+        return (
+            <Group key={planetInfo.name}>
+                {planetSymbol(planetInfo)}
+                {planetDegrees(planetInfo)}
+                {planetSign(planetInfo)}
+                {planetMinutes(planetInfo)}
+            </Group>
+        )
+    }
     return (
         <Group>
-            {Object.keys(props.coords).map((coord) => (
-                [planet(coord, props.coords[coord]),
-                planetDegrees(props.coords[coord]),
-                planetSign(props.coords[coord]),
-                planetMinutes(props.coords[coord])]
+            {Object.keys(props.coords).map((planet) => (
+                planetAndCoords(adjustedCoords[planet])
             ))}
         </Group>
     )

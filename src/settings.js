@@ -1,5 +1,7 @@
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
+const VERSION = "0.1.0a"
+const TITLE = `Nova ${VERSION}`
 
 const SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
 
@@ -133,8 +135,6 @@ const CHART_SCALE_DEFAULTS = {
     }
 }
 
-
-
 const PLANET_COLORS = {
     "Sun": "yellow",
     "Moon": "silver",
@@ -158,7 +158,9 @@ const PLANET_UNICODE = {
     "Saturn": "\u2644",
     "Uranus": "\u2645",
     "Neptune": "\u2646",
-    "Pluto": "\u2647"
+    "Pluto": "\u2647",
+    "EP": "EP",
+    "WP": "WP"
 }
 
 const SIGN_COLORS = {
@@ -189,6 +191,21 @@ const SIGN_UNICODE = {
     "Cap": "\u2651",
     "Aqu": "\u2652",
     "Pis": "\u2653"
+}
+
+const SIGN_URLS = {
+    "Ari": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Aries.svg",
+    "Tau": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Taurus.svg",
+    "Gem": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Gemini.svg",
+    "Can": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Cancer.svg",
+    "Leo": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Leo.svg",
+    "Vir": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Virgo.svg",
+    "Lib": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Libra.svg",
+    "Sco": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Scorpio.svg",
+    "Sag": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Sagittarius.svg",
+    "Cap": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Capricorn.svg",
+    "Aqu": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Aquarius.svg",
+    "Pis": "https://en.wikipedia.org/wiki/Astrological_symbols#/media/File:Pisces.svg"
 }
 
 // IANA-recognized timezones
@@ -796,6 +813,9 @@ export {
     PLANET_UNICODE,
     SIGN_COLORS,
     SIGN_UNICODE,
+    SIGN_URLS,
     SIGNS,
-    CHART_SCALE_DEFAULTS
+    CHART_SCALE_DEFAULTS,
+    VERSION,
+    TITLE
 };
