@@ -1,4 +1,4 @@
-import { SIGNS, SIGN_UNICODE } from "../settings";
+import { SIGNS } from "../settings";
 
 export function toRads(deg) {
     return deg * (Math.PI / 180);

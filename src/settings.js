@@ -153,7 +153,7 @@ const CHART_SCALE_DEFAULTS = {
 
 const PLANET_COLORS = {
     "Sun": "yellow",
-    "Moon": "silver",
+    "Moon": "gray",
     "Mercury": "orange",
     "Venus": "green",
     "Mars": "red",
@@ -192,21 +192,6 @@ const SIGN_COLORS = {
     "Cap": "green",
     "Aqu": "cyan",
     "Pis": "blue"
-}
-
-const SIGN_UNICODE = {
-    "Ari": "\u2648",
-    "Tau": "\u2649",
-    "Gem": "\u264A",
-    "Can": "\u264B",
-    "Leo": "\u264C",
-    "Vir": "\u264D",
-    "Lib": "\u264E",
-    "Sco": "\u264F",
-    "Sag": "\u2650",
-    "Cap": "\u2651",
-    "Aqu": "\u2652",
-    "Pis": "\u2653"
 }
 
 const SIGN_URIS = {
@@ -827,8 +812,6 @@ export {
     TIMEZONES,
     PLANET_COLORS,
     PLANET_UNICODE,
-    SIGN_COLORS,
-    SIGN_UNICODE,
     SIGN_URIS,
     SIGNS,
     CHART_SCALE_DEFAULTS,
