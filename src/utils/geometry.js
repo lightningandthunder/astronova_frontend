@@ -8,6 +8,13 @@ export function degToMin(deg) {
     return Math.trunc((deg - Math.trunc(deg)) * 60);
 }
 
+export function rotateCoordinatesInRA(coords, ramc) {
+    Object.keys(coords).forEach(k => {
+        let rotated = coords[k] - (ramc - 270);
+        coords[k] = rotated >= 0 ? rotated : rotated + 360;
+    })
+}
+
 export function fixOverlap(coords) {
     const fixedAnglePlacement = 10;
     let adjustedAngles = Object.assign(coords);

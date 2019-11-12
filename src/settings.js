@@ -38,6 +38,7 @@ const CHART_SCALE_DEFAULTS = {
         },
         fontsAndOffsets: {
             planetFontSize: 22,
+            epWPFontSize: 14,
             planetOffsetX: 8,
             planetOffsetY: 8,
 
@@ -72,6 +73,7 @@ const CHART_SCALE_DEFAULTS = {
         },
         fontsAndOffsets: {
             planetFontSize: 22,
+            epWPFontSize: 14,
             planetOffsetX: 8,
             planetOffsetY: 8,
 
@@ -106,6 +108,7 @@ const CHART_SCALE_DEFAULTS = {
         },
         fontsAndOffsets: {
             planetFontSize: 22,
+            epWPFontSize: 14,
             planetOffsetX: 8,
             planetOffsetY: 8,
 

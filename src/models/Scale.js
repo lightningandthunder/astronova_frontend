@@ -22,6 +22,7 @@ export default class Scale {
         this.dividerRadiusTriwheelInner = dividerRadius.dividerRadiusTriwheelInner;
 
         this.planetFontSize = wheelParams.planetFontSize;
+        this.epWPFontSize = wheelParams.epWPFontSize;
         this.planetOffsetX = wheelParams.planetOffsetX;
         this.planetOffsetY = wheelParams.planetOffsetY;
 

@@ -17,7 +17,11 @@ export default function Planets(props) {
                 x={x}
                 y={y}
                 text={PLANET_UNICODE[planetInfo.name]}
-                fontSize={props.scale.planetFontSize}
+                fontSize={
+                    planetInfo.name === "EP" || planetInfo.name === "WP"
+                        ? props.scale.epWPFontSize
+                        : props.scale.planetFontSize
+                }
                 stroke={PLANET_COLORS[planetInfo.name]}
                 strokeWidth={1}
                 offsetX={props.scale.planetOffsetX}
@@ -25,6 +29,7 @@ export default function Planets(props) {
             />
         )
     }
+
 
     const planetDegrees = (planetInfo) => {
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetDegreeRadius, props.rotationalOffset);
@@ -91,6 +96,7 @@ export default function Planets(props) {
             {Object.keys(props.coords).map((planet) => (
                 planetAndCoords(adjustedCoords[planet])
             ))}
+            {}
         </Group>
     )
 }

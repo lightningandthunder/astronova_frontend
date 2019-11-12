@@ -9,6 +9,7 @@ import Rings from "./chartComponents/rings";
 import BiwheelDivider from "./chartComponents/BiwheelDivider"
 import { ScaleManager } from "../managers/ScaleManager";
 import ChartInfo from "./chartComponents/ChartInfo";
+import { rotateCoordinatesInRA } from "../utils/geometry";
 
 const defaultCusps = {
     "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -21,12 +22,6 @@ export default function Chart(props) {
 
     const manager = new ScaleManager();
 
-    const rotateCoordinatesInRA = (coords, ramc) => {
-        Object.keys(coords).forEach(k => {
-            let rotated = coords[k] - (ramc - 270);
-            coords[k] = rotated >= 0 ? rotated : rotated + 360;
-        })
-    }
 
     // ================== Chart display functions ==================
 
@@ -35,24 +30,28 @@ export default function Chart(props) {
 
         let cusps;
         let displayOffset;
-        let coords = {
-            ...props.chart[props.view],
-            EP: props.chart.angles["Eq Asc"],
-            WP: props.chart.angles["Eq Dsc"]
-        };
+        let coords;
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
             cusps = props.chart.cusps;
             displayOffset = cusps["1"];
+            coords = {
+                ...props.chart[props.view],
+                EP: props.chart.angles["Eq Asc"],
+                WP: props.chart.angles["Eq Dsc"]
+            };
+
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
+            coords = props.chart[props.view];
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
+            coords = props.chart[props.view];
             rotateCoordinatesInRA(coords, props.chart.ramc); // Rotate to RAMC - 270
         }
         else {
@@ -76,11 +75,7 @@ export default function Chart(props) {
     }
 
     const showBiwheel = () => {
-        const coordsInner = {
-            ...props.chart.returnChart[props.view],
-            EP: props.chart.returnChart.angles["Eq Asc"],
-            WP: props.chart.returnChart.angles["Eq Dsc"]
-        }
+        let coordsInner;
         const coordsOuter = { ...props.chart.radix[props.view] }
         const scaleInner = manager.getChartScale(props.width, props.height, "Biwheel Inner", props.scaleFactor);
         const scaleOuter = manager.getChartScale(props.width, props.height, "Biwheel Outer", props.scaleFactor);
@@ -92,14 +87,21 @@ export default function Chart(props) {
             // Lock left side of chart to Ascendant
             cusps = props.chart.returnChart.cusps;
             displayOffset = cusps["1"];
+            coordsInner = {
+                ...props.chart.returnChart[props.view],
+                EP: props.chart.returnChart.angles["Eq Asc"],
+                WP: props.chart.returnChart.angles["Eq Dsc"]
+            }
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
+            coordsInner = props.chart.returnChart[props.view];
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
+            coordsInner = props.chart.returnChart[props.view];
             // Rotate to RAMC - 270
             rotateCoordinatesInRA(coordsInner, props.chart.returnChart.ramc);
             rotateCoordinatesInRA(coordsOuter, props.chart.returnChart.ramc);
