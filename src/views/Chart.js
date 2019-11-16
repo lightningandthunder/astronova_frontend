@@ -68,11 +68,11 @@ export default function Chart(props) {
                 />
                 <Grid chart={coords} />
 
-                <Rings scale={scale} />
+                {/* <Rings scale={scale} />
                 <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                 <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                 <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} />
+                <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} /> */}
             </Group>
         )
     }

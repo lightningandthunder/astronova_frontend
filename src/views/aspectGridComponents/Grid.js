@@ -3,36 +3,74 @@ import { Group, Rect } from "react-konva";
 import AspectManager from "../../managers/AspectManager";
 
 export default function Grid(props) {
-    const manager = new AspectManager();
-    let aspectList = [];
-    let usedKeys = [];
-    const epWp = ["EP", "WP"];
+    const planets = [
+        "Sun",
+        "Moon",
+        "Mercury",
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto",
+        "Asc",
+        "MC",
+        "Dsc",
+        "IC"
+    ];
+    const getPlanetPermutations = (mode) => {
+        let combinations = [];
+        let usedKeys = [];
+        for (let planetIndex1 in planets) {
+            for (let planetIndex2 in planets) {
+                if (mode === "Uniwheel" &&
+                    (planetIndex1 === planetIndex2 || usedKeys.indexOf(planetIndex2) >= 0))
+                    // Don't repeat planet combinations for Uniwheel
+                    continue;
 
-    for (let planet1 of Object.keys(props.chart)) {
-        for (let planet2 of Object.keys(props.chart)) {
-            // Don't loop over the same planet again
-            if (planet1 === planet2
-                || usedKeys.indexOf(planet2) >= 0
-                // These will eventually not be necessary, once the chart coordinate
-                // structure is fully hashed out
-                || epWp.indexOf(planet1) >= 0
-                || epWp.indexOf(planet2) >= 0)
-                continue;
+                combinations.push(`${planets[planetIndex1]}-${planets[planetIndex2]}`);
+            }
 
-            let aspect = manager.parseAspect(planet1,
-                props.chart[planet1],
-                planet2,
-                props.chart[planet2]);
-            aspectList.push(aspect);
+            usedKeys.push(planetIndex1);
         }
-
-        usedKeys.push(planet1);
+        console.log(combinations);
+        return combinations;
     }
+
+    const getGridCells = (mode) => {
+        const cells = [];
+        for (let y = 1; y <= planets.length; ++y) {
+            // For uniwheel, cells per row = row number. For biwheel, made a square grid.
+            const horizontalLimit = mode === "Uniwheel" ? y : planets.length;
+            
+            for (let x = 1; x <= horizontalLimit; ++x) {
+                cells.push(<Rect
+                    key={`${y}-${x}`}
+                    x={x * 50}
+                    y={y * 50}
+                    height={50}
+                    width={50}
+                    stroke={"black"}
+                    cornerRadius={1}
+                />)
+            }
+        }
+        return cells;
+    }
+
+    const uniwheelGrid = () => {
+        const permutations = getPlanetPermutations("Uniwheel");
+        return (
+            <Group>
+                {getGridCells("Uniwheel")}
+            </Group>
+        )
+    }
+
     return (
         <Group>
-            {aspectList.map((aspect) => (
-                console.log(aspect)
-            ))}
+            {uniwheelGrid()}
         </Group>
     );
 }

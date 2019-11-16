@@ -96,7 +96,6 @@ export default function Planets(props) {
             {Object.keys(props.coords).map((planet) => (
                 planetAndCoords(adjustedCoords[planet])
             ))}
-            {}
         </Group>
     )
 }
