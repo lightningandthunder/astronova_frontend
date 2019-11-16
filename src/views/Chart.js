@@ -10,6 +10,7 @@ import BiwheelDivider from "./chartComponents/BiwheelDivider"
 import { ScaleManager } from "../managers/ScaleManager";
 import ChartInfo from "./chartComponents/ChartInfo";
 import { rotateCoordinatesInRA } from "../utils/geometry";
+import Grid from "./aspectGridComponents/Grid";
 
 const defaultCusps = {
     "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -18,7 +19,7 @@ const defaultCusps = {
 
 export default function Chart(props) {
     if (!props.chart)
-        throw new Error("Missing cart data!")
+        throw new Error("Missing chart data!")
 
     const manager = new ScaleManager();
 
@@ -28,7 +29,7 @@ export default function Chart(props) {
     const showUniwheel = () => {
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
 
-        let cusps;
+        let cusps
         let displayOffset;
         let coords;
 
@@ -65,6 +66,8 @@ export default function Chart(props) {
                     latitude={props.chart.latitude}
                     local_datetime={new Date(props.chart.local_datetime).toString()}
                 />
+                <Grid chart={coords} />
+
                 <Rings scale={scale} />
                 <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                 <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />

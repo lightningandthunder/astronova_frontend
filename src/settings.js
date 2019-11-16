@@ -179,20 +179,20 @@ const PLANET_UNICODE = {
     "WP": "WP"
 }
 
-const SIGN_COLORS = {
-    "Ari": "red",
-    "Tau": "green",
-    "Gem": "cyan",
-    "Can": "blue",
-    "Leo": "red",
-    "Vir": "green",
-    "Lib": "cyan",
-    "Sco": "blue",
-    "Sag": "red",
-    "Cap": "green",
-    "Aqu": "cyan",
-    "Pis": "blue"
-}
+// const SIGN_COLORS = {
+//     "Ari": "red",
+//     "Tau": "green",
+//     "Gem": "cyan",
+//     "Can": "blue",
+//     "Leo": "red",
+//     "Vir": "green",
+//     "Lib": "cyan",
+//     "Sco": "blue",
+//     "Sag": "red",
+//     "Cap": "green",
+//     "Aqu": "cyan",
+//     "Pis": "blue"
+// }
 
 const SIGN_URIS = {
     "Ari": aries,
