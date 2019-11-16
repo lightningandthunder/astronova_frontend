@@ -75,6 +75,6 @@ export default class AspectManager {
             return new Aspect(pname1, pname2, orb % 135, "Ssq");
         }
 
-        return null;
+        return new Aspect(pname1, pname2, null, null);
     }
 }

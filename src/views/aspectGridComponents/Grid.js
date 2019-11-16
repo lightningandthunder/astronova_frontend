@@ -1,5 +1,5 @@
 import React from "react";
-import { Rect } from "react-konva";
+import { Group, Rect } from "react-konva";
 import AspectManager from "../../managers/AspectManager";
 
 export default function Grid(props) {
@@ -11,7 +11,8 @@ export default function Grid(props) {
     for (let planet1 of Object.keys(props.chart)) {
         for (let planet2 of Object.keys(props.chart)) {
             // Don't loop over the same planet again
-            if (usedKeys.indexOf(planet2) >= 0
+            if (planet1 === planet2
+                || usedKeys.indexOf(planet2) >= 0
                 // These will eventually not be necessary, once the chart coordinate
                 // structure is fully hashed out
                 || epWp.indexOf(planet1) >= 0
@@ -22,14 +23,16 @@ export default function Grid(props) {
                 props.chart[planet1],
                 planet2,
                 props.chart[planet2]);
-            if (aspect !== null)
-                aspectList.push(aspect);
+            aspectList.push(aspect);
         }
 
         usedKeys.push(planet1);
     }
-    console.log(aspectList);
     return (
-        <Rect />
+        <Group>
+            {aspectList.map((aspect) => (
+                console.log(aspect)
+            ))}
+        </Group>
     );
 }
