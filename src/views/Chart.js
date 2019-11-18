@@ -11,6 +11,7 @@ import { ScaleManager } from "../managers/ScaleManager";
 import ChartInfo from "./chartComponents/ChartInfo";
 import { rotateCoordinatesInRA } from "../utils/geometry";
 import Grid from "./aspectGridComponents/Grid";
+import GridAspects from "./aspectGridComponents/GridAspects";
 
 const defaultCusps = {
     "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -67,6 +68,7 @@ export default function Chart(props) {
                     local_datetime={new Date(props.chart.local_datetime).toString()}
                 />
                 <Grid chart={coords} />
+                <GridAspects chart={coords} angles={props.chart.angles} />
 
                 {/* <Rings scale={scale} />
                 <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />

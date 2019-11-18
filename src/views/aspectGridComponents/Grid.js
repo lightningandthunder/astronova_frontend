@@ -1,6 +1,5 @@
 import React from "react";
 import { Group, Rect } from "react-konva";
-import AspectManager from "../../managers/AspectManager";
 
 export default function Grid(props) {
     const planets = [
@@ -34,16 +33,15 @@ export default function Grid(props) {
 
             usedKeys.push(planetIndex1);
         }
-        console.log(combinations);
         return combinations;
     }
 
     const getGridCells = (mode) => {
         const cells = [];
-        for (let y = 1; y <= planets.length; ++y) {
+        for (let y = 1; y < planets.length; ++y) {
             // For uniwheel, cells per row = row number. For biwheel, made a square grid.
             const horizontalLimit = mode === "Uniwheel" ? y : planets.length;
-            
+
             for (let x = 1; x <= horizontalLimit; ++x) {
                 cells.push(<Rect
                     key={`${y}-${x}`}
