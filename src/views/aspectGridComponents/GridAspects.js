@@ -1,6 +1,7 @@
 import React from "react";
 import { Group, Text } from "react-konva";
 import AspectManager from "../../managers/AspectManager";
+import { PLANET_UNICODE, PLANET_COLORS } from "../../settings";
 
 export default function GridAspects(props) {
     const planets = [
@@ -54,17 +55,15 @@ export default function GridAspects(props) {
 
             usedKeys.push(planet1);
         }
-        console.log(aspectList)
         return aspectList;
     }
 
     const getAspectSymbols = (aspects) => {
         const cells = [];
         let accumulator = 0;
-        for (let y = 1; y < planets.length; ++y) {
-            const horizontalLimit = y;
 
-            for (let x = 1; x <= horizontalLimit; ++x) {
+        for (let x = 1; x < planets.length; ++x) {
+            for (let y = x; y < planets.length; ++y) {
                 cells.push(<Text
                     key={`${y}-${x}`}
                     x={x * 50}
@@ -80,11 +79,85 @@ export default function GridAspects(props) {
             }
         }
         return cells;
-
     }
+
+    const getAspectOrbs = (aspects) => {
+        const cells = [];
+        let accumulator = 0;
+
+        for (let x = 1; x < planets.length; ++x) {
+            for (let y = x; y < planets.length; ++y) {
+                if (aspects[accumulator] && aspects[accumulator].aspectType) {
+                    const degrees = Math.trunc(aspects[accumulator].orb);
+                    const minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60)
+                    cells.push(<Text
+                        key={`${y}-${x}`}
+                        x={x * 50}
+                        y={y * 50}
+                        fontSize={9}
+                        stroke={"black"}
+                        text={`${degrees}\u00B0 ${minutes}'`}
+                        offsetX={-13}
+                        offsetY={-30}
+                        strokeWidth={1}
+                    />)
+                }
+                ++accumulator;
+            }
+        }
+        return cells;
+    }
+
+    const getVerticalPlanetSymbols = () => {
+        const cells = [];
+        for (let y = 1; y < planets.length; ++y) {
+            // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
+            cells.push(<Text
+                key={`${y}`}
+                x={0}
+                y={y * 50}
+                fontSize={14}
+                stroke={PLANET_COLORS[planets[y]]}
+                text={`${PLANET_UNICODE[planets[y]]}`}
+                offsetX={-20}
+                offsetY={-20}
+                strokeWidth={1}
+            />);
+        }
+        return cells;
+    }
+
+    const getHorizontalPlanetSymbols = () => {
+        const cells = [];
+        for (let x = 0; x < planets.length; ++x) {
+            // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
+            cells.push(<Text
+                key={`${x}`}
+                x={(x + 1) * 50}
+                y={0}
+                fontSize={14}
+                stroke={PLANET_COLORS[planets[x]]}
+                text={`${PLANET_UNICODE[planets[x]]}`}
+                offsetX={-20}
+                offsetY={-20}
+                strokeWidth={1}
+            />);
+        }
+        return cells;
+    }
+
+    const aspects = getAspects(props.chart);
+    const symbols = getAspectSymbols(aspects);
+    const orbs = getAspectOrbs(aspects);
+    const verticalSymbols = getVerticalPlanetSymbols();
+    const horizontalSymbols = getHorizontalPlanetSymbols();
+
     return (
         <Group>
-            {getAspectSymbols(getAspects(props.chart))}
+            {symbols}
+            {orbs}
+            {verticalSymbols}
+            {horizontalSymbols}
         </Group>
     );
 }

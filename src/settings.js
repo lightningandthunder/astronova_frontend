@@ -176,7 +176,11 @@ const PLANET_UNICODE = {
     "Neptune": "\u2646",
     "Pluto": "\u2647",
     "EP": "EP",
-    "WP": "WP"
+    "WP": "WP",
+    "Asc": "Asc",
+    "MC": "MC",
+    "Dsc": "Dsc",
+    "IC": "IC"
 }
 
 // const SIGN_COLORS = {
