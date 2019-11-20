@@ -10,6 +10,7 @@ export default function ChartList(props) {
                     key={index}
                     chart={item}
                     onChangeSelectedChart={props.onChangeSelectedChart}
+                    deleteChart={props.deleteChart}
                     selected={item === props.selectedChart}
                 />
             ))}

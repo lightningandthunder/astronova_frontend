@@ -27,6 +27,7 @@ class App extends React.Component {
         this.saveChart = this.saveChart.bind(this);
         this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
         this.handleViewChange = this.handleViewChange.bind(this);
+        this.deleteChart = this.deleteChart.bind(this);
     }
 
     /* ================ Lifecycle hooks ================ */
@@ -61,9 +62,34 @@ class App extends React.Component {
         );
     }
 
+    deleteChart(chart) {
+        const currentSelectedChart = this.state.selectedChart;
+        const allCharts = this.state.charts;
+        const chartIndex = allCharts.indexOf(chart);
+
+        if (chartIndex < -1) {
+            logIfDevelopment("Unable to remove chart; not found in chart list");
+            return;
+        }
+        allCharts.splice(chartIndex, 1);
+        this.setState({ charts: [...allCharts] },
+            () => {
+                localStorage.setItem('charts', JSON.stringify(this.state.charts));
+                logIfDevelopment(`Deleted ${chart.name}; saved remaining charts to LS.`);
+            })
+        if (allCharts.indexOf(currentSelectedChart) >= 0)
+            this.onChangeSelectedChart(currentSelectedChart)
+        else
+            this.onChangeSelectedChart(allCharts[chartIndex - 1 >= 0 ? chartIndex - 1 : 0]);
+    }
+
     onChangeSelectedChart(chart) {
+        let selection = chart;
+        if (this.state.charts.indexOf(chart) < 0)
+            return;
+
         // Saves to both state and localStorage
-        this.setState({ selectedChart: chart },
+        this.setState({ selectedChart: selection },
             () => {
                 localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
                 logIfDevelopment("Saved current selection to LS: " + this.state.selectedChart.name);
@@ -123,6 +149,7 @@ class App extends React.Component {
                     charts={this.state.charts ? this.state.charts : []}
                     selectedChart={this.state.selectedChart}
                     onChangeSelectedChart={this.onChangeSelectedChart}
+                    deleteChart={this.deleteChart}
                 />
                 <NewChartPopup
                     saveChart={this.saveChart}
