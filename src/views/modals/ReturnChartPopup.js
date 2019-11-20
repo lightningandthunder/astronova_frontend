@@ -94,9 +94,9 @@ export default class ReturnChartPopup extends React.Component {
     /* ==================== Query ================= */
 
     createQuantityRange() {
-        // [1, 2, 3, ... 20]
+        // [1, 2, 3, ... 60]
         let arr = [];
-        for (let c = 1; c < 21; c++)
+        for (let c = 1; c < 61; c++)
             arr.push(c);
 
         return arr;
