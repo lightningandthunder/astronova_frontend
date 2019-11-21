@@ -9,6 +9,7 @@ import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
 import Chart from './views/Chart';
 import ViewButtons from "./views/ViewButtons";
+import ModeButtons from "./views/ModeButtons";
 import { TITLE } from "./settings";
 
 
@@ -18,7 +19,8 @@ class App extends React.Component {
         this.state = {
             charts: [],
             selectedChart: undefined,
-            view: "ecliptical"
+            view: "ecliptical",
+            mode: "chart"
         }
 
         this.addChartToState = this.saveChart.bind(this);
@@ -27,6 +29,7 @@ class App extends React.Component {
         this.saveChart = this.saveChart.bind(this);
         this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
         this.handleViewChange = this.handleViewChange.bind(this);
+        this.handleModeChange = this.handleModeChange.bind(this);
         this.deleteChart = this.deleteChart.bind(this);
     }
 
@@ -105,6 +108,10 @@ class App extends React.Component {
         this.setState({ view: e.target.value });
     }
 
+    handleModeChange(e) {
+        this.setState({ mode: e.target.value });
+    }
+
     // This should be in another section; will eventually reorganize
     resetCharts() {
         localStorage.removeItem('charts');
@@ -116,7 +123,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {/* ======== Uniwheel ======== */}
+                {/* ======== Uniwheel Chart ======== */}
                 {
                     this.state.selectedChart &&
                     this.state.selectedChart.type === "Uniwheel" &&
@@ -125,11 +132,13 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
+                        mode={this.state.mode}
                         scaleFactor={1.2}
                     />
                 }
 
-                {/* ======== Biwheel ======== */}
+
+                {/* ======== Biwheel Chart ======== */}
                 {
                     this.state.selectedChart &&
                     this.state.selectedChart.type === "Biwheel" &&
@@ -144,6 +153,10 @@ class App extends React.Component {
                 <ViewButtons
                     view={this.state.view}
                     onChangeView={this.handleViewChange}
+                />
+                < ModeButtons
+                    mode={this.state.mode}
+                    onChangeMode={this.handleModeChange}
                 />
                 <Chartlist className="chartList"
                     charts={this.state.charts ? this.state.charts : []}

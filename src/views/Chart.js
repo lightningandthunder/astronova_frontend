@@ -67,14 +67,26 @@ export default function Chart(props) {
                     latitude={props.chart.latitude}
                     local_datetime={new Date(props.chart.local_datetime).toString()}
                 />
-                <Grid chart={coords} />
-                <GridAspects chart={coords} angles={props.chart.angles} />
+                {/* =========== Chart View ========== */}
+                {
+                    props.mode === "chart" &&
+                    <Group>
+                        <Rings scale={scale} />
+                        <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                        <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                        <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                        <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} />
+                    </Group>
+                }
 
-                {/* <Rings scale={scale} />
-                <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} /> */}
+                {/* ======== Aspect Grid View ======== */}
+                {
+                    props.mode === "aspectGrid" &&
+                    <Group>
+                        <Grid scale={scale} chart={coords} mode="Uniwheel" />
+                        <GridAspects scale={scale} chart={coords} angles={props.chart.angles} />
+                    </Group>
+                }
             </Group>
         )
     }

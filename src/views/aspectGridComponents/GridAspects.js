@@ -4,6 +4,8 @@ import AspectManager from "../../managers/AspectManager";
 import { PLANET_UNICODE, PLANET_COLORS } from "../../settings";
 
 export default function GridAspects(props) {
+    const globalOffsetX = props.scale.origin.x / 2.2;
+    const globalOffsetY = 50;
     const planets = [
         "Sun",
         "Moon",
@@ -15,6 +17,8 @@ export default function GridAspects(props) {
         "Uranus",
         "Neptune",
         "Pluto",
+        "EP",
+        "WP",
         "Asc",
         "MC",
         "Dsc",
@@ -25,7 +29,6 @@ export default function GridAspects(props) {
         const manager = new AspectManager();
         let aspectList = [];
         let usedKeys = [];
-        const epWp = ["EP", "WP"];
 
         // Need to clean this up and put into a dedicated function to determine
         // Chart points, for the grid cells as well as their contents.
@@ -38,12 +41,7 @@ export default function GridAspects(props) {
         for (let planet1 of Object.keys(chartPoints)) {
             for (let planet2 of Object.keys(chartPoints)) {
                 // Don't loop over the same planet again
-                if (planet1 === planet2
-                    || usedKeys.indexOf(planet2) >= 0
-                    // These will eventually not be necessary, once the chart coordinate
-                    // structure is fully hashed out
-                    || epWp.indexOf(planet1) >= 0
-                    || epWp.indexOf(planet2) >= 0)
+                if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
                     continue;
 
                 let aspect = manager.parseAspect(planet1,
@@ -66,13 +64,13 @@ export default function GridAspects(props) {
             for (let y = x; y < planets.length; ++y) {
                 cells.push(<Text
                     key={`${y}-${x}`}
-                    x={x * 50}
-                    y={y * 50}
+                    x={globalOffsetX + (x * 50)}
+                    y={globalOffsetY + (y * 50)}
                     fontSize={12}
                     stroke={"black"}
                     text={aspects[accumulator].aspectType}
-                    offsetX={-15}
-                    offsetY={-15}
+                    offsetX={-12}
+                    offsetY={-10}
                     strokeWidth={1}
                 />)
                 ++accumulator;
@@ -92,13 +90,13 @@ export default function GridAspects(props) {
                     const minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60)
                     cells.push(<Text
                         key={`${y}-${x}`}
-                        x={x * 50}
-                        y={y * 50}
+                        x={globalOffsetX + (x * 50)}
+                        y={globalOffsetY + (y * 50)}
                         fontSize={9}
                         stroke={"black"}
                         text={`${degrees}\u00B0 ${minutes}'`}
-                        offsetX={-13}
-                        offsetY={-30}
+                        offsetX={-10}
+                        offsetY={-25}
                         strokeWidth={1}
                     />)
                 }
@@ -114,13 +112,13 @@ export default function GridAspects(props) {
             // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
             cells.push(<Text
                 key={`${y}`}
-                x={0}
-                y={y * 50}
+                x={globalOffsetX}
+                y={globalOffsetY + (y * 50)}
                 fontSize={14}
                 stroke={PLANET_COLORS[planets[y]]}
                 text={`${PLANET_UNICODE[planets[y]]}`}
                 offsetX={-20}
-                offsetY={-20}
+                offsetY={-10}
                 strokeWidth={1}
             />);
         }
@@ -133,8 +131,8 @@ export default function GridAspects(props) {
             // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
             cells.push(<Text
                 key={`${x}`}
-                x={(x + 1) * 50}
-                y={0}
+                x={((x + 1) * 50) + globalOffsetX}
+                y={globalOffsetY}
                 fontSize={14}
                 stroke={PLANET_COLORS[planets[x]]}
                 text={`${PLANET_UNICODE[planets[x]]}`}
