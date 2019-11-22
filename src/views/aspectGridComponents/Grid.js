@@ -3,7 +3,7 @@ import { Group, Rect } from "react-konva";
 
 export default function Grid(props) {
     const globalOffsetX = props.scale.origin.x / 2.2;
-    const globalOffsetY = 40;
+    const globalOffsetY = 0;
     const planets = [
         "Sun",
         "Moon",

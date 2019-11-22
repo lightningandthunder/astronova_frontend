@@ -11,9 +11,9 @@ export default function Planets(props) {
     const adjustedCoords = fixOverlap(new PlanetCoords(props.coords));
 
     const planetSymbol = (planetInfo) => {
-        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetRadius, props.rotationalOffset)
+        const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetRadius, props.rotationalOffset);
         return (
-            <Text key={`${planetInfo.name}-Symbol`}
+            <Text key={`${planetInfo.name}-${props.ringLayer}-Symbol`}
                 x={x}
                 y={y}
                 text={PLANET_UNICODE[planetInfo.name]}
@@ -34,7 +34,7 @@ export default function Planets(props) {
     const planetDegrees = (planetInfo) => {
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetDegreeRadius, props.rotationalOffset);
         return (
-            <Text key={`${planetInfo.name}-Degrees`}
+            <Text key={`${planetInfo.name}-${props.ringLayer}-Degrees`}
                 x={x}
                 y={y}
                 text={`${Math.trunc(planetInfo.rawCoord) % 30}\u00B0`}
@@ -52,7 +52,7 @@ export default function Planets(props) {
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetSignRadius, props.rotationalOffset);
         return (
             <SignImage
-                key={`${planetInfo.name}-Sign`}
+                key={`${planetInfo.name}-${props.ringLayer}-Sign`}
                 image={signUri}
                 x={x}
                 y={y}
@@ -69,7 +69,7 @@ export default function Planets(props) {
         const mins = degToMin(planetInfo.rawCoord)
         const [x, y] = derivePoint(props.scale.origin, planetInfo.renderCoord, props.scale.planetMinuteRadius, props.rotationalOffset);
         return (
-            <Text key={`${planetInfo.name}-Minutes`}
+            <Text key={`${planetInfo.name}-${props.ringLayer}-Minutes`}
                 x={x}
                 y={y}
                 text={`${mins}'`}

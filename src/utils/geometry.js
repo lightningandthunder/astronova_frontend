@@ -16,6 +16,7 @@ export function rotateCoordinatesInRA(coords, ramc) {
 }
 
 export function fixOverlap(coords) {
+    return coords;
     const fixedAnglePlacement = 10;
     let adjustedAngles = Object.assign(coords);
 

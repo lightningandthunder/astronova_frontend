@@ -35,7 +35,8 @@ export default function ChartInfo(props) {
             <Text key={`ChartInfoDatetime`}
                 x={10}
                 y={40}
-                text={props.local_datetime}
+                // Newline to split long text into 2 shorter lines
+                text={props.local_datetime.replace("GMT", "\nGMT")} 
                 fontSize={14}
                 strokeWidth={1}
             />

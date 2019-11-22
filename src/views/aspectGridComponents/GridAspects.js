@@ -5,7 +5,7 @@ import { PLANET_UNICODE, PLANET_COLORS } from "../../settings";
 
 export default function GridAspects(props) {
     const globalOffsetX = props.scale.origin.x / 2.2;
-    const globalOffsetY = 50;
+    const globalOffsetY = 10;
     const planets = [
         "Sun",
         "Moon",
@@ -70,7 +70,7 @@ export default function GridAspects(props) {
                     stroke={"black"}
                     text={aspects[accumulator].aspectType}
                     offsetX={-12}
-                    offsetY={-10}
+                    offsetY={0}
                     strokeWidth={1}
                 />)
                 ++accumulator;
@@ -85,9 +85,14 @@ export default function GridAspects(props) {
 
         for (let x = 1; x < planets.length; ++x) {
             for (let y = x; y < planets.length; ++y) {
+
+                // Only populate if aspectType is not null
                 if (aspects[accumulator] && aspects[accumulator].aspectType) {
                     const degrees = Math.trunc(aspects[accumulator].orb);
-                    const minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60)
+                    let minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60);
+                    
+                    // Prepend 0 if minutes < 10
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
                     cells.push(<Text
                         key={`${y}-${x}`}
                         x={globalOffsetX + (x * 50)}
@@ -96,7 +101,7 @@ export default function GridAspects(props) {
                         stroke={"black"}
                         text={`${degrees}\u00B0 ${minutes}'`}
                         offsetX={-10}
-                        offsetY={-25}
+                        offsetY={-20}
                         strokeWidth={1}
                     />)
                 }

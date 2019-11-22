@@ -20,7 +20,7 @@ const defaultCusps = {
 
 export default function Chart(props) {
     if (!props.chart)
-        throw new Error("Missing chart data!")
+        throw new Error("Missing chart data!");
 
     const manager = new ScaleManager();
 
@@ -75,7 +75,7 @@ export default function Chart(props) {
                         <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                         <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                         <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                        <Planets scale={scale} coords={coords} rotationalOffset={displayOffset} />
+                        <Planets scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
                     </Group>
                 }
 
@@ -138,8 +138,8 @@ export default function Chart(props) {
                 <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
                 <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
                 <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
-                <Planets scale={scaleInner} coords={coordsInner} rotationalOffset={displayOffset} />
-                <Planets scale={scaleOuter} coords={coordsOuter} rotationalOffset={displayOffset} />
+                <Planets scale={scaleInner} ringLayer={"inner"} coords={coordsInner} rotationalOffset={displayOffset} />
+                <Planets scale={scaleOuter} ringLayer={"outer"} coords={coordsOuter} rotationalOffset={displayOffset} />
                 <BiwheelDivider scale={scaleOuter} />
             </Group>
         )
@@ -147,7 +147,7 @@ export default function Chart(props) {
 
     return (
         <div id="chart">
-            <Stage width={props.width} height={props.height}>
+            <Stage ref={ref => { this.stageRef = ref }} width={props.width} height={props.height}>
                 <Layer>
                     {props.chart.type === "Uniwheel"
                         ? showUniwheel()
