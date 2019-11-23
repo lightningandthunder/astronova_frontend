@@ -8,24 +8,28 @@ import { Image } from 'react-konva';
 export default class SignImage extends Component {
     constructor(props) {
         super(props);
-        this.updateImage = this.updateImage.bind(this);
         this.state = {
             image: null
         };
+        this.updateImage = this.updateImage.bind(this);
 
     }
 
-    static propTypes = {
-        image: PropTypes.string.isRequired
-    };
+    // static propTypes = {
+    //     image: PropTypes.string.isRequired
+    // };
 
     componentDidMount() {
         this.updateImage();
     }
 
-    // componentDidUpdate() {
-    //     this.updateImage();
-    // }
+    componentDidUpdate() {
+        this.updateImage();
+    }
+
+    componentWillUnmount() {
+        this.setState({ image: null });
+    }
 
     updateImage() {
         const image = new window.Image();

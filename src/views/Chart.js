@@ -1,5 +1,5 @@
 import React from "react";
-import { Stage, Layer, Group } from "react-konva";
+import { Stage, Layer, Group, useStrictMode } from "react-konva";
 
 import HouseNumbers from "./chartComponents/houseNumbers";
 import CuspCoords from "./chartComponents/cuspCoords";
@@ -147,7 +147,7 @@ export default function Chart(props) {
 
     return (
         <div id="chart">
-            <Stage ref={ref => { this.stageRef = ref }} width={props.width} height={props.height}>
+            <Stage width={props.width} height={props.height}>
                 <Layer>
                     {props.chart.type === "Uniwheel"
                         ? showUniwheel()
