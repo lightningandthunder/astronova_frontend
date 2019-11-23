@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Image } from 'react-konva';
 
 // From StackOverflow:
@@ -9,26 +8,19 @@ export default class SignImage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            image: null
+            image: null,
+            coord: props.coord
         };
         this.updateImage = this.updateImage.bind(this);
-
     }
-
-    // static propTypes = {
-    //     image: PropTypes.string.isRequired
-    // };
 
     componentDidMount() {
         this.updateImage();
     }
 
     componentDidUpdate() {
-        this.updateImage();
-    }
-
-    componentWillUnmount() {
-        this.setState({ image: null });
+        if (this.props.coord !== this.state.coord)  // Prevent infinite update loop
+            this.updateImage();
     }
 
     updateImage() {
@@ -36,7 +28,8 @@ export default class SignImage extends Component {
         image.src = this.props.image;
         image.onload = () => {
             this.setState({
-                image: image
+                image: image,
+                coord: this.props.coord
             });
         };
     }

@@ -60,6 +60,7 @@ export default function Planets(props) {
         return (
             <SignImage
                 key={`${planetInfo.name}-${props.ringLayer}-Sign`}
+                coord={planetInfo.rawCoord}
                 image={signUri}
                 x={x}
                 y={y}
