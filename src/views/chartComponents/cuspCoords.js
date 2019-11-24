@@ -13,6 +13,7 @@ export default function CuspCoords(props) {
             <SignImage
                 key={`${cusp}-Sign`}
                 image={signUri}
+                coord={coord}
                 x={x}
                 y={y}
                 width={20}
