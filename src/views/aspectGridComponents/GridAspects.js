@@ -9,6 +9,7 @@ export default function GridAspects(props) {
     const planets = props.chartPoints;
     const cellEdgeSize = 48;
 
+
     const getAspects = () => {
         const manager = new AspectManager();
         const aspectList = [];
@@ -38,25 +39,26 @@ export default function GridAspects(props) {
             for (let planet2 of Object.keys(planetRowVertical)) {
 
                 let aspect;
-                
-                if (props.mode === "Uniwheel")
-                    // Don't re-parse aspects in Uniwheels
-                    if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
-                        aspect = null;
 
-                    else
-                        aspect = manager.parseAspect(
-                            planet1,
-                            planetRowHorizontal[planet1],
-                            planet2,
-                            planetRowVertical[planet2],
-                            props.mode
-                        );
+                if (props.mode === "Uniwheel"
+                    && (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0))
+                    // Don't re-parse aspects in Uniwheels
+                    aspect = null;
+
+                else
+                    aspect = manager.parseAspect(
+                        planet1,
+                        planetRowHorizontal[planet1],
+                        planet2,
+                        planetRowVertical[planet2],
+                        props.mode
+                    );
 
                 aspectList.push(aspect);
             }
             usedKeys.push(planet1);
         }
+        console.log(aspectList)
         return aspectList;
     }
 
@@ -154,18 +156,14 @@ export default function GridAspects(props) {
         }
         return cells;
     }
-    const aspects = getAspects();
-    const symbols = getAspectSymbols(aspects);
-    const orbs = getAspectOrbs(aspects);
-    const verticalSymbols = getVerticalPlanetSymbols();
-    const horizontalSymbols = getHorizontalPlanetSymbols();
 
+    const aspects = getAspects();
     return (
         <Group>
-            {symbols}
-            {orbs}
-            {verticalSymbols}
-            {horizontalSymbols}
+            {getAspectSymbols(aspects)}
+            {getAspectOrbs(aspects)}
+            {getVerticalPlanetSymbols()}
+            {getHorizontalPlanetSymbols()}
         </Group>
     );
 }

@@ -30,7 +30,7 @@ export default function Chart(props) {
     const showUniwheel = () => {
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
 
-        let cusps
+        let cusps;
         let displayOffset;
         let coords;
         let chartPoints;
@@ -152,7 +152,7 @@ export default function Chart(props) {
 
     const showBiwheel = () => {
         let coordsInner;
-        const coordsOuter = { ...props.chart.radix[props.view] }
+        let coordsOuter;
         const scaleInner = manager.getChartScale(props.width, props.height, "Biwheel Inner", props.scaleFactor);
         const scaleOuter = manager.getChartScale(props.width, props.height, "Biwheel Outer", props.scaleFactor);
 
@@ -166,6 +166,11 @@ export default function Chart(props) {
             displayOffset = cusps["1"];
             coordsInner = {
                 ...props.chart.returnChart[props.view],
+                EP: props.chart.returnChart.angles["Eq Asc"],
+                WP: props.chart.returnChart.angles["Eq Dsc"]
+            };
+            coordsOuter = {
+                ...props.chart.radix[props.view],
                 EP: props.chart.returnChart.angles["Eq Asc"],
                 WP: props.chart.returnChart.angles["Eq Dsc"]
             };
@@ -192,6 +197,7 @@ export default function Chart(props) {
             cusps = defaultCusps;
             displayOffset = 0;
             coordsInner = props.chart.returnChart[props.view];
+            coordsOuter = { ...props.chart.radix[props.view] };
             chartPoints = [
                 "Sun",
                 "Moon",
@@ -202,17 +208,14 @@ export default function Chart(props) {
                 "Saturn",
                 "Uranus",
                 "Neptune",
-                "Pluto",
-                "Asc",
-                "MC",
-                "Dsc",
-                "IC"
+                "Pluto"
             ];
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
             coordsInner = props.chart.returnChart[props.view];
+            coordsOuter = { ...props.chart.radix[props.view] };
             // Rotate to RAMC - 270
             rotateCoordinatesInRA(coordsInner, props.chart.returnChart.ramc);
             rotateCoordinatesInRA(coordsOuter, props.chart.returnChart.ramc);
@@ -226,11 +229,7 @@ export default function Chart(props) {
                 "Saturn",
                 "Uranus",
                 "Neptune",
-                "Pluto",
-                "Asc",
-                "MC",
-                "Dsc",
-                "IC"
+                "Pluto"
             ];
         }
         else {
