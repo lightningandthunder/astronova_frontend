@@ -147,6 +147,7 @@ class App extends React.Component {
                         height={window.innerHeight}
                         chart={this.state.selectedChart}
                         view={this.state.view}
+                        mode={this.state.mode}
                         scaleFactor={1.2}
                     />
                 }

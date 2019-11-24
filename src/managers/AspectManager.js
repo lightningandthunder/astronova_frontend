@@ -26,9 +26,6 @@ export default class AspectManager {
     }
 
     parseAspect(pname1, plong1, pname2, plong2) {
-        if (pname1 === pname2)
-            return null;
-
         let orb = null;
 
         // Conjunction

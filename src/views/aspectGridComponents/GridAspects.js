@@ -25,32 +25,45 @@ export default function GridAspects(props) {
         "IC"
     ];
 
-    const getAspects = (chart) => {
+    const getAspects = () => {
         const manager = new AspectManager();
         let aspectList = [];
         let usedKeys = [];
 
+        const planetRowVertical = props.charts[0];
+        let planetRowHorizontal = null;
+
         // Need to clean this up and put into a dedicated function to determine
         // Chart points, for the grid cells as well as their contents.
-        const chartPoints = chart;
-        chartPoints["Asc"] = props.angles["Asc"];
-        chartPoints["MC"] = props.angles["MC"];
-        chartPoints["Dsc"] = props.angles["Dsc"];
-        chartPoints["IC"] = props.angles["IC"];
+        planetRowVertical["Asc"] = props.angles["Asc"];
+        planetRowVertical["MC"] = props.angles["MC"];
+        planetRowVertical["Dsc"] = props.angles["Dsc"];
+        planetRowVertical["IC"] = props.angles["IC"];
 
-        for (let planet1 of Object.keys(chartPoints)) {
-            for (let planet2 of Object.keys(chartPoints)) {
+        if (props.charts.length > 1 && props.angles.length > 1) {
+            planetRowHorizontal = props.charts[1];
+            planetRowHorizontal["Asc"] = props.angles[1]["Asc"];
+            planetRowHorizontal["MC"] = props.angles[1]["MC"];
+            planetRowHorizontal["Dsc"] = props.angles[1]["Dsc"];
+            planetRowHorizontal["IC"] = props.angles[1]["IC"];
+        } else {
+            planetRowHorizontal = planetRowVertical;
+        }
+
+        for (let planet1 of Object.keys(planetRowHorizontal)) {
+            for (let planet2 of Object.keys(planetRowVertical)) {
                 // Don't loop over the same planet again
-                if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
-                    continue;
+                if (props.charts.length === 1)
+                    if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
+                        continue;
 
                 let aspect = manager.parseAspect(planet1,
-                    chartPoints[planet1],
+                    planetRowHorizontal[planet1],
                     planet2,
-                    chartPoints[planet2]);
+                    planetRowVertical[planet2]);
+
                 aspectList.push(aspect);
             }
-
             usedKeys.push(planet1);
         }
         return aspectList;
@@ -68,7 +81,7 @@ export default function GridAspects(props) {
                     y={globalOffsetY + (y * 50)}
                     fontSize={12}
                     stroke={"black"}
-                    text={aspects[accumulator].aspectType}
+                    text={aspects[accumulator] ? aspects[accumulator].aspectType : null}
                     offsetX={-12}
                     offsetY={0}
                     strokeWidth={1}
@@ -76,6 +89,7 @@ export default function GridAspects(props) {
                 ++accumulator;
             }
         }
+
         return cells;
     }
 
@@ -87,10 +101,10 @@ export default function GridAspects(props) {
             for (let y = x; y < planets.length; ++y) {
 
                 // Only populate if aspectType is not null
-                if (aspects[accumulator] && aspects[accumulator].aspectType) {
+                if (aspects[accumulator].aspectType) {
                     const degrees = Math.trunc(aspects[accumulator].orb);
                     let minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60);
-                    
+
                     // Prepend 0 if minutes < 10
                     minutes = minutes < 10 ? "0" + minutes : minutes;
                     cells.push(<Text
@@ -113,12 +127,14 @@ export default function GridAspects(props) {
 
     const getVerticalPlanetSymbols = () => {
         const cells = [];
-        for (let y = 1; y < planets.length; ++y) {
-            // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
+        // For biwheels, slide symbols down by 1, due to starting index in for loop
+        const cellOffset = props.mode === "Uniwheel?" ? 0 : 1;
+
+        for (let y = props.mode === "Uniwheel" ? 1 : 0; y < planets.length; ++y) {
             cells.push(<Text
-                key={`${y}`}
+                key={`${y}-verticalPlanetSymbol`}
                 x={globalOffsetX}
-                y={globalOffsetY + (y * 50)}
+                y={globalOffsetY + ((y + cellOffset) * 50)}
                 fontSize={14}
                 stroke={PLANET_COLORS[planets[y]]}
                 text={`${PLANET_UNICODE[planets[y]]}`}
@@ -133,9 +149,8 @@ export default function GridAspects(props) {
     const getHorizontalPlanetSymbols = () => {
         const cells = [];
         for (let x = 0; x < planets.length; ++x) {
-            // TODO: y = uniwheel ? x : 0; step over and down each iteration on uniwheel
             cells.push(<Text
-                key={`${x}`}
+                key={`${x}-horizontalPlanetSymbol`}
                 x={((x + 1) * 50) + globalOffsetX}
                 y={globalOffsetY}
                 fontSize={14}
@@ -148,8 +163,7 @@ export default function GridAspects(props) {
         }
         return cells;
     }
-
-    const aspects = getAspects(props.chart);
+    const aspects = getAspects();
     const symbols = getAspectSymbols(aspects);
     const orbs = getAspectOrbs(aspects);
     const verticalSymbols = getVerticalPlanetSymbols();

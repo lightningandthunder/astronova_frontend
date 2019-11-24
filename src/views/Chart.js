@@ -84,7 +84,7 @@ export default function Chart(props) {
                     props.mode === "aspectGrid" &&
                     <Group>
                         <Grid scale={scale} chart={coords} mode="Uniwheel" />
-                        <GridAspects scale={scale} chart={coords} angles={props.chart.angles} />
+                        <GridAspects scale={scale} charts={[coords]} angles={[props.chart.angles]} />
                     </Group>
                 }
             </Group>
@@ -134,14 +134,33 @@ export default function Chart(props) {
                     latitude={props.chart.returnChart.latitude}
                     local_datetime={new Date(props.chart.returnChart.local_datetime).toString()}
                 />
-                <Rings scale={scaleInner} />
-                <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
-                <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
-                <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
-                <Planets scale={scaleInner} ringLayer={"inner"} coords={coordsInner} rotationalOffset={displayOffset} />
-                <Planets scale={scaleOuter} ringLayer={"outer"} coords={coordsOuter} rotationalOffset={displayOffset} />
-                <BiwheelDivider scale={scaleOuter} />
+                {/* =========== Chart View ========== */}
+                {
+                    props.mode === "chart" &&
+                    <Group>
+                        <Rings scale={scaleInner} />
+                        <CuspLines scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                        <CuspCoords scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                        <HouseNumbers scale={scaleInner} coords={coordsInner} cusps={cusps} cuspOffset={displayOffset} />
+                        <Planets scale={scaleInner} ringLayer={"inner"} coords={coordsInner} rotationalOffset={displayOffset} />
+                        <Planets scale={scaleOuter} ringLayer={"outer"} coords={coordsOuter} rotationalOffset={displayOffset} />
+                        <BiwheelDivider scale={scaleOuter} />
+                    </Group>
+                }
+                {/* ======== Aspect Grid View ======== */}
+                {
+                    props.mode === "aspectGrid" &&
+                    <Group>
+                        <Grid scale={scaleInner} chart={coordsInner} mode="Biwheel" />
+                        <GridAspects scale={scaleInner}
+                            charts={[coordsOuter, coordsInner]}
+                            angles={[props.chart.radix.angles, props.chart.returnChart.angles]}
+                        />
+                    </Group>
+                }
             </Group>
+
+
         )
     }
 

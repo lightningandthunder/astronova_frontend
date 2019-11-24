@@ -19,7 +19,8 @@ export default class SignImage extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.coord !== this.state.coord)  // Prevent infinite update loop
+        // Prevent infinite loop, since updateImage will re-trigger componentDidUpdate
+        if (this.props.coord !== this.state.coord)  
             this.updateImage();
     }
 
