@@ -4,34 +4,17 @@ import AspectManager from "../../managers/AspectManager";
 import { PLANET_UNICODE, PLANET_COLORS } from "../../settings";
 
 export default function GridAspects(props) {
-    const globalOffsetX = props.scale.origin.x / 2.2;
-    const globalOffsetY = 10;
-    const planets = [
-        "Sun",
-        "Moon",
-        "Mercury",
-        "Venus",
-        "Mars",
-        "Jupiter",
-        "Saturn",
-        "Uranus",
-        "Neptune",
-        "Pluto",
-        "EP",
-        "WP",
-        "Asc",
-        "MC",
-        "Dsc",
-        "IC"
-    ];
+    const globalOffsetX = props.scale.origin.x / 2.3;
+    const globalOffsetY = -20;
+    const planets = props.chartPoints;
+    const cellEdgeSize = 48;
 
     const getAspects = () => {
         const manager = new AspectManager();
-        let aspectList = [];
-        let usedKeys = [];
+        const aspectList = [];
+        const usedKeys = [];
 
         const planetRowVertical = props.charts[0];
-        let planetRowHorizontal = null;
 
         // Need to clean this up and put into a dedicated function to determine
         // Chart points, for the grid cells as well as their contents.
@@ -40,6 +23,7 @@ export default function GridAspects(props) {
         planetRowVertical["Dsc"] = props.angles["Dsc"];
         planetRowVertical["IC"] = props.angles["IC"];
 
+        let planetRowHorizontal = null;
         if (props.charts.length > 1 && props.angles.length > 1) {
             planetRowHorizontal = props.charts[1];
             planetRowHorizontal["Asc"] = props.angles[1]["Asc"];
@@ -52,15 +36,22 @@ export default function GridAspects(props) {
 
         for (let planet1 of Object.keys(planetRowHorizontal)) {
             for (let planet2 of Object.keys(planetRowVertical)) {
-                // Don't loop over the same planet again
-                if (props.charts.length === 1)
-                    if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
-                        continue;
 
-                let aspect = manager.parseAspect(planet1,
-                    planetRowHorizontal[planet1],
-                    planet2,
-                    planetRowVertical[planet2]);
+                let aspect;
+                
+                if (props.mode === "Uniwheel")
+                    // Don't re-parse aspects in Uniwheels
+                    if (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)
+                        aspect = null;
+
+                    else
+                        aspect = manager.parseAspect(
+                            planet1,
+                            planetRowHorizontal[planet1],
+                            planet2,
+                            planetRowVertical[planet2],
+                            props.mode
+                        );
 
                 aspectList.push(aspect);
             }
@@ -73,12 +64,12 @@ export default function GridAspects(props) {
         const cells = [];
         let accumulator = 0;
 
-        for (let x = 1; x < planets.length; ++x) {
-            for (let y = x; y < planets.length; ++y) {
+        for (let x = 1; x <= planets.length; ++x) {
+            for (let y = 1; y <= planets.length; ++y) {
                 cells.push(<Text
                     key={`${y}-${x}`}
-                    x={globalOffsetX + (x * 50)}
-                    y={globalOffsetY + (y * 50)}
+                    x={globalOffsetX + (x * cellEdgeSize)}
+                    y={globalOffsetY + (y * cellEdgeSize)}
                     fontSize={12}
                     stroke={"black"}
                     text={aspects[accumulator] ? aspects[accumulator].aspectType : null}
@@ -97,11 +88,11 @@ export default function GridAspects(props) {
         const cells = [];
         let accumulator = 0;
 
-        for (let x = 1; x < planets.length; ++x) {
-            for (let y = x; y < planets.length; ++y) {
+        for (let x = 1; x <= planets.length; ++x) {
+            for (let y = 1; y <= planets.length; ++y) {
 
                 // Only populate if aspectType is not null
-                if (aspects[accumulator].aspectType) {
+                if (aspects[accumulator] && aspects[accumulator].aspectType) {
                     const degrees = Math.trunc(aspects[accumulator].orb);
                     let minutes = Math.trunc((aspects[accumulator].orb - degrees) * 60);
 
@@ -109,8 +100,8 @@ export default function GridAspects(props) {
                     minutes = minutes < 10 ? "0" + minutes : minutes;
                     cells.push(<Text
                         key={`${y}-${x}`}
-                        x={globalOffsetX + (x * 50)}
-                        y={globalOffsetY + (y * 50)}
+                        x={globalOffsetX + (x * cellEdgeSize)}
+                        y={globalOffsetY + (y * cellEdgeSize)}
                         fontSize={9}
                         stroke={"black"}
                         text={`${degrees}\u00B0 ${minutes}'`}
@@ -122,19 +113,18 @@ export default function GridAspects(props) {
                 ++accumulator;
             }
         }
+
         return cells;
     }
 
     const getVerticalPlanetSymbols = () => {
         const cells = [];
-        // For biwheels, slide symbols down by 1, due to starting index in for loop
-        const cellOffset = props.mode === "Uniwheel?" ? 0 : 1;
 
-        for (let y = props.mode === "Uniwheel" ? 1 : 0; y < planets.length; ++y) {
+        for (let y = 0; y < planets.length; ++y) {
             cells.push(<Text
                 key={`${y}-verticalPlanetSymbol`}
                 x={globalOffsetX}
-                y={globalOffsetY + ((y + cellOffset) * 50)}
+                y={globalOffsetY + ((y + 1) * cellEdgeSize)}
                 fontSize={14}
                 stroke={PLANET_COLORS[planets[y]]}
                 text={`${PLANET_UNICODE[planets[y]]}`}
@@ -148,10 +138,11 @@ export default function GridAspects(props) {
 
     const getHorizontalPlanetSymbols = () => {
         const cells = [];
-        for (let x = 0; x < planets.length; ++x) {
+
+        for (let x = 0; x < props.chartPoints.length; ++x) {
             cells.push(<Text
                 key={`${x}-horizontalPlanetSymbol`}
-                x={((x + 1) * 50) + globalOffsetX}
+                x={((x + 1) * cellEdgeSize) + globalOffsetX}
                 y={globalOffsetY}
                 fontSize={14}
                 stroke={PLANET_COLORS[planets[x]]}

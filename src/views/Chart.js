@@ -1,5 +1,5 @@
 import React from "react";
-import { Stage, Layer, Group, useStrictMode } from "react-konva";
+import { Stage, Layer, Group } from "react-konva";
 
 import HouseNumbers from "./chartComponents/houseNumbers";
 import CuspCoords from "./chartComponents/cuspCoords";
@@ -33,6 +33,7 @@ export default function Chart(props) {
         let cusps
         let displayOffset;
         let coords;
+        let chartPoints;
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
@@ -43,17 +44,66 @@ export default function Chart(props) {
                 EP: props.chart.angles["Eq Asc"],
                 WP: props.chart.angles["Eq Dsc"]
             };
-
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "EP",
+                "WP",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
             coords = props.chart[props.view];
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
             coords = props.chart[props.view];
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
             rotateCoordinatesInRA(coords, props.chart.ramc); // Rotate to RAMC - 270
         }
         else {
@@ -83,8 +133,17 @@ export default function Chart(props) {
                 {
                     props.mode === "aspectGrid" &&
                     <Group>
-                        <Grid scale={scale} chart={coords} mode="Uniwheel" />
-                        <GridAspects scale={scale} charts={[coords]} angles={[props.chart.angles]} />
+                        <Grid scale={scale}
+                            chart={coords}
+                            chartPoints={chartPoints}
+                            mode="Uniwheel"
+                        />
+                        <GridAspects scale={scale}
+                            charts={[coords]}
+                            chartPoints={chartPoints}
+                            angles={[props.chart.angles]}
+                            mode="Uniwheel"
+                        />
                     </Group>
                 }
             </Group>
@@ -99,6 +158,7 @@ export default function Chart(props) {
 
         let cusps;
         let displayOffset;
+        let chartPoints;
 
         if (props.view === "ecliptical") {
             // Lock left side of chart to Ascendant
@@ -108,12 +168,46 @@ export default function Chart(props) {
                 ...props.chart.returnChart[props.view],
                 EP: props.chart.returnChart.angles["Eq Asc"],
                 WP: props.chart.returnChart.angles["Eq Dsc"]
-            }
+            };
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "EP",
+                "WP",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
             coordsInner = props.chart.returnChart[props.view];
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
@@ -122,6 +216,22 @@ export default function Chart(props) {
             // Rotate to RAMC - 270
             rotateCoordinatesInRA(coordsInner, props.chart.returnChart.ramc);
             rotateCoordinatesInRA(coordsOuter, props.chart.returnChart.ramc);
+            chartPoints = [
+                "Sun",
+                "Moon",
+                "Mercury",
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn",
+                "Uranus",
+                "Neptune",
+                "Pluto",
+                "Asc",
+                "MC",
+                "Dsc",
+                "IC"
+            ];
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
@@ -151,10 +261,15 @@ export default function Chart(props) {
                 {
                     props.mode === "aspectGrid" &&
                     <Group>
-                        <Grid scale={scaleInner} chart={coordsInner} mode="Biwheel" />
+                        <Grid scale={scaleInner}
+                            chart={coordsInner}
+                            chartPoints={chartPoints}
+                            mode="Biwheel"
+                        />
                         <GridAspects scale={scaleInner}
                             charts={[coordsOuter, coordsInner]}
                             angles={[props.chart.radix.angles, props.chart.returnChart.angles]}
+                            chartPoints={chartPoints}
                         />
                     </Group>
                 }

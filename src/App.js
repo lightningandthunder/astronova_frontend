@@ -148,7 +148,7 @@ class App extends React.Component {
                         chart={this.state.selectedChart}
                         view={this.state.view}
                         mode={this.state.mode}
-                        scaleFactor={1.2}
+                        scaleFactor={1.1}
                     />
                 }
                 <ViewButtons

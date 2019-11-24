@@ -25,7 +25,7 @@ export default class AspectManager {
         return null;
     }
 
-    parseAspect(pname1, plong1, pname2, plong2) {
+    parseAspect(pname1, plong1, pname2, plong2, mode) {
         let orb = null;
 
         // Conjunction
