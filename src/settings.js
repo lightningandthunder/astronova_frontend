@@ -151,19 +151,6 @@ const CHART_SCALE_DEFAULTS = {
     }
 }
 
-const PLANET_COLORS = {
-    "Sun": "yellow",
-    "Moon": "gray",
-    "Mercury": "orange",
-    "Venus": "green",
-    "Mars": "red",
-    "Jupiter": "purple",
-    "Saturn": "indigo",
-    "Uranus": "blue",
-    "Neptune": "cyan",
-    "Pluto": "crimson"
-}
-
 const PLANET_UNICODE = {
     "Sun": "\u2609",
     "Moon": "\u263D",
@@ -181,6 +168,39 @@ const PLANET_UNICODE = {
     "MC": "MC",
     "Dsc": "Dsc",
     "IC": "IC"
+}
+
+const PLANET_COLORS = {
+    "Sun": "yellow",
+    "Moon": "gray",
+    "Mercury": "orange",
+    "Venus": "green",
+    "Mars": "red",
+    "Jupiter": "purple",
+    "Saturn": "indigo",
+    "Uranus": "blue",
+    "Neptune": "cyan",
+    "Pluto": "crimson"
+}
+
+const ASPECT_UNICODE = {
+    "Cnj": "\u260C",
+    "Opp": "\u260D",
+    "Sqr": "\u25A1",
+    "Sms": "\u2220",
+    "Ssq": "Ssq",
+    "Tri": "\u25B3",
+    "Sxt": "*"
+}
+
+const ASPECT_COLORS = {
+    "Cnj": "black",
+    "Opp": "red",
+    "Sqr": "red",
+    "Sms": "blue",
+    "Ssq": "blue",
+    "Tri": "green",
+    "Sxt": "green"
 }
 
 // const SIGN_COLORS = {
@@ -820,5 +840,7 @@ export {
     SIGNS,
     CHART_SCALE_DEFAULTS,
     VERSION,
-    TITLE
+    TITLE,
+    ASPECT_UNICODE,
+    ASPECT_COLORS
 };

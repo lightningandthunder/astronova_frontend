@@ -1,7 +1,12 @@
 import React from "react";
 import { Group, Text } from "react-konva";
 import AspectManager from "../../managers/AspectManager";
-import { PLANET_UNICODE, PLANET_COLORS } from "../../settings";
+import {
+    PLANET_UNICODE,
+    PLANET_COLORS,
+    ASPECT_UNICODE,
+    ASPECT_COLORS
+} from "../../settings";
 
 export default function GridAspects(props) {
     const globalOffsetX = props.scale.origin.x / 2.3;
@@ -58,7 +63,7 @@ export default function GridAspects(props) {
             }
             usedKeys.push(planet1);
         }
-        console.log(aspectList)
+
         return aspectList;
     }
 
@@ -68,15 +73,18 @@ export default function GridAspects(props) {
 
         for (let x = 1; x <= planets.length; ++x) {
             for (let y = 1; y <= planets.length; ++y) {
+                const aspect = aspects[accumulator]
+                    ? aspects[accumulator].aspectType
+                    : null
                 cells.push(<Text
                     key={`${y}-${x}`}
                     x={globalOffsetX + (x * cellEdgeSize)}
                     y={globalOffsetY + (y * cellEdgeSize)}
-                    fontSize={12}
-                    stroke={"black"}
-                    text={aspects[accumulator] ? aspects[accumulator].aspectType : null}
-                    offsetX={-12}
-                    offsetY={0}
+                    fontSize={20}
+                    stroke={ASPECT_COLORS[aspect]}
+                    text={aspect ? ASPECT_UNICODE[aspect] : null}
+                    offsetX={-15}
+                    offsetY={2}
                     strokeWidth={1}
                 />)
                 ++accumulator;
@@ -104,10 +112,10 @@ export default function GridAspects(props) {
                         key={`${y}-${x}`}
                         x={globalOffsetX + (x * cellEdgeSize)}
                         y={globalOffsetY + (y * cellEdgeSize)}
-                        fontSize={9}
+                        fontSize={13}
                         stroke={"black"}
                         text={`${degrees}\u00B0 ${minutes}'`}
-                        offsetX={-10}
+                        offsetX={-8}
                         offsetY={-20}
                         strokeWidth={1}
                     />)
