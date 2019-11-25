@@ -5,7 +5,7 @@ import {
     PLANET_UNICODE,
     PLANET_COLORS,
     ASPECT_UNICODE,
-    ASPECT_COLORS
+    ASPECT_SYMBOL_COLORS
 } from "../../settings";
 
 export default function GridAspects(props) {
@@ -16,55 +16,8 @@ export default function GridAspects(props) {
 
 
     const getAspects = () => {
-        const manager = new AspectManager();
-        const aspectList = [];
-        const usedKeys = [];
-
-        const planetRowVertical = props.charts[0];
-
-        // Need to clean this up and put into a dedicated function to determine
-        // Chart points, for the grid cells as well as their contents.
-        planetRowVertical["Asc"] = props.angles["Asc"];
-        planetRowVertical["MC"] = props.angles["MC"];
-        planetRowVertical["Dsc"] = props.angles["Dsc"];
-        planetRowVertical["IC"] = props.angles["IC"];
-
-        let planetRowHorizontal = null;
-        if (props.charts.length > 1 && props.angles.length > 1) {
-            planetRowHorizontal = props.charts[1];
-            planetRowHorizontal["Asc"] = props.angles[1]["Asc"];
-            planetRowHorizontal["MC"] = props.angles[1]["MC"];
-            planetRowHorizontal["Dsc"] = props.angles[1]["Dsc"];
-            planetRowHorizontal["IC"] = props.angles[1]["IC"];
-        } else {
-            planetRowHorizontal = planetRowVertical;
-        }
-
-        for (let planet1 of Object.keys(planetRowHorizontal)) {
-            for (let planet2 of Object.keys(planetRowVertical)) {
-
-                let aspect;
-
-                if (props.mode === "Uniwheel"
-                    && (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0))
-                    // Don't re-parse aspects in Uniwheels
-                    aspect = null;
-
-                else
-                    aspect = manager.parseAspect(
-                        planet1,
-                        planetRowHorizontal[planet1],
-                        planet2,
-                        planetRowVertical[planet2],
-                        props.mode
-                    );
-
-                aspectList.push(aspect);
-            }
-            usedKeys.push(planet1);
-        }
-
-        return aspectList;
+        return new AspectManager()
+            .getAspectsFromCoords(props.charts, props.angles, props.mode);
     }
 
     const getAspectSymbols = (aspects) => {
@@ -81,7 +34,7 @@ export default function GridAspects(props) {
                     x={globalOffsetX + (x * cellEdgeSize)}
                     y={globalOffsetY + (y * cellEdgeSize)}
                     fontSize={20}
-                    stroke={ASPECT_COLORS[aspect]}
+                    stroke={ASPECT_SYMBOL_COLORS[aspect]}
                     text={aspect ? ASPECT_UNICODE[aspect] : null}
                     offsetX={-15}
                     offsetY={2}

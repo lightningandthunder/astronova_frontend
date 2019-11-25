@@ -30,6 +30,8 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreeRadius: 260,
             planetSignRadius: 235,
             planetMinuteRadius: 210,
+            planetMarkerOutsideRadius: 175,
+            planetMarkerInsideRadius: 170
         },
         houseRingRadii: {
             houseRingOuterRadius: 170,
@@ -65,6 +67,8 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreeRadius: 255,
             planetSignRadius: 235,
             planetMinuteRadius: 215,
+            planetMarkerOutsideRadius: 210,
+            planetMarkerInsideRadius: 205
         },
         houseRingRadii: {
             houseRingOuterRadius: 105,
@@ -100,6 +104,8 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreeRadius: 165,
             planetSignRadius: 140,
             planetMinuteRadius: 115,
+            planetMarkerOutsideRadius: 110,
+            planetMarkerInsideRadius: 105
         },
         houseRingRadii: {
             houseRingOuterRadius: 105,
@@ -193,7 +199,16 @@ const ASPECT_UNICODE = {
     "Sxt": "*"
 }
 
-const ASPECT_COLORS = {
+const ASPECT_LINE_COLORS = {
+    "Opp": "red",
+    "Sqr": "blue",
+    "Sms": "purple",
+    "Ssq": "purple",
+    "Tri": "green",
+    "Sxt": "green"
+}
+
+const ASPECT_SYMBOL_COLORS = {
     "Cnj": "black",
     "Opp": "red",
     "Sqr": "red",
@@ -202,6 +217,7 @@ const ASPECT_COLORS = {
     "Tri": "green",
     "Sxt": "green"
 }
+
 
 // const SIGN_COLORS = {
 //     "Ari": "red",
@@ -842,5 +858,6 @@ export {
     VERSION,
     TITLE,
     ASPECT_UNICODE,
-    ASPECT_COLORS
+    ASPECT_SYMBOL_COLORS,
+    ASPECT_LINE_COLORS
 };

@@ -13,6 +13,17 @@ export default function ChartItem(props) {
             >
                 del
             </button>
+            {
+                props.chart.type !== "Uniwheel" &&
+                <button
+                    id={props.chart.name}
+                    className="ChartSplitButton"
+                    onClick={() => props.splitCharts(props.chart)}
+                >
+                    split
+            </button>
+            }
+
         </div>
     );
 }

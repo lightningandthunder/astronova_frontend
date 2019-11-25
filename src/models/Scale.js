@@ -12,6 +12,8 @@ export default class Scale {
         this.planetDegreeRadius = wheelParams.planetDegreeRadius;
         this.planetSignRadius = wheelParams.planetSignRadius;
         this.planetMinuteRadius = wheelParams.planetMinuteRadius;
+        this.planetMarkerOutsideRadius = wheelParams.planetMarkerOutsideRadius;
+        this.planetMarkerInsideRadius = wheelParams.planetMarkerInsideRadius;
 
         this.houseRingOuterRadius = wheelParams.houseRingOuterRadius;
         this.houseNumberRadius = wheelParams.houseNumberRadius;

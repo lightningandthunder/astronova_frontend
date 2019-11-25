@@ -16,13 +16,15 @@ export default function Grid(props) {
 
             for (let x = 1; x <= horizontalLimit; ++x) {
                 cells.push(<Rect
-                    key={`${y}-${x}`}
+                    key={`Cell-${y}-${x}`}
                     x={globalOffsetX + (x * cellEdgeSize)}
                     y={globalOffsetY + (y * cellEdgeSize)}
                     height={cellEdgeSize}
                     width={cellEdgeSize}
                     stroke={"black"}
-                    cornerRadius={1}
+
+                    // Gray-out cells corresponding to same planet on X and Y
+                    fill={mode === "Uniwheel" && x === y ? "silver" : "white"}
                 />)
             }
         }

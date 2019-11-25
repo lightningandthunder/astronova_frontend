@@ -31,6 +31,7 @@ class App extends React.Component {
         this.handleViewChange = this.handleViewChange.bind(this);
         this.handleModeChange = this.handleModeChange.bind(this);
         this.deleteChart = this.deleteChart.bind(this);
+        this.splitCharts = this.splitCharts.bind(this);
     }
 
     /* ================ Lifecycle hooks ================ */
@@ -55,9 +56,9 @@ class App extends React.Component {
 
     /* ================ onChange methods ================ */
 
-    saveChart(chart) {
+    saveChart(...charts) {
         // Saves to both state and localStorage
-        this.setState({ charts: [...this.state.charts, chart] },
+        this.setState({ charts: [...this.state.charts, ...charts] },
             () => {
                 localStorage.setItem('charts', JSON.stringify(this.state.charts));
                 logIfDevelopment("Saved charts to LS: " + this.state.charts.length);
@@ -84,6 +85,14 @@ class App extends React.Component {
             this.onChangeSelectedChart(currentSelectedChart)
         else
             this.onChangeSelectedChart(allCharts[chartIndex - 1 >= 0 ? chartIndex - 1 : 0]);
+    }
+
+    splitCharts(chart) {
+        if (chart.type !== "Uniwheel") {
+            this.saveChart(chart.radix, chart.returnChart);
+            this.onChangeSelectedChart(this.state.charts[this.state.charts.length - 1]);
+        }
+
     }
 
     onChangeSelectedChart(chart) {
@@ -148,7 +157,7 @@ class App extends React.Component {
                         chart={this.state.selectedChart}
                         view={this.state.view}
                         mode={this.state.mode}
-                        scaleFactor={1.1}
+                        scaleFactor={1.21}
                     />
                 }
                 <ViewButtons
@@ -164,6 +173,7 @@ class App extends React.Component {
                     selectedChart={this.state.selectedChart}
                     onChangeSelectedChart={this.onChangeSelectedChart}
                     deleteChart={this.deleteChart}
+                    splitCharts={this.splitCharts}
                 />
                 <NewChartPopup
                     saveChart={this.saveChart}

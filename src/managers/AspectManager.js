@@ -1,6 +1,60 @@
 import Aspect from "../models/Aspect";
 
 export default class AspectManager {
+
+    getAspectsFromCoords(charts, angles, mode) {
+        const planetRowVertical = charts[0];
+
+        // Need to clean this up and put into a dedicated function to determine
+        // Chart points, for the grid cells as well as their contents.
+        planetRowVertical["Asc"] = angles["Asc"];
+        planetRowVertical["MC"] = angles["MC"];
+        planetRowVertical["Dsc"] = angles["Dsc"];
+        planetRowVertical["IC"] = angles["IC"];
+
+        let planetRowHorizontal = null;
+        if (charts.length > 1 && angles.length > 1) {
+            planetRowHorizontal = charts[1];
+            planetRowHorizontal["Asc"] = angles[1]["Asc"];
+            planetRowHorizontal["MC"] = angles[1]["MC"];
+            planetRowHorizontal["Dsc"] = angles[1]["Dsc"];
+            planetRowHorizontal["IC"] = angles[1]["IC"];
+        } else {
+            planetRowHorizontal = planetRowVertical;
+        }
+        return this.getAspectList(planetRowHorizontal, planetRowVertical, mode)
+    }
+
+    getAspectList(planetRowHorizontal, planetRowVertical, mode) {
+        const usedKeys = [];
+        const aspectList = [];
+        for (let planet1 of Object.keys(planetRowHorizontal)) {
+            for (let planet2 of Object.keys(planetRowVertical)) {
+
+                let aspect;
+
+                if (mode === "Uniwheel"
+                    && (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)) {
+                    // Don't re-parse aspects in Uniwheels
+                    aspect = null;
+                } else {
+                    aspect = this.parseAspect(
+                        planet1,
+                        planetRowHorizontal[planet1],
+                        planet2,
+                        planetRowVertical[planet2]
+                    );
+                }
+
+                aspectList.push(aspect);
+            }
+
+            usedKeys.push(planet1);
+        }
+
+        return aspectList;
+    }
+
     getOrb(longitude1, longitude2, lowbound, highbound) {
         const aspectAverage = (lowbound + highbound) / 2;
 
@@ -25,7 +79,7 @@ export default class AspectManager {
         return null;
     }
 
-    parseAspect(pname1, plong1, pname2, plong2, mode) {
+    parseAspect(pname1, plong1, pname2, plong2) {
         let orb = null;
 
         // Conjunction

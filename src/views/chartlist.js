@@ -12,6 +12,7 @@ export default function ChartList(props) {
                     onChangeSelectedChart={props.onChangeSelectedChart}
                     deleteChart={props.deleteChart}
                     selected={item === props.selectedChart}
+                    splitCharts={props.splitCharts}
                 />
             ))}
         </div>

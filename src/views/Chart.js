@@ -12,6 +12,9 @@ import ChartInfo from "./chartComponents/ChartInfo";
 import { rotateCoordinatesInRA } from "../utils/geometry";
 import Grid from "./aspectGridComponents/Grid";
 import GridAspects from "./aspectGridComponents/GridAspects";
+import PlanetLocationMarker from "./chartComponents/PlanetLocationMarker";
+import AspectManager from "../managers/AspectManager";
+import AspectLines from "./chartComponents/AspectLines";
 
 const defaultCusps = {
     "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -126,6 +129,12 @@ export default function Chart(props) {
                         <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                         <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
                         <Planets scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
+                        <PlanetLocationMarker scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
+                        <AspectLines scale={scale}
+                            aspects={new AspectManager().getAspectList(coords, coords, "Uniwheel")}
+                            coords={coords}
+                            rotationalOffset={displayOffset}
+                        />
                     </Group>
                 }
 
@@ -254,6 +263,8 @@ export default function Chart(props) {
                         <Planets scale={scaleInner} ringLayer={"inner"} coords={coordsInner} rotationalOffset={displayOffset} />
                         <Planets scale={scaleOuter} ringLayer={"outer"} coords={coordsOuter} rotationalOffset={displayOffset} />
                         <BiwheelDivider scale={scaleOuter} />
+                        <PlanetLocationMarker scale={scaleInner} ringLayer={"inner"} coords={coordsInner} rotationalOffset={displayOffset} />
+                        <PlanetLocationMarker scale={scaleOuter} ringLayer={"outer"} coords={coordsOuter} rotationalOffset={displayOffset} />
                     </Group>
                 }
                 {/* ======== Aspect Grid View ======== */}
