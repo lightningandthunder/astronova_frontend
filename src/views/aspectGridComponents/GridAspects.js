@@ -5,7 +5,7 @@ import {
     PLANET_UNICODE,
     PLANET_COLORS,
     ASPECT_UNICODE,
-    ASPECT_SYMBOL_COLORS
+    ASPECT_COLORS
 } from "../../settings";
 
 export default function GridAspects(props) {
@@ -34,7 +34,7 @@ export default function GridAspects(props) {
                     x={globalOffsetX + (x * cellEdgeSize)}
                     y={globalOffsetY + (y * cellEdgeSize)}
                     fontSize={20}
-                    stroke={ASPECT_SYMBOL_COLORS[aspect]}
+                    stroke={ASPECT_COLORS[aspect]}
                     text={aspect ? ASPECT_UNICODE[aspect] : null}
                     offsetX={-15}
                     offsetY={2}

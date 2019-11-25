@@ -199,21 +199,12 @@ const ASPECT_UNICODE = {
     "Sxt": "*"
 }
 
-const ASPECT_LINE_COLORS = {
+const ASPECT_COLORS = {
+    "Cnj": "black",
     "Opp": "red",
     "Sqr": "blue",
     "Sms": "purple",
     "Ssq": "purple",
-    "Tri": "green",
-    "Sxt": "green"
-}
-
-const ASPECT_SYMBOL_COLORS = {
-    "Cnj": "black",
-    "Opp": "red",
-    "Sqr": "red",
-    "Sms": "blue",
-    "Ssq": "blue",
     "Tri": "green",
     "Sxt": "green"
 }
@@ -858,6 +849,5 @@ export {
     VERSION,
     TITLE,
     ASPECT_UNICODE,
-    ASPECT_SYMBOL_COLORS,
-    ASPECT_LINE_COLORS
+    ASPECT_COLORS
 };
