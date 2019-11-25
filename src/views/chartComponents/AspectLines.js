@@ -11,7 +11,6 @@ export default function AspectLines(props) {
         if (aspect && aspect.aspectType && aspect.aspectType !== "Cnj") {
             const pos1 = props.coords[aspect.planet1];
             const pos2 = props.coords[aspect.planet2];
-            console.log(aspect.planet1, aspect.aspectType, aspect.planet2)
 
             return (<Line key={`AspectLine-${aspect.planet1}-${aspect.planet2}`}
                 points={[...derivePoint(props.scale.origin, pos1, props.scale.houseRingInnerRadius, props.rotationalOffset),
