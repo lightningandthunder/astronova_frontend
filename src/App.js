@@ -3,7 +3,7 @@ import './styles/App.css';
 
 import Chartlist from './views/chartlist';
 // import RawChartData from './views/rawchartdata';
-import RemoveButton from './views/removeButton';
+import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import logIfDevelopment from './utils/logIfDevelopment';
@@ -132,65 +132,68 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {/* ======== Uniwheel Chart ======== */}
-                {
-                    this.state.selectedChart &&
-                    this.state.selectedChart.type === "Uniwheel" &&
-                    <Chart
-                        width={window.innerWidth}
-                        height={window.innerHeight}
-                        chart={this.state.selectedChart}
-                        view={this.state.view}
-                        mode={this.state.mode}
-                        scaleFactor={1.2}
-                    />
-                }
-
-
-                {/* ======== Biwheel Chart ======== */}
-                {
-                    this.state.selectedChart &&
-                    this.state.selectedChart.type === "Biwheel" &&
-                    <Chart
-                        width={window.innerWidth}
-                        height={window.innerHeight}
-                        chart={this.state.selectedChart}
-                        view={this.state.view}
-                        mode={this.state.mode}
-                        scaleFactor={1.21}
-                    />
-                }
-                <ViewButtons
-                    view={this.state.view}
-                    onChangeView={this.handleViewChange}
-                />
-                < ModeButtons
-                    mode={this.state.mode}
-                    onChangeMode={this.handleModeChange}
-                />
-                <Chartlist className="chartList"
-                    charts={this.state.charts ? this.state.charts : []}
-                    selectedChart={this.state.selectedChart}
-                    onChangeSelectedChart={this.onChangeSelectedChart}
-                    deleteChart={this.deleteChart}
-                    splitCharts={this.splitCharts}
-                />
-                <NewChartPopup
-                    saveChart={this.saveChart}
-                    setSelectedChartToNewest={this.setSelectedChartToNewest}
-                />
-
-                {/* ======== Button for solunar return chart ======== */}
-                {
-                    this.state.selectedChart
-                        ? <ReturnChartPopup
-                            saveChart={this.saveChart}
-                            setSelectedChartToNewest={this.setSelectedChartToNewest}
-                            selectedChart={this.state.selectedChart}
+                <div className="Chart">
+                    {/* ======== Uniwheel Chart ======== */}
+                    {
+                        this.state.selectedChart &&
+                        this.state.selectedChart.type === "Uniwheel" &&
+                        <Chart
+                            width={window.innerWidth - 300}
+                            height={window.innerHeight}
+                            chart={this.state.selectedChart}
+                            view={this.state.view}
+                            mode={this.state.mode}
+                            scaleFactor={1.2}
                         />
-                        : <div></div>
-                }
-                <RemoveButton onClick={this.resetCharts} />
+                    }
+                    {/* ======== Biwheel Chart ======== */}
+                    {
+                        this.state.selectedChart &&
+                        this.state.selectedChart.type === "Biwheel" &&
+                        <Chart
+                            width={window.innerWidth - 300}
+                            height={window.innerHeight}
+                            chart={this.state.selectedChart}
+                            view={this.state.view}
+                            mode={this.state.mode}
+                            scaleFactor={1.21}
+                        />
+                    }
+                </div>
+                <div className="ControlPanel">
+                    <ViewButtons
+                        view={this.state.view}
+                        onChangeView={this.handleViewChange}
+                    />
+                    < ModeButtons
+                        mode={this.state.mode}
+                        onChangeMode={this.handleModeChange}
+                    />
+                    <NewChartPopup
+                        saveChart={this.saveChart}
+                        setSelectedChartToNewest={this.setSelectedChartToNewest}
+                    />
+                    {/* ======== Button for solunar return chart ======== */}
+
+                    <ReturnChartPopup
+                        saveChart={this.saveChart}
+                        setSelectedChartToNewest={this.setSelectedChartToNewest}
+                        selectedChart={this.state.selectedChart}
+                        enabled={this.state.selectedChart
+                            && this.state.selectedChart.type === "Uniwheel"}
+                    />
+                    <ResetChartsButton onClick={this.resetCharts} />
+                    <Chartlist className="chartList"
+                        charts={this.state.charts ? this.state.charts : []}
+                        selectedChart={this.state.selectedChart}
+                        onChangeSelectedChart={this.onChangeSelectedChart}
+                        deleteChart={this.deleteChart}
+                        splitCharts={this.splitCharts}
+                    />
+
+
+                </div>
+
             </div >
         );
     }

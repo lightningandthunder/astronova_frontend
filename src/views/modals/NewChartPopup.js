@@ -140,7 +140,7 @@ export default class NewChartPopup extends React.Component {
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
             this.closePopup();
-            this.setState({apm: "AM"})
+            this.setState({ apm: "AM" })
         } catch (err) {
             this.handleError(err);
         }
@@ -150,7 +150,9 @@ export default class NewChartPopup extends React.Component {
     render() {
         return (
             <div onKeyDown={this.handleKeyDown}>
-                <button onClick={this.openPopup}>New Chart</button>
+                <button className="NewChartButton" onClick={this.openPopup}>
+                    New Chart
+                </button>
                 <Popup
                     className="popup"
                     position="right center"
@@ -159,7 +161,7 @@ export default class NewChartPopup extends React.Component {
                     closeOnDocumentClick
                     onClose={this.closePopup}
                 >
-                    <div className="actions">
+                    <div className="NewChartDialog">
                         < NameInput onChange={this.handleNameChange} />
                         <div>
                             <Datepicker onChange={this.handleDateTimeChange} hourAndMinute={true} />

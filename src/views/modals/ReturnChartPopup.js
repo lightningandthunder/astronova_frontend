@@ -187,16 +187,20 @@ export default class ReturnChartPopup extends React.Component {
     render() {
         return (
             <div onKeyDown={this.handleKeyDown}>
-                <button onClick={this.openPopup}>New Solunar Return</button>
+                <button
+                className={"SolunarReturnButton"}
+                    disabled={!this.props.enabled}
+                    onClick={this.openPopup}>
+                    New Solunar Return
+                </button>
                 <Popup
-                    className="popup"
                     position="right center"
                     modal
                     open={this.state.isOpen}
                     closeOnDocumentClick
                     onClose={this.closePopup}
                 >
-                    <div className="actions">
+                    <div className="ReturnChartDialog">
                         <Datepicker onChange={this.handleDateTimeChange} />
                         <LocationInput updateLocation={this.handleLocationChange} />
                         <select onChange={this.handlePlanetChange}>

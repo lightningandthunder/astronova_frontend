@@ -1,27 +1,24 @@
 /* Globals
 */
-
-
-
-/* Header 
-*/
-
-
-
+.App {
+    display: flex;
+}
 
 /* Calculation Popup
 */
 
-
+.NewChartDialog, .ReturnChartDialog {
+    height: 200px;
+    width: auto;
+}
 
 
 /* Chart List
 */
 
 .chartList{
-    float: "left";
     height: 500px;
-    width: 500px;
+    width: 250px;
     background-color: rgb(237, 240, 245);
     overflow-y: scroll;
 }
@@ -43,15 +40,28 @@
 
 
 
-/* Body
+/* Control Panel
 */
 
+.ControlPanel {
+    background-color: lightcyan;
+}
 
+.SolunarReturnButton, .NewChartButton {
+    height: 20px;
+    width: 280px;
+    border-radius: 5px;
+}
 
+.ResetChartsButton {
+    height: 20px;
+    width: 280px;
+    border-radius: 5px;
+    background-color: rgb(246, 227, 227);
+}
 
 /* Chart
 */
-
 
 
 
