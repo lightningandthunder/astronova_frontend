@@ -10,3 +10,10 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+/* 
+* Nova, a free sidereal astrological tool.
+* Copyright (C) 2019  Mike Verducci
+* This project is under the GNU General Public License V3.
+* The full license may be found in src/LICENSE.txt
+*/
