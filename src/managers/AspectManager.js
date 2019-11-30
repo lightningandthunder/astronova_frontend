@@ -25,6 +25,8 @@ export default class AspectManager {
         return this.getAspectList(planetRowHorizontal, planetRowVertical, mode)
     }
 
+    // Todo: pass in an array or something for coords, so that 
+    // uniwheels don't need to pass the same coordinate set in twice.
     getAspectList(planetRowHorizontal, planetRowVertical, mode) {
         const usedKeys = [];
         const aspectList = [];
