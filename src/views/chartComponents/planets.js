@@ -1,13 +1,16 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 
-import { derivePoint, parseSign, degToMin, fixOverlap } from "../../utils/geometry";
+import { derivePoint, parseSign, degToMin, getRenderCoords } from "../../utils/geometry";
 import { PLANET_COLORS, PLANET_UNICODE, SIGN_URIS } from "../../settings";
 import PlanetCoords from "../../models/PlanetCoords";
 import SignImage from "./SignImage";
 
 export default function Planets(props) {
-    const adjustedCoords = fixOverlap(new PlanetCoords(props.coords));
+    const adjustedCoords = getRenderCoords(
+        new PlanetCoords(props.coords),
+        props.scale.planetMinuteRadius
+    );
 
     const planetSymbol = (planetInfo) => {
         const [x, y] = derivePoint(props.scale.origin,
@@ -102,14 +105,14 @@ export default function Planets(props) {
     }
     return (
         <Group>
-            {Object.keys(props.coords).map((planet) => (
+            {Object.keys(adjustedCoords).map((planet) => (
                 planetAndCoords(adjustedCoords[planet])
             ))}
         </Group>
     )
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

@@ -52,7 +52,7 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreesOffsetX: 8,
             planetDegreesOffsetY: 8,
 
-            planetMinutesFontSize: 14,
+            planetMinutesFontSize: 12,
             planetMinutesOffsetX: 8,
             planetMinutesOffsetY: 8,
 
@@ -66,7 +66,7 @@ const CHART_SCALE_DEFAULTS = {
             planetRadius: 280,
             planetDegreeRadius: 255,
             planetSignRadius: 235,
-            planetMinuteRadius: 215,
+            planetMinuteRadius: 220,
             planetMarkerOutsideRadius: 210,
             planetMarkerInsideRadius: 205
         },
@@ -89,7 +89,7 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreesOffsetX: 8,
             planetDegreesOffsetY: 8,
 
-            planetMinutesFontSize: 14,
+            planetMinutesFontSize: 12,
             planetMinutesOffsetX: 8,
             planetMinutesOffsetY: 8,
 
@@ -103,7 +103,7 @@ const CHART_SCALE_DEFAULTS = {
             planetRadius: 190,
             planetDegreeRadius: 165,
             planetSignRadius: 140,
-            planetMinuteRadius: 115,
+            planetMinuteRadius: 120,
             planetMarkerOutsideRadius: 110,
             planetMarkerInsideRadius: 105
         },
@@ -126,7 +126,7 @@ const CHART_SCALE_DEFAULTS = {
             planetDegreesOffsetX: 8,
             planetDegreesOffsetY: 8,
 
-            planetMinutesFontSize: 14,
+            planetMinutesFontSize: 12,
             planetMinutesOffsetX: 8,
             planetMinutesOffsetY: 8,
 

@@ -15,28 +15,76 @@ export function rotateCoordinatesInRA(coords, ramc) {
     })
 }
 
-export function fixOverlap(coords) {
-    return coords;
-    const fixedAnglePlacement = 10;
-    let adjustedAngles = Object.assign(coords);
+export function addToLongitude(long, addition) {
+    // Adds a value to a base longitude, and normalizes to within 0-359
+    let adjustedLongitude = long + addition;
+    if (adjustedLongitude > 360)
+        adjustedLongitude -= 360;
+    if (adjustedLongitude < 0)
+        adjustedLongitude += 360;
 
-    let previousKey = null;
-    Object.keys(coords).forEach((key) => {
-        let first = coords[key].renderCoord;
-        if (!previousKey) {
-            previousKey = key;
+    return adjustedLongitude;
+}
+
+export function mergeSortCoordinates(coords) {
+    if (coords.length < 2)
+        return coords;
+
+    let arrayOfCoords = [];
+    if (!(Array.isArray(coords))) {
+        // Add coordinates to array as individual objects
+        Object.keys(coords).map(key => (
+            arrayOfCoords.push({ [key]: coords[key] })
+        ));
+    } else {
+        arrayOfCoords = coords;
+    }
+
+    const middle = Math.floor(arrayOfCoords.length / 2);
+    const left = arrayOfCoords.slice(0, middle);
+    const right = arrayOfCoords.slice(middle);
+
+    return merge(mergeSortCoordinates(left), mergeSortCoordinates(right));
+}
+
+export function merge(left, right) {
+    let arr = [];
+
+    while (left.length && right.length) {
+        // TODO: This is gross; clean this up
+        if (Object.values(left[0])[0].rawCoord < Object.values(right[0])[0].rawCoord) {
+            arr.push(left.shift());
+        } else {
+            arr.push(right.shift());
+        }
+    }
+
+    // Concat anything left over and return the whole array
+    return arr.concat(left.slice().concat(right.slice()));
+}
+
+export function getRenderCoords(coords, radius) {
+    // TODO: Though this works, these are kind of magic numbers; 
+    // find something more logical
+    const minAngle = (500 - radius) * 0.022;
+    const sorted = mergeSortCoordinates(coords);
+
+    let prev = null;
+    sorted.forEach((obj, index) => {
+        const key = Object.keys(obj)[0];
+        const values = obj[key];
+        if (index === 0) {
+            prev = coords[key];
             return;
         }
 
-        let second = coords[previousKey].renderCoord;
-        let diff = Math.abs(first - second);
-        if (diff < fixedAnglePlacement || diff > 360 - fixedAnglePlacement) {
-            console.log(`Found diff ${diff}; Making adjustment between ${key} and ${previousKey}`)
-            adjustedAngles[key].renderCoord += (fixedAnglePlacement - diff);
-        }
-        previousKey = key;
+        let overlap = minAngle - (obj[key].rawCoord - prev.renderCoord);
+        if (overlap > 0) {
+            coords[key].renderCoord = addToLongitude(coords[key].rawCoord, overlap)
+        } 
+        prev = coords[key];
     });
-    return adjustedAngles;
+    return coords;
 }
 
 export function avgCoords(pos1, pos2) {
@@ -65,11 +113,7 @@ export function parseSign(coord) {
     return SIGNS[Math.trunc(coord / 30)];
 }
 
-export function parseAspect(longitude1, longitude2) {
-    throw new Error("Not implemented yet!");
-}
-
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.
