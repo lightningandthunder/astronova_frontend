@@ -72,7 +72,6 @@ export function getRenderCoords(coords, radius) {
     let prev = null;
     sorted.forEach((obj, index) => {
         const key = Object.keys(obj)[0];
-        const values = obj[key];
         if (index === 0) {
             prev = coords[key];
             return;

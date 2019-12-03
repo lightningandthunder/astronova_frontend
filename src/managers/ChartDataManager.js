@@ -10,8 +10,8 @@ export default class ChartManager {
 
     /* ================== Chart models =================  */
 
-    createUniwheel(data, name=undefined) {
-        const expectedProperties = [
+    createUniwheel(data, location, name = undefined) {
+        const expectedPropertiesData = [
             "local_datetime",
             "ecliptical",
             "mundane",
@@ -28,20 +28,28 @@ export default class ChartManager {
             "tz"
         ];
 
-        this.validateExpectedProperties(expectedProperties, data);
+        const expectedPropertiesLocation = ["placeName"];
+
+        this.validateExpectedProperties(expectedPropertiesData, data);
+        this.validateExpectedProperties(expectedPropertiesLocation, location)
+        data.placeName = location.placeName;
         const uniwheel = new Uniwheel(data);
         uniwheel.name = name ? name : `${moment(data.local_datetime).format("YYYY/MM/DD")}`
         return uniwheel;
     }
 
-    createBiwheel(data, name=undefined) {
+    createBiwheel(data, location, name = undefined) {
         const expectedPropertiesTopLevel = [
             "radix",
             "return_chart"
         ];
 
         this.validateExpectedProperties(expectedPropertiesTopLevel, data);
-        const expectedProperties = [
+
+        const expectedPropertiesLocation = ["placeName"];
+        this.validateExpectedProperties(expectedPropertiesLocation, location);
+
+        const expectedPropertiesCharts = [
             "local_datetime",
             "ecliptical",
             "mundane",
@@ -58,12 +66,13 @@ export default class ChartManager {
             "tz"
         ];
 
-        this.validateExpectedProperties(expectedProperties, data.radix);
-        this.validateExpectedProperties(expectedProperties, data.return_chart);
-        const radix = this.createUniwheel(data.radix);
-        const returnChart = this.createUniwheel(data.return_chart);
+        this.validateExpectedProperties(expectedPropertiesCharts, data.radix);
+        this.validateExpectedProperties(expectedPropertiesCharts, data.return_chart);
+        const radix = this.createUniwheel(data.radix, location);
+        const returnChart = this.createUniwheel(data.return_chart, location);
         const biwheel = new Biwheel(radix, returnChart);
         biwheel.name = `${name || radix.name} return ${moment(returnChart.local_datetime).format("YYYY/MM/DD")}`;
+        biwheel.placeName = location.placeName;
         return biwheel;
     }
 
@@ -183,7 +192,7 @@ export default class ChartManager {
     }
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

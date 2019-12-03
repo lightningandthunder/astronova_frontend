@@ -119,6 +119,7 @@ export default function Chart(props) {
                     longitude={props.chart.longitude}
                     latitude={props.chart.latitude}
                     local_datetime={new Date(props.chart.local_datetime).toString()}
+                    placeName={props.chart.placeName}
                 />
                 {/* =========== Chart View ========== */}
                 {
@@ -251,6 +252,7 @@ export default function Chart(props) {
                     longitude={props.chart.returnChart.longitude}
                     latitude={props.chart.returnChart.latitude}
                     local_datetime={new Date(props.chart.returnChart.local_datetime).toString()}
+                    placeName={props.chart.placeName}
                 />
                 {/* =========== Chart View ========== */}
                 {

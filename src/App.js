@@ -190,11 +190,8 @@ class App extends React.Component {
                         deleteChart={this.deleteChart}
                         splitCharts={this.splitCharts}
                     />
-
-
                 </div>
-
-            </div >
+            </div>
         );
     }
 }

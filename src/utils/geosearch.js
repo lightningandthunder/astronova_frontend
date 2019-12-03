@@ -19,23 +19,30 @@ export default async function geosearch(q) {
 
     const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
     const res = await axios.get(endpoint);
-    logIfDevelopment("Geosearch result: ", res);
+    logIfDevelopment("Geosearch results: ", res);
 
     if (res.data.length === 0)
         return undefined;
     else
-        res.data = res.data[0]; // Take the first location
+        res.data = res.data[0]; // Take first location
 
     try {
         const tz = tzsearch(res.data.lon, res.data.lat)
         res.tz = tz;
+
+        // Normalize place name
+        let placeArray = res.data.display_name.split(",");
+        res.data.placeName = placeArray.length > 3
+            ? [placeArray[0], placeArray[2], placeArray[placeArray.length - 1]].join(",")
+            : [placeArray[0], placeArray[placeArray.length - 1]].join(",")
+
         return new Location(res);
     } catch (err) {
         throw new Error(`Geocoding failed: ${err}`)
     }
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

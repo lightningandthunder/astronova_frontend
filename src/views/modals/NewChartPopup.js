@@ -89,21 +89,21 @@ export default class NewChartPopup extends React.Component {
             return;
         }
         let d = new Date(originalDate);
-
         const apm = this.state.apm;
         const hour = d.getHours();
         if (hour === 12 && apm === "AM")
             d.setHours(0)
         else if (0 < hour < 12 && apm === "PM")
             d.setHours(hour + 12);
-        return d.toISOString();
+
+        // return d.toISOString();
+        return d;
     }
 
     async queryBackendForRadix() {
         // Query back end for a single chart.
 
         const dt = this.convertApmToMilitaryTime(this.state.currentSelectedDatetime);
-
         const locationQuery = this.state.locationInput;
         if (!locationQuery || locationQuery.length === 0 || locationQuery.trim().length === 0) {
             this.handleError("Invalid location!");
@@ -135,7 +135,7 @@ export default class NewChartPopup extends React.Component {
         }
 
         try {
-            const newChart = manager.createUniwheel(response.data, this.state.nameInput);
+            const newChart = manager.createUniwheel(response.data, locationResults, this.state.nameInput);
             logIfDevelopment("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();

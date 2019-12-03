@@ -142,7 +142,6 @@ export default class ReturnChartPopup extends React.Component {
         }
 
         // Setup and make query
-
         const locationResults = await geosearch(locationQuery);
         if (!locationResults) {
             this.handleError("No location found! Please try a different location.");
@@ -173,7 +172,7 @@ export default class ReturnChartPopup extends React.Component {
             }
             logIfDevelopment("Radix & return charts: ", charts);
             for (let c = 0; c < charts.length; c++) {
-                const newChart = manager.createBiwheel(charts[c], inputRadix.name);
+                const newChart = manager.createBiwheel(charts[c], locationResults, inputRadix.name);
                 this.props.saveChart(newChart);
             }
 

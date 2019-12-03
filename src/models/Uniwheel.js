@@ -16,10 +16,11 @@ export default class Uniwheel {
         this.tz = data.tz;
         this.type = "Uniwheel";
         this.name = "Uniwheel" // default value
+        this.placeName = data.placeName; 
     }
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

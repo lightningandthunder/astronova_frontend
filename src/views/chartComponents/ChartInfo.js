@@ -18,11 +18,23 @@ export default function ChartInfo(props) {
         )
     }
 
+    const placeName = () => {
+        return (
+            <Text key={`ChartInfoPlaceName`}
+                x={10}
+                y={25}
+                text={`${props.placeName}`}
+                fontSize={14}
+                strokeWidth={1}
+            />
+        )
+    }
+
     const geoCoords = () => {
         return (
             <Text key={`ChartInfoGeoCoords`}
                 x={10}
-                y={25}
+                y={40}
                 text={`${props.longitude}, ${props.latitude}`}
                 fontSize={14}
                 strokeWidth={1}
@@ -34,7 +46,7 @@ export default function ChartInfo(props) {
         return (
             <Text key={`ChartInfoDatetime`}
                 x={10}
-                y={40}
+                y={55}
                 // Newline to split long text into 2 shorter lines
                 text={props.local_datetime.replace("GMT", "\nGMT")} 
                 fontSize={14}
@@ -46,6 +58,7 @@ export default function ChartInfo(props) {
     return (
         <Group>
             {name()}
+            {placeName()}
             {geoCoords()}
             {dt()}
         </Group>

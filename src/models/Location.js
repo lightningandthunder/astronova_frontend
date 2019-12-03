@@ -3,6 +3,7 @@ export default class Location {
         this.longitude = geo.data.lon;
         this.latitude = geo.data.lat;
         this.tz = geo.tz;
+        this.placeName = geo.data.placeName
     }
 }
 
