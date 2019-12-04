@@ -1,5 +1,6 @@
 import React from "react";
 import { Stage, Layer, Group } from "react-konva";
+import moment from "moment-timezone";
 
 import HouseNumbers from "./chartComponents/houseNumbers";
 import CuspCoords from "./chartComponents/cuspCoords";
@@ -118,7 +119,7 @@ export default function Chart(props) {
                     name={props.chart.name}
                     longitude={props.chart.longitude}
                     latitude={props.chart.latitude}
-                    local_datetime={new Date(props.chart.local_datetime).toString()}
+                    local_datetime={moment.tz(props.chart.local_datetime, props.chart.tz).toString()}
                     placeName={props.chart.placeName}
                 />
                 {/* =========== Chart View ========== */}
@@ -251,7 +252,7 @@ export default function Chart(props) {
                     name={props.chart.name}
                     longitude={props.chart.returnChart.longitude}
                     latitude={props.chart.returnChart.latitude}
-                    local_datetime={new Date(props.chart.returnChart.local_datetime).toString()}
+                    local_datetime={moment.tz(props.chart.returnChart.local_datetime, props.chart.returnChart.tz).toString()}
                     placeName={props.chart.placeName}
                 />
                 {/* =========== Chart View ========== */}

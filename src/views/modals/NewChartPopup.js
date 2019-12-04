@@ -1,10 +1,11 @@
 import React from "react";
 import Popup from "reactjs-popup";
 import axios from "axios";
+import moment from "moment-timezone";
 
 import ChartManager from "../../managers/ChartDataManager";
 import geosearch from "../../utils/geosearch";
-import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
+import { QUERY_HEADERS, API_ADDRESS, TIMEZONES } from "../../settings";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
@@ -25,8 +26,7 @@ export default class NewChartPopup extends React.Component {
         }
         this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
         this.handleAPMChange = this.handleAPMChange.bind(this);
-        this.validateDateTime = this.validateDateTime.bind(this);
-        this.convertApmToMilitaryTime = this.convertApmToMilitaryTime.bind(this);
+        this.normalizeDateAndTz = this.normalizeDateAndTz.bind(this);
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
         this.openPopup = this.openPopup.bind(this);
@@ -77,33 +77,32 @@ export default class NewChartPopup extends React.Component {
         }
     }
 
-    validateDateTime() {
-        // YYYY-mm-ddThh:mm in military time
-        const dtRegex = /^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/;
-        return dtRegex.exec(this.state.currentSelectedDatetime) ? true : false;
-    }
-
-    convertApmToMilitaryTime(originalDate) {
-        if (!this.validateDateTime()) {
+    normalizeDateAndTz(originalDate, timezone) {
+        // Validate date format
+        if (!(/^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/).exec(originalDate)) {
             this.handleError("Invalid datetime!");
             return;
         }
-        let d = new Date(originalDate);
-        const apm = this.state.apm;
-        const hour = d.getHours();
-        if (hour === 12 && apm === "AM")
-            d.setHours(0)
-        else if (0 < hour < 12 && apm === "PM")
-            d.setHours(hour + 12);
 
-        // return d.toISOString();
-        return d;
+        // Validate timezone
+        if (!(TIMEZONES.has(timezone))) {
+            this.handleError("Invalid timezone!");
+            return;
+        }
+
+        const dt = moment.tz(originalDate, timezone);
+        const hour = dt.hour();
+        if (hour === 12 && this.state.apm === "AM")
+            dt.hour(0)
+        else if (0 < hour < 12 && this.state.apm === "PM")
+            dt.hour(hour + 12);
+
+        return dt;
     }
 
     async queryBackendForRadix() {
         // Query back end for a single chart.
 
-        const dt = this.convertApmToMilitaryTime(this.state.currentSelectedDatetime);
         const locationQuery = this.state.locationInput;
         if (!locationQuery || locationQuery.length === 0 || locationQuery.trim().length === 0) {
             this.handleError("Invalid location!");
@@ -115,6 +114,8 @@ export default class NewChartPopup extends React.Component {
             this.handleError("No location found! Please try a different location.");
             return;
         }
+
+        const dt = this.normalizeDateAndTz(this.state.currentSelectedDatetime, locationResults.tz);
 
         const radixQuery = manager.createRadixQueryFromRaw(dt,
             locationResults.longitude,
@@ -179,7 +180,7 @@ export default class NewChartPopup extends React.Component {
 
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

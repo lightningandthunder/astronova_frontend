@@ -1,12 +1,14 @@
 import React from "react";
 import Popup from "reactjs-popup";
+import axios from 'axios';
+
 import ChartManager from '../../managers/ChartDataManager';
 import geosearch from '../../utils/geosearch';
-import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
+import { QUERY_HEADERS, API_ADDRESS, TIMEZONES } from '../../settings';
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
-import axios from 'axios';
 import logIfDevelopment from "../../utils/logIfDevelopment";
+import moment from "moment-timezone";
 
 const manager = new ChartManager();
 
@@ -24,7 +26,7 @@ export default class ReturnChartPopup extends React.Component {
 
         this.queryBackendForReturn = this.queryBackendForReturn.bind(this);
         this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
-        this.validateDateTime = this.validateDateTime.bind(this);
+        this.normalizeDatetimeAndTz = this.normalizeDatetimeAndTz.bind(this);
         this.handleLocationChange = this.handleLocationChange.bind(this);
         this.openPopup = this.openPopup.bind(this);
         this.closePopup = this.closePopup.bind(this);
@@ -62,10 +64,17 @@ export default class ReturnChartPopup extends React.Component {
         //TODO: Eventually make this more robust
         alert(err.toString());
     }
-    validateDateTime() {
-        // YYYY-mm-ddThh:mm in military time
-        const dtRegex = /^[1-3]\d{3}-[01]\d-[0-3]\d/;
-        return dtRegex.exec(this.state.currentSelectedDatetime) ? true : false;
+
+    normalizeDatetimeAndTz(dt, timezone) {
+        if (!(/^[1-3]\d{3}-[01]\d-[0-3]\d/.exec(dt))) {
+            this.handleError("Invalid datetime!");
+            return;
+        }
+        if (!(TIMEZONES.has(timezone))) {
+            this.handleError("Invalid TImezone!");
+            return;
+        }
+        return moment.tz(dt, timezone);
     }
 
     validatePlanet() {
@@ -110,7 +119,6 @@ export default class ReturnChartPopup extends React.Component {
         const locationQuery = this.state.locationInput;
 
         // Validations
-
         if (!inputRadix) {
             this.handleError("No base chart selected!");
             return;
@@ -126,13 +134,8 @@ export default class ReturnChartPopup extends React.Component {
             return;
         }
 
-        if (!(1 <= quantity <= 20)) {
+        if (!(1 <= quantity <= 60)) {
             this.handleError("Invalid quantity selected: " + quantity);
-            return;
-        }
-
-        if (!this.validateDateTime()) {
-            this.handleError("Invalid datetime!");
             return;
         }
 
@@ -142,14 +145,16 @@ export default class ReturnChartPopup extends React.Component {
         }
 
         // Setup and make query
+
         const locationResults = await geosearch(locationQuery);
         if (!locationResults) {
             this.handleError("No location found! Please try a different location.");
             return;
         }
 
+        const dt = this.normalizeDatetimeAndTz(this.state.currentSelectedDatetime, locationResults.tz);
         const query = manager.createReturnQuery(inputRadix, planet, harmonic, locationResults.longitude,
-            locationResults.latitude, this.state.currentSelectedDatetime, locationResults.tz, quantity)
+            locationResults.latitude, dt, locationResults.tz, quantity)
 
         logIfDevelopment("Return query: ", query);
         const response = await axios.post(
@@ -187,7 +192,7 @@ export default class ReturnChartPopup extends React.Component {
         return (
             <div onKeyDown={this.handleKeyDown}>
                 <button
-                className={"SolunarReturnButton"}
+                    className={"SolunarReturnButton"}
                     disabled={!this.props.enabled}
                     onClick={this.openPopup}>
                     New Solunar Return
@@ -230,7 +235,7 @@ export default class ReturnChartPopup extends React.Component {
     }
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.
