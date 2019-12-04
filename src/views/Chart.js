@@ -108,7 +108,9 @@ export default function Chart(props) {
                 "Dsc",
                 "IC"
             ];
-            rotateCoordinatesInRA(coords, props.chart.ramc); // Rotate to RAMC - 270
+            
+            // Rotate to RAMC - 270
+            coords = rotateCoordinatesInRA({ ...coords }, props.chart.ramc);
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)
@@ -225,11 +227,15 @@ export default function Chart(props) {
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
-            coordsInner = props.chart.returnChart[props.view];
-            coordsOuter = { ...props.chart.radix[props.view] };
             // Rotate to RAMC - 270
-            rotateCoordinatesInRA(coordsInner, props.chart.returnChart.ramc);
-            rotateCoordinatesInRA(coordsOuter, props.chart.returnChart.ramc);
+            coordsInner = rotateCoordinatesInRA(
+                { ...props.chart.returnChart[props.view] },
+                props.chart.returnChart.ramc
+            );
+            coordsOuter = rotateCoordinatesInRA(
+                { ...props.chart.radix[props.view] },
+                props.chart.returnChart.ramc
+            );
             chartPoints = [
                 "Sun",
                 "Moon",
@@ -305,7 +311,7 @@ export default function Chart(props) {
     )
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

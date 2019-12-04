@@ -9,10 +9,12 @@ export function degToMin(deg) {
 }
 
 export function rotateCoordinatesInRA(coords, ramc) {
-    Object.keys(coords).forEach(k => {
-        let rotated = coords[k] - (ramc - 270);
-        coords[k] = rotated >= 0 ? rotated : rotated + 360;
-    })
+    const rotatedCoords = Object.assign(coords);
+    Object.keys(rotatedCoords).forEach(k => {
+        let rotated = rotatedCoords[k] - (ramc - 270);
+        rotatedCoords[k] = rotated >= 0 ? rotated : rotated + 360;
+    });
+    return rotatedCoords;
 }
 
 export function addToLongitude(long, addition) {
