@@ -108,7 +108,7 @@ export default function Chart(props) {
                 "Dsc",
                 "IC"
             ];
-            
+
             // Rotate to RAMC - 270
             coords = rotateCoordinatesInRA({ ...coords }, props.chart.ramc);
         }
@@ -177,15 +177,15 @@ export default function Chart(props) {
             // Lock left side of chart to Ascendant
             cusps = props.chart.returnChart.cusps;
             displayOffset = cusps["1"];
-            coordsInner = {
+            coordsOuter = {
                 ...props.chart.returnChart[props.view],
                 EP: props.chart.returnChart.angles["Eq Asc"],
                 WP: props.chart.returnChart.angles["Eq Dsc"]
             };
-            coordsOuter = {
+            coordsInner = {
                 ...props.chart.radix[props.view],
-                EP: props.chart.returnChart.angles["Eq Asc"],
-                WP: props.chart.returnChart.angles["Eq Dsc"]
+                EP: props.chart.radix.angles["Eq Asc"],
+                WP: props.chart.radix.angles["Eq Dsc"]
             };
             chartPoints = [
                 "Sun",
@@ -209,8 +209,8 @@ export default function Chart(props) {
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
-            coordsInner = props.chart.returnChart[props.view];
-            coordsOuter = { ...props.chart.radix[props.view] };
+            coordsOuter = props.chart.returnChart[props.view];
+            coordsInner = { ...props.chart.radix[props.view] };
             chartPoints = [
                 "Sun",
                 "Moon",
@@ -228,11 +228,11 @@ export default function Chart(props) {
             cusps = defaultCusps;
             displayOffset = 0;
             // Rotate to RAMC - 270
-            coordsInner = rotateCoordinatesInRA(
+            coordsOuter = rotateCoordinatesInRA(
                 { ...props.chart.returnChart[props.view] },
                 props.chart.returnChart.ramc
             );
-            coordsOuter = rotateCoordinatesInRA(
+            coordsInner = rotateCoordinatesInRA(
                 { ...props.chart.radix[props.view] },
                 props.chart.returnChart.ramc
             );
