@@ -116,6 +116,18 @@ export default class ChartManager {
         return new ReturnQuery(radixQ, returnParams);
     }
 
+    createRelocationQuery(location, charts) {
+        const expectedProperties = [
+            "longitude",
+            "latitude",
+            "tz",
+            "placeName"
+        ];
+        this.validateExpectedProperties(expectedProperties, location);
+        if (!charts.returnChart)
+        
+    }
+
     /* ================== Validations ==================  */
 
     validateInt(initialValue, varName) {
