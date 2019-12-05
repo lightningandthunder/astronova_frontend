@@ -2,9 +2,9 @@ import React from "react";
 import { Group, Rect } from "react-konva";
 
 export default function Grid(props) {
-    const globalOffsetX = props.scale.origin.x / 2.3;
-    const globalOffsetY = -30;
-    const cellEdgeSize = 48;
+    const globalOffsetX = props.scale.origin.x / 2.3 * props.scale.scaleFactor;
+    const globalOffsetY = -30 * props.scale.scaleFactor;
+    const cellEdgeSize = 48 * props.scale.scaleFactor
 
     const getGridCells = (mode) => {
         const cells = [];
@@ -37,7 +37,7 @@ export default function Grid(props) {
     );
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

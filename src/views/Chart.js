@@ -33,7 +33,6 @@ export default function Chart(props) {
 
     const showUniwheel = () => {
         const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
-
         let cusps;
         let displayOffset;
         let coords;
@@ -46,7 +45,6 @@ export default function Chart(props) {
             coords = {
                 ...props.chart[props.view],
                 EP: props.chart.angles["Eq Asc"],
-                WP: props.chart.angles["Eq Dsc"]
             };
             chartPoints = [
                 "Sun",
@@ -60,11 +58,8 @@ export default function Chart(props) {
                 "Neptune",
                 "Pluto",
                 "EP",
-                "WP",
                 "Asc",
                 "MC",
-                "Dsc",
-                "IC"
             ];
         }
         else if (props.view === "mundane") {
@@ -82,10 +77,6 @@ export default function Chart(props) {
                 "Uranus",
                 "Neptune",
                 "Pluto",
-                "Asc",
-                "MC",
-                "Dsc",
-                "IC"
             ];
         }
         else if (props.view === "right_ascension") {
@@ -103,10 +94,6 @@ export default function Chart(props) {
                 "Uranus",
                 "Neptune",
                 "Pluto",
-                "Asc",
-                "MC",
-                "Dsc",
-                "IC"
             ];
 
             // Rotate to RAMC - 270
@@ -180,12 +167,10 @@ export default function Chart(props) {
             coordsOuter = {
                 ...props.chart.returnChart[props.view],
                 EP: props.chart.returnChart.angles["Eq Asc"],
-                WP: props.chart.returnChart.angles["Eq Dsc"]
             };
             coordsInner = {
                 ...props.chart.radix[props.view],
                 EP: props.chart.radix.angles["Eq Asc"],
-                WP: props.chart.radix.angles["Eq Dsc"]
             };
             chartPoints = [
                 "Sun",
@@ -199,11 +184,8 @@ export default function Chart(props) {
                 "Neptune",
                 "Pluto",
                 "EP",
-                "WP",
                 "Asc",
                 "MC",
-                "Dsc",
-                "IC"
             ];
         }
         else if (props.view === "mundane") {

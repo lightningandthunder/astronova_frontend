@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/App.css';
+import './styles/index.css';
 
 import Chartlist from './views/chartlist';
 // import RawChartData from './views/rawchartdata';
@@ -12,6 +13,7 @@ import ViewButtons from "./views/ViewButtons";
 import ModeButtons from "./views/ModeButtons";
 import { TITLE } from "./settings";
 
+const defaultScaleFactor = ((window.innerWidth - 300) / window.innerHeight) * 0.87;
 
 class App extends React.Component {
     constructor(props) {
@@ -65,6 +67,8 @@ class App extends React.Component {
             }
         );
     }
+
+
 
     deleteChart(chart) {
         const currentSelectedChart = this.state.selectedChart;
@@ -143,7 +147,7 @@ class App extends React.Component {
                             chart={this.state.selectedChart}
                             view={this.state.view}
                             mode={this.state.mode}
-                            scaleFactor={1.2}
+                            scaleFactor={defaultScaleFactor}
                         />
                     }
                     {/* ======== Biwheel Chart ======== */}
@@ -156,7 +160,7 @@ class App extends React.Component {
                             chart={this.state.selectedChart}
                             view={this.state.view}
                             mode={this.state.mode}
-                            scaleFactor={1.21}
+                            scaleFactor={defaultScaleFactor}
                         />
                     }
                 </div>

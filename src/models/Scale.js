@@ -1,5 +1,5 @@
 export default class Scale {
-    constructor(origin, outerRingRadius, wheelParams, dividerRadius, fontsAndOffsets) {
+    constructor(origin, outerRingRadius, wheelParams, dividerRadius, fontsAndOffsets, scaleFactor) {
         // These initializations can be done in a few lines with for loops, 
         // but that's much less clear about what properties this model actually has.
 
@@ -57,6 +57,8 @@ export default class Scale {
         this.houseNumberFontSize = wheelParams.houseNumberFontSize;
         this.houseNumberOffsetX = wheelParams.houseNumberOffsetX;
         this.houseNumberOffsetY = wheelParams.houseNumberOffsetY;
+
+        this.scaleFactor = scaleFactor;
     }
 }
 

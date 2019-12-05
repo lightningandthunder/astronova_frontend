@@ -48,7 +48,7 @@ export class ScaleManager {
             for (let attr in chartRadii[radiusGroup])
                 wheelRadius[attr] = chartRadii[radiusGroup][attr] * scaleFactor;
 
-        return new Scale(origin, outerRing, wheelRadius, dividers, fonts);
+        return new Scale(origin, outerRing, wheelRadius, dividers, fonts, scaleFactor);
     }
 }
 

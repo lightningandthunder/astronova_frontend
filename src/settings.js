@@ -190,13 +190,20 @@ const PLANET_COLORS = {
 }
 
 const ASPECT_UNICODE = {
-    "Cnj": "\u260C",
-    "Opp": "\u260D",
-    "Sqr": "\u25A1",
-    "Sms": "\u2220",
-    "Ssq": "Ssq",
-    "Tri": "\u25B3",
-    "Sxt": "*"
+    "Cnj": "B",
+    "Opp": "C",
+    "Sqr": "E",
+    "Sms": "I",
+    "Ssq": "J",
+    "Tri": "D",
+    "Sxt": "F"
+    // "Cnj": "\u260C",
+    // "Opp": "\u260D",
+    // "Sqr": "\u25A1",
+    // "Sms": "\u2220",
+    // "Ssq": "\u26BC",
+    // "Tri": "\u25B3",
+    // "Sxt": "*"
 }
 
 const ASPECT_COLORS = {

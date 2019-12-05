@@ -9,16 +9,12 @@ export default class AspectManager {
         // Chart points, for the grid cells as well as their contents.
         planetRowVertical["Asc"] = angles["Asc"];
         planetRowVertical["MC"] = angles["MC"];
-        planetRowVertical["Dsc"] = angles["Dsc"];
-        planetRowVertical["IC"] = angles["IC"];
 
         let planetRowHorizontal = null;
         if (charts.length > 1 && angles.length > 1) {
             planetRowHorizontal = charts[1];
             planetRowHorizontal["Asc"] = angles[1]["Asc"];
             planetRowHorizontal["MC"] = angles[1]["MC"];
-            planetRowHorizontal["Dsc"] = angles[1]["Dsc"];
-            planetRowHorizontal["IC"] = angles[1]["IC"];
         } else {
             planetRowHorizontal = planetRowVertical;
         }
@@ -65,7 +61,6 @@ export default class AspectManager {
         // If one longitude is near 360º and the other is near 0º
         const aspect360 = Math.abs(aspect - 360);
 
-        // console.log(`Aspect: ${aspect} aspect360: ${aspect360}`)
         if (lowbound <= aspect && aspect <= highbound) {
             return lowbound === 0
                 ? aspect

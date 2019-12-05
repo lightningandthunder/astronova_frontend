@@ -1,4 +1,18 @@
+/*
+** Custom fonts
+** Enigma Astrology: http://radixpro.com/downloads/font/
+** AstroDot: https://astrology-symbols.com/astrology-fonts/
+*/
 
+@font-face {
+    font-family: 'EnigmaAstrology';
+    src: url('../assets/EnigmaAstrology.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'AstroDotBasic.';
+    src: url('../assets/AstroDotBasic.woff') format('woff');
+}
 
 /* 
 * Nova, a free sidereal astrological tool.

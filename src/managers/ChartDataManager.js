@@ -124,8 +124,9 @@ export default class ChartManager {
             "placeName"
         ];
         this.validateExpectedProperties(expectedProperties, location);
-        if (!charts.returnChart)
-        
+        if (!charts.returnChart) {
+            
+        }
     }
 
     /* ================== Validations ==================  */
