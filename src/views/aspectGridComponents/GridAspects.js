@@ -39,7 +39,7 @@ export default function GridAspects(props) {
                     key={`${y}-${x}`}
                     x={globalOffsetX + (x * cellEdgeSize)}
                     y={globalOffsetY + (y * cellEdgeSize)}
-                    fontFamily={"EnigmaAstrology"}
+                    fontFamily={"AstroDotBasic"}
                     fontSize={20 * props.scale.scaleFactor}
                     stroke={ASPECT_COLORS[aspect]}
                     text={aspect ? ASPECT_UNICODE[aspect] : null}

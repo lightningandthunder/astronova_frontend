@@ -2,9 +2,8 @@ import React from "react";
 import { Text, Group } from "react-konva";
 
 import { derivePoint, parseSign, degToMin, getRenderCoords } from "../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE, SIGN_URIS } from "../../settings";
+import { PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE } from "../../settings";
 import PlanetCoords from "../../models/PlanetCoords";
-import SignImage from "./SignImage";
 
 export default function Planets(props) {
     const adjustedCoords = getRenderCoords(
@@ -55,20 +54,23 @@ export default function Planets(props) {
 
     const planetSign = (planetInfo) => {
         const sign = parseSign(planetInfo.rawCoord);
-        const signUri = SIGN_URIS[sign];
         const [x, y] = derivePoint(props.scale.origin,
             planetInfo.renderCoord,
             props.scale.planetSignRadius,
             props.rotationalOffset);
         return (
-            <SignImage
-                key={`${planetInfo.name}-${props.ringLayer}-Sign`}
-                coord={planetInfo.rawCoord}
-                image={signUri}
-                x={x}
-                y={y}
-                width={20}
-                height={20}
+            <Text 
+            x={x}
+            y={y}
+            key={`${planetInfo.name}-${props.ringLayer}-Sign`}
+            coord={planetInfo.rawCoord}
+            text={SIGN_UNICODE[sign]}
+            stroke={SIGN_COLORS[sign]}
+            strokeWidth={1}
+            fontFamily={"AstroDotBasic"}
+            fontSize={props.scale.planetFontSize}
+            offsetX={props.scale.planetDegreesOffsetX}
+            offsetY={props.scale.planetDegreesOffsetY}
             />
         )
     }

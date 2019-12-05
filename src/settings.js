@@ -1,16 +1,3 @@
-import aries from "./assets/aries.jpg";
-import taurus from "./assets/taurus.jpg";
-import gemini from "./assets/gemini.jpg";
-import cancer from "./assets/cancer.jpg";
-import leo from "./assets/leo.jpg";
-import virgo from "./assets/virgo.jpg";
-import libra from "./assets/libra.jpg";
-import scorpio from "./assets/scorpio.jpg";
-import sagittarius from "./assets/sagittarius.jpg";
-import capricorn from "./assets/capricorn.jpg";
-import aquarius from "./assets/aquarius.jpg";
-import pisces from "./assets/pisces.jpg";
-
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
 const VERSION = "0.1.0a"
@@ -190,20 +177,23 @@ const PLANET_COLORS = {
 }
 
 const ASPECT_UNICODE = {
-    "Cnj": "B",
-    "Opp": "C",
-    "Sqr": "E",
-    "Sms": "I",
-    "Ssq": "J",
-    "Tri": "D",
-    "Sxt": "F"
-    // "Cnj": "\u260C",
-    // "Opp": "\u260D",
-    // "Sqr": "\u25A1",
-    // "Sms": "\u2220",
-    // "Ssq": "\u26BC",
-    // "Tri": "\u25B3",
-    // "Sxt": "*"
+    //AstroDotBasic
+    "Cnj": "m",
+    "Opp": "n",
+    "Sqr": "o",
+    "Sms": "t",
+    "Ssq": "u",
+    "Tri": "p",
+    "Sxt": "q"
+
+    //EnigmaAstrology
+    // "Cnj": "B",
+    // "Opp": "C",
+    // "Sqr": "E",
+    // "Sms": "I",
+    // "Ssq": "J",
+    // "Tri": "D",
+    // "Sxt": "F"
 }
 
 const ASPECT_COLORS = {
@@ -216,35 +206,49 @@ const ASPECT_COLORS = {
     "Sxt": "green"
 }
 
+const SIGN_COLORS = {
+    "Ari": "red",
+    "Tau": "green",
+    "Gem": "cyan",
+    "Can": "blue",
+    "Leo": "red",
+    "Vir": "green",
+    "Lib": "cyan",
+    "Sco": "blue",
+    "Sag": "red",
+    "Cap": "green",
+    "Aqu": "cyan",
+    "Pis": "blue"
+}
 
-// const SIGN_COLORS = {
-//     "Ari": "red",
-//     "Tau": "green",
-//     "Gem": "cyan",
-//     "Can": "blue",
-//     "Leo": "red",
-//     "Vir": "green",
-//     "Lib": "cyan",
-//     "Sco": "blue",
-//     "Sag": "red",
-//     "Cap": "green",
-//     "Aqu": "cyan",
-//     "Pis": "blue"
-// }
+const SIGN_UNICODE = {
+    // AstroDotBasic
+    "Ari": "a",
+    "Tau": "b",
+    "Gem": "c",
+    "Can": "d",
+    "Leo": "e",
+    "Vir": "f",
+    "Lib": "g",
+    "Sco": "h",
+    "Sag": "i",
+    "Cap": "j",
+    "Aqu": "k",
+    "Pis": "l"
 
-const SIGN_URIS = {
-    "Ari": aries,
-    "Tau": taurus,
-    "Gem": gemini,
-    "Can": cancer,
-    "Leo": leo,
-    "Vir": virgo,
-    "Lib": libra,
-    "Sco": scorpio,
-    "Sag": sagittarius,
-    "Cap": capricorn,
-    "Aqu": aquarius,
-    "Pis": pisces
+    //EnigmaAstrology
+    // "Ari": "1",
+    // "Tau": "2",
+    // "Gem": "3",
+    // "Can": "4",
+    // "Leo": "5",
+    // "Vir": "6",
+    // "Lib": "7",
+    // "Sco": "8",
+    // "Sag": "9",
+    // "Cap": "0",
+    // "Aqu": "-",
+    // "Pis": "="
 }
 
 // IANA-recognized timezones
@@ -850,7 +854,8 @@ export {
     TIMEZONES,
     PLANET_COLORS,
     PLANET_UNICODE,
-    SIGN_URIS,
+    SIGN_COLORS,
+    SIGN_UNICODE,
     SIGNS,
     CHART_SCALE_DEFAULTS,
     VERSION,
