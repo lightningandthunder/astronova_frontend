@@ -94,9 +94,10 @@ export default class NewChartPopup extends React.Component {
         const hour = dt.hour();
         if (hour === 12 && this.state.apm === "AM")
             dt.hour(0)
-        else if (0 < hour < 12 && this.state.apm === "PM")
+        else if (0 < hour && hour < 12 && this.state.apm === "PM")
             dt.hour(hour + 12);
 
+        logIfDevelopment("Selected datetime: " + dt);
         return dt;
     }
 
