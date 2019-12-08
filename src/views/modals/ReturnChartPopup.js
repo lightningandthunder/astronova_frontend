@@ -41,9 +41,15 @@ export default class ReturnChartPopup extends React.Component {
 
     /* ============= Popup handlers ============= */
 
-    openPopup() { this.setState({ isOpen: true }) }
+    openPopup() {
+        this.setState({
+            isOpen: true, 
+            planetInput: "Sun",
+            harmonicInput: 1,
+            quantityInput: 1
+        })
+    }
     closePopup() { this.setState({ isOpen: false }) }
-
     handleKeyDown(event) {
         // Recognize pressing return key
         if (event.keyCode === 13 && this.state.isOpen === true)
