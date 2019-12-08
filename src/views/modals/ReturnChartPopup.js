@@ -4,7 +4,8 @@ import axios from 'axios';
 
 import ChartManager from '../../managers/ChartDataManager';
 import geosearch from '../../utils/geosearch';
-import { QUERY_HEADERS, API_ADDRESS, TIMEZONES } from '../../settings';
+import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
+import { TIMEZONES } from "../../timezones";
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
 import logIfDevelopment from "../../utils/logIfDevelopment";
@@ -43,7 +44,7 @@ export default class ReturnChartPopup extends React.Component {
 
     openPopup() {
         this.setState({
-            isOpen: true, 
+            isOpen: true,
             planetInput: "Sun",
             harmonicInput: 1,
             quantityInput: 1

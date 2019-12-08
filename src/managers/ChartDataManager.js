@@ -1,7 +1,7 @@
 import Uniwheel from "../models/Uniwheel";
 import Biwheel from "../models/Biwheel";
 import RadixQuery from "../models/RadixQuery";
-import { TIMEZONES } from "../settings";
+import { TIMEZONES } from "../timezones";
 import ReturnParams from "../models/ReturnParams";
 import ReturnQuery from "../models/ReturnQuery";
 import moment from "moment";
@@ -125,7 +125,7 @@ export default class ChartManager {
         ];
         this.validateExpectedProperties(expectedProperties, location);
         if (!charts.returnChart) {
-            
+
         }
     }
 

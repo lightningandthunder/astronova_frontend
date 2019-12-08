@@ -70,8 +70,6 @@ class App extends React.Component {
         );
     }
 
-
-
     deleteChart(chart) {
         const currentSelectedChart = this.state.selectedChart;
         const allCharts = this.state.charts;

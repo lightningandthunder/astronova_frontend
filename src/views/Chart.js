@@ -16,6 +16,7 @@ import GridAspects from "./aspectGridComponents/GridAspects";
 import PlanetLocationMarker from "./chartComponents/PlanetLocationMarker";
 import AspectManager from "../managers/AspectManager";
 import AspectLines from "./chartComponents/AspectLines";
+import UserConfigManager from "../managers/UserConfigManager";
 
 const defaultCusps = {
     "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -26,13 +27,14 @@ export default function Chart(props) {
     if (!props.chart)
         throw new Error("Missing chart data!");
 
-    const manager = new ScaleManager();
+    const scaleManager = new ScaleManager();
+    const configManager = new UserConfigManager();
 
 
     // ================== Chart display functions ==================
 
     const showUniwheel = () => {
-        const scale = manager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
+        const scale = scaleManager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
         let cusps;
         let displayOffset;
         let coords;
@@ -46,55 +48,19 @@ export default function Chart(props) {
                 ...props.chart[props.view],
                 EP: props.chart.angles["Eq Asc"],
             };
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto",
-                "EP",
-                "Asc",
-                "MC",
-            ];
+            chartPoints = configManager.getChartPointsEcliptical();
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
             coords = props.chart[props.view];
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto",
-            ];
+            chartPoints = configManager.getChartPointsMundane();
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
             coords = props.chart[props.view];
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto",
-            ];
+            chartPoints = configManager.getChartPointsRightAscension();
 
             // Rotate to RAMC - 270
             coords = rotateCoordinatesInRA({ ...coords }, props.chart.ramc);
@@ -153,8 +119,8 @@ export default function Chart(props) {
     const showBiwheel = () => {
         let coordsInner;
         let coordsOuter;
-        const scaleInner = manager.getChartScale(props.width, props.height, "Biwheel Inner", props.scaleFactor);
-        const scaleOuter = manager.getChartScale(props.width, props.height, "Biwheel Outer", props.scaleFactor);
+        const scaleInner = scaleManager.getChartScale(props.width, props.height, "Biwheel Inner", props.scaleFactor);
+        const scaleOuter = scaleManager.getChartScale(props.width, props.height, "Biwheel Outer", props.scaleFactor);
 
         let cusps;
         let displayOffset;
@@ -172,39 +138,14 @@ export default function Chart(props) {
                 ...props.chart.radix[props.view],
                 EP: props.chart.radix.angles["Eq Asc"],
             };
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto",
-                "EP",
-                "Asc",
-                "MC",
-            ];
+            chartPoints = configManager.getChartPointsEcliptical();
         }
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
             coordsOuter = props.chart.returnChart[props.view];
             coordsInner = { ...props.chart.radix[props.view] };
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto"
-            ];
+            chartPoints = configManager.getChartPointsMundane();
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
@@ -218,18 +159,7 @@ export default function Chart(props) {
                 { ...props.chart.radix[props.view] },
                 props.chart.returnChart.ramc
             );
-            chartPoints = [
-                "Sun",
-                "Moon",
-                "Mercury",
-                "Venus",
-                "Mars",
-                "Jupiter",
-                "Saturn",
-                "Uranus",
-                "Neptune",
-                "Pluto"
-            ];
+            chartPoints = configManager.getChartPointsRightAscension();
         }
         else {
             throw new Error(`Invalid view selected: ${props.view}`)

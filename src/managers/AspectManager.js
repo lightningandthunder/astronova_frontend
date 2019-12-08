@@ -1,7 +1,10 @@
 import Aspect from "../models/Aspect";
+import UserConfigManager from "./UserConfigManager";
 
 export default class AspectManager {
-
+    constructor(configManager=null) {
+        this.manager = configManager ? configManager : new UserConfigManager();
+    }
     getAspectsFromCoords(charts, angles, mode) {
         const planetRowVertical = charts[0];
 
@@ -80,54 +83,60 @@ export default class AspectManager {
         let orb = null;
 
         // Conjunction
-        orb = this.getOrb(plong1, plong2, 0, 10);
+        const cnjOrb = this.manager.getOrb("Cnj");
+        orb = this.getOrb(plong1, plong2, 0, cnjOrb);
         if (orb !== null) {
             // console.log(`${pname1} ${orb} ${pname2}`);
             return new Aspect(pname1, pname2, orb, "Cnj");
         }
 
         // Opposition
-        orb = this.getOrb(plong1, plong2, 170, 190);
+        const oppOrb = this.manager.getOrb("Opp");
+        orb = this.getOrb(plong1, plong2, 180 - oppOrb, 180 + oppOrb);
         if (orb !== null) {
             return new Aspect(pname1, pname2, orb % 180, "Opp");
         }
 
         // Square
-        orb = this.getOrb(plong1, plong2, 82.5, 97.5);
+        const sqrOrb = this.manager.getOrb("Sqr");
+        orb = this.getOrb(plong1, plong2, 90 - sqrOrb, 90 + sqrOrb);
         if (orb !== null) {
             return new Aspect(pname1, pname2, orb % 90, "Sqr");
         }
 
         // Trine
-        orb = this.getOrb(plong1, plong2, 115, 125);
+        const triOrb = this.manager.getOrb("Tri");
+        orb = this.getOrb(plong1, plong2, 120 - triOrb, 120 + triOrb);
         if (orb !== null) {
             return new Aspect(pname1, pname2, orb % 120, "Tri");
         }
 
         // Sextile
-        orb = this.getOrb(plong1, plong2, 55, 65);
+        const sxtOrb = this.manager.getOrb("Sxt");
+        orb = this.getOrb(plong1, plong2, 60 - sxtOrb, 60 + sxtOrb);
         if (orb !== null) {
             return new Aspect(pname1, pname2, orb % 60, "Sxt");
         }
 
         // Semisquare
-        orb = this.getOrb(plong1, plong2, 43, 47);
+        const smsOrb = this.manager.getOrb("Sms");
+        orb = this.getOrb(plong1, plong2, 45 - smsOrb, 45 + smsOrb);
         if (orb !== null) {
             return new Aspect(pname1, pname2, orb % 45, "Sms");
         }
 
-
         // Sesquisquare
-        orb = this.getOrb(plong1, plong2, 133, 137);
+        const sqqOrb = this.manager.getOrb("Sqq");
+        orb = this.getOrb(plong1, plong2, 135 - sqqOrb, 135 + sqqOrb);
         if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 135, "Ssq");
+            return new Aspect(pname1, pname2, orb % 135, "Sqq");
         }
 
         return new Aspect(pname1, pname2, null, null);
     }
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

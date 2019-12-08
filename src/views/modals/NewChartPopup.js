@@ -5,7 +5,8 @@ import moment from "moment-timezone";
 
 import ChartManager from "../../managers/ChartDataManager";
 import geosearch from "../../utils/geosearch";
-import { QUERY_HEADERS, API_ADDRESS, TIMEZONES } from "../../settings";
+import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
+import { TIMEZONES } from "../../timezones";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";

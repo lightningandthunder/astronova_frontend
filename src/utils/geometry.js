@@ -1,4 +1,4 @@
-import { SIGNS } from "../settings";
+import { SIGNS, CUSPS } from "../settings";
 
 export function toRads(deg) {
     return deg * (Math.PI / 180);
@@ -82,7 +82,7 @@ export function getRenderCoords(coords, radius) {
         let overlap = minAngle - (obj[key].rawCoord - prev.renderCoord);
         if (overlap > 0) {
             coords[key].renderCoord = addToLongitude(coords[key].rawCoord, overlap)
-        } 
+        }
         prev = coords[key];
     });
     return coords;
@@ -110,8 +110,8 @@ export function derivePoint(origin, pos, radius, rotationalOffset = 0) {
     return [x, y];
 }
 
-export function parseSign(coord) {
-    return SIGNS[Math.trunc(coord / 30)];
+export function parseSign(coord, cusp=false) {
+    return cusp ? CUSPS[Math.trunc(coord / 30)] : SIGNS[Math.trunc(coord / 30)];
 }
 
 /*
