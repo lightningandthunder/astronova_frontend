@@ -14,7 +14,7 @@ const CHART_SCALE_DEFAULTS = {
     uniwheelRadii: {
         planetRingRadii: {
             planetRadius: 280,
-            planetDegreeRadius: 260,
+            planetDegreeRadius: 255,
             planetSignRadius: 235,
             planetMinuteRadius: 210,
             planetMarkerOutsideRadius: 175,
@@ -33,7 +33,7 @@ const CHART_SCALE_DEFAULTS = {
 
             planetSignFontSize: 14,
             planetSignOffsetX: 8,
-            planetSignOffsetY: 8,
+            planetSignOffsetY: 12,
 
             planetDegreesFontSize: 14,
             planetDegreesOffsetX: 8,
@@ -136,7 +136,7 @@ const CHART_SCALE_DEFAULTS = {
         cuspDegreesOffsetX: 8,
         cuspDegreesOffsetY: 8,
         cuspDegreesRotationalOffset: -4,
-        cuspMinutesRotationalOffset: 5,
+        cuspMinutesRotationalOffset: 4,
 
         cuspMinsFontSize: 14,
         cuspMinsOffsetX: 8,

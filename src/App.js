@@ -53,7 +53,6 @@ class App extends React.Component {
         const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
         if (selectedChartFromLS) {
             this.setState({ selectedChart: selectedChartFromLS });
-            logIfDevelopment("Loaded selected chart from LS: " + selectedChartFromLS.name);
         }
         else
             logIfDevelopment("Found no selected chart in LS");

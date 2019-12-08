@@ -69,8 +69,8 @@ export default function Planets(props) {
             strokeWidth={1}
             fontFamily={"AstroDotBasic"}
             fontSize={props.scale.planetFontSize}
-            offsetX={props.scale.planetDegreesOffsetX}
-            offsetY={props.scale.planetDegreesOffsetY}
+            offsetX={props.scale.planetSignOffsetX}
+            offsetY={props.scale.planetSignOffsetY}
             />
         )
     }
