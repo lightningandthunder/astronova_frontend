@@ -15,11 +15,24 @@ export default function GridAspects(props) {
     // by the scale factor in-place, rather than calculating them ahead of time.
     // I'm not sure what makes more sense.
 
-    const globalOffsetX = props.scale.origin.x / 2.3 * props.scale.scaleFactor;
-    const globalOffsetY = -20 * props.scale.scaleFactor;
-    const planets = props.chartPoints;
-    const cellEdgeSize = 48 * props.scale.scaleFactor;
+    const baseCellEdgeSize = 48;
 
+    const bottomRowLength = (props.chartPoints.length + 1) * baseCellEdgeSize;
+    const allottedWidth = props.scale.signRingOuterRadius * 2;
+    const gridAdjustFactor = bottomRowLength > allottedWidth
+        ? bottomRowLength / allottedWidth
+        : 1;
+
+    const cellEdgeSize = baseCellEdgeSize / gridAdjustFactor;
+
+    const globalOffsetX = 0;
+    // Move everything down by about 2 cells or to just underneath the chart info text,
+    // whichever is greater
+    const defaultYOffset = cellEdgeSize * 2 + 10;
+    const globalOffsetY = defaultYOffset >= 75 ? defaultYOffset : 75;
+
+
+    const planets = props.chartPoints;
 
     const getAspects = () => {
         return new AspectManager()
@@ -32,9 +45,7 @@ export default function GridAspects(props) {
 
         for (let x = 1; x <= planets.length; ++x) {
             for (let y = 1; y <= planets.length; ++y) {
-                const aspect = aspects[accumulator]
-                    ? aspects[accumulator].aspectType
-                    : null
+                const aspect = aspects[accumulator] && aspects[accumulator].aspectType;
                 cells.push(<Text
                     key={`${y}-${x}`}
                     x={globalOffsetX + (x * cellEdgeSize)}
@@ -43,8 +54,9 @@ export default function GridAspects(props) {
                     fontSize={20 * props.scale.scaleFactor}
                     stroke={ASPECT_COLORS[aspect]}
                     text={aspect ? ASPECT_UNICODE[aspect] : null}
-                    offsetX={-15 * props.scale.scaleFactor}
-                    offsetY={2 * props.scale.scaleFactor}
+                    offsetY={(cellEdgeSize / -16)}
+                    // Not quite half a cell to the right
+                    offsetX={cellEdgeSize / -2.8}
                     strokeWidth={1 * props.scale.scaleFactor}
                 />)
                 ++accumulator;
@@ -72,11 +84,11 @@ export default function GridAspects(props) {
                         key={`${y}-${x}`}
                         x={globalOffsetX + (x * cellEdgeSize)}
                         y={globalOffsetY + (y * cellEdgeSize)}
-                        fontSize={13 * props.scale.scaleFactor}
+                        fontSize={11 * props.scale.scaleFactor}
                         stroke={"black"}
                         text={`${degrees}\u00B0 ${minutes}'`}
-                        offsetX={-8 * props.scale.scaleFactor}
-                        offsetY={-20 * props.scale.scaleFactor}
+                        offsetX={(cellEdgeSize / -6)}
+                        offsetY={cellEdgeSize / -1.5}
                         strokeWidth={1 * props.scale.scaleFactor}
                     />)
                 }
@@ -98,8 +110,8 @@ export default function GridAspects(props) {
                 fontSize={14 * props.scale.scaleFactor}
                 stroke={PLANET_COLORS[planets[y]]}
                 text={`${PLANET_UNICODE[planets[y]]}`}
-                offsetX={-20 * props.scale.scaleFactor}
-                offsetY={-10 * props.scale.scaleFactor}
+                offsetX={(cellEdgeSize / -6) * props.scale.scaleFactor}
+                offsetY={(cellEdgeSize / -4) * props.scale.scaleFactor}
                 strokeWidth={1 * props.scale.scaleFactor}
             />);
         }
@@ -112,13 +124,13 @@ export default function GridAspects(props) {
         for (let x = 0; x < props.chartPoints.length; ++x) {
             cells.push(<Text
                 key={`${x}-horizontalPlanetSymbol`}
-                x={((x + 1) * cellEdgeSize) + globalOffsetX}
+                x={(globalOffsetX + (x + 1) * cellEdgeSize)}
                 y={globalOffsetY}
                 fontSize={14 * props.scale.scaleFactor}
                 stroke={PLANET_COLORS[planets[x]]}
                 text={`${PLANET_UNICODE[planets[x]]}`}
-                offsetX={-20 * props.scale.scaleFactor}
-                offsetY={-20 * props.scale.scaleFactor}
+                offsetX={(cellEdgeSize / -4) * props.scale.scaleFactor}
+                offsetY={(cellEdgeSize / -6) * props.scale.scaleFactor}
                 strokeWidth={1 * props.scale.scaleFactor}
             />);
         }

@@ -2,9 +2,21 @@ import React from "react";
 import { Group, Rect } from "react-konva";
 
 export default function Grid(props) {
-    const globalOffsetX = props.scale.origin.x / 2.3 * props.scale.scaleFactor;
-    const globalOffsetY = -30 * props.scale.scaleFactor;
-    const cellEdgeSize = 48 * props.scale.scaleFactor
+    const baseCellEdgeSize = 48;
+
+    const bottomRowLength = (props.chartPoints.length + 1) * baseCellEdgeSize;
+    const allottedWidth = props.scale.signRingOuterRadius * 2;
+    const gridAdjustFactor = bottomRowLength > allottedWidth
+        ? bottomRowLength / allottedWidth
+        : 1;
+
+    const cellEdgeSize = baseCellEdgeSize / gridAdjustFactor;
+    const globalOffsetX = 0;
+
+    // Move everything down by aboutt 2 cells or to just underneath the chart info text,
+    // whichever is greater
+    const defaultYOffset = (cellEdgeSize * 2) + 10;
+    const globalOffsetY = defaultYOffset >= 75 ? defaultYOffset : 75;
 
     const getGridCells = (mode) => {
         const cells = [];
