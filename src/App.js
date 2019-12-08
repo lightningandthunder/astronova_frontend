@@ -13,7 +13,10 @@ import ViewButtons from "./views/ViewButtons";
 import ModeButtons from "./views/ModeButtons";
 import { TITLE } from "./settings";
 
-const defaultScaleFactor = ((window.innerWidth - 300) / window.innerHeight) * 0.87;
+const defaultScaleFactor = Math.min(
+    window.innerHeight / 675,  // If the window is wide
+    window.innerWidth * 0.8 / 675 // If the window is narrow, leave room for controls
+);
 
 class App extends React.Component {
     constructor(props) {
@@ -142,7 +145,7 @@ class App extends React.Component {
                         this.state.selectedChart &&
                         this.state.selectedChart.type === "Uniwheel" &&
                         <Chart
-                            width={window.innerWidth - 300}
+                            width={window.innerWidth * 0.8}
                             height={window.innerHeight}
                             chart={this.state.selectedChart}
                             view={this.state.view}
@@ -155,7 +158,7 @@ class App extends React.Component {
                         this.state.selectedChart &&
                         this.state.selectedChart.type === "Biwheel" &&
                         <Chart
-                            width={window.innerWidth - 300}
+                            width={window.innerWidth * 0.8}
                             height={window.innerHeight}
                             chart={this.state.selectedChart}
                             view={this.state.view}
@@ -202,7 +205,7 @@ class App extends React.Component {
 
 export default App;
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

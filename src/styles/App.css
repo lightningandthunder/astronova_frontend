@@ -18,7 +18,7 @@
 
 .chartList{
     height: 500px;
-    width: 250px;
+    width: 100%;
     background-color: rgb(237, 240, 245);
     overflow-y: scroll;
 }
@@ -45,17 +45,18 @@
 
 .ControlPanel {
     background-color: lightcyan;
+    width: 20%;
 }
 
 .SolunarReturnButton, .NewChartButton {
     height: 20px;
-    width: 280px;
+    width: 100%;
     border-radius: 5px;
 }
 
 .ResetChartsButton {
     height: 20px;
-    width: 280px;
+    width: 100%;
     border-radius: 5px;
     background-color: rgb(246, 227, 227);
 }
