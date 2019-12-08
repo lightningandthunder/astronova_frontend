@@ -86,7 +86,6 @@ class App extends React.Component {
         this.setState({ charts: [...allCharts] },
             () => {
                 localStorage.setItem('charts', JSON.stringify(this.state.charts));
-                logIfDevelopment(`Deleted ${chart.name}; saved remaining charts to LS.`);
             })
         if (allCharts.indexOf(currentSelectedChart) >= 0)
             this.onChangeSelectedChart(currentSelectedChart)
@@ -111,7 +110,6 @@ class App extends React.Component {
         this.setState({ selectedChart: selection },
             () => {
                 localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
-                logIfDevelopment("Saved current selection to LS: " + this.state.selectedChart.name);
             }
         );
     }

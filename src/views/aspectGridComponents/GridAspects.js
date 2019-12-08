@@ -8,6 +8,7 @@ import {
     ASPECT_COLORS
 } from "../../settings";
 import "../../styles/index.css";
+import logIfDevelopment from "../../utils/logIfDevelopment";
 
 export default function GridAspects(props) {
     // Note that this component, along with the Grid component, are
@@ -138,6 +139,7 @@ export default function GridAspects(props) {
     }
 
     const aspects = getAspects();
+    logIfDevelopment("Aspects: ", aspects);
     return (
         <Group>
             {getAspectSymbols(aspects)}

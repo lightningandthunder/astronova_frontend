@@ -268,7 +268,7 @@ export default function Chart(props) {
                             mode="Biwheel"
                         />
                         <GridAspects scale={scaleInner}
-                            charts={[coordsOuter, coordsInner]}
+                            charts={[coordsInner, coordsOuter]}
                             angles={[props.chart.radix.angles, props.chart.returnChart.angles]}
                             chartPoints={chartPoints}
                         />
