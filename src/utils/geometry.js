@@ -9,10 +9,16 @@ export function degToMin(deg) {
 }
 
 export function rotateCoordinatesInRA(coords, ramc) {
-    const rotatedCoords = Object.assign(coords);
-    Object.keys(rotatedCoords).forEach(k => {
-        let rotated = rotatedCoords[k] - (ramc - 270);
-        rotatedCoords[k] = rotated >= 0 ? rotated : rotated + 360;
+    const rotatedCoords = {};
+    Object.keys(coords).forEach(k => {
+        let rotated = coords[k] - (ramc - 270);
+        if (rotated >= 0 && rotated < 360)
+            rotatedCoords[k] = rotated;
+        else if (rotated < 0)
+            rotatedCoords[k] = rotated + 360;
+        else  // > 360
+            rotatedCoords[k] = rotated - 360;
+
     });
     return rotatedCoords;
 }
@@ -110,7 +116,7 @@ export function derivePoint(origin, pos, radius, rotationalOffset = 0) {
     return [x, y];
 }
 
-export function parseSign(coord, cusp=false) {
+export function parseSign(coord, cusp = false) {
     return cusp ? CUSPS[Math.trunc(coord / 30)] : SIGNS[Math.trunc(coord / 30)];
 }
 

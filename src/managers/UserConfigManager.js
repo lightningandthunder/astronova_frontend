@@ -12,6 +12,8 @@ export default class UserConfigManager {
         logIfDevelopment("Saved user config: ", this.userConfig);
     }
 
+    // TODO: Save default config into LS to optimize loading via parsing JSON
+    // rather than instantiating a new object over and over
     loadUserConfig() {
         let config = JSON.parse(localStorage.getItem('userConfig'));
         if (config) {
