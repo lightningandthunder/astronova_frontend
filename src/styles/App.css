@@ -7,7 +7,7 @@
 /* Calculation Popup
 */
 
-.NewChartDialog, .ReturnChartDialog {
+.NewChartDialog, .ReturnChartDialog, .RelocateChartDialog {
     height: 200px;
     width: auto;
 }
@@ -48,7 +48,7 @@
     width: 20%;
 }
 
-.SolunarReturnButton, .NewChartButton {
+.SolunarReturnButton, .NewChartButton, .RelocateChartButton {
     height: 20px;
     width: 100%;
     border-radius: 5px;

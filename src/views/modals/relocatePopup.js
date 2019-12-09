@@ -119,7 +119,7 @@ export default class relocatePopup extends React.Component {
                     closeOnDocumentClick
                     onClose={this.closePopup}
                 >
-                    <div className="RelocateDialog">
+                    <div className="RelocateChartDialog">
                         <LocationInput updateLocation={this.handleLocationChange} />
                         <div>
                             <button onClick={this.queryBackendForRelocation}>Relocate</button>
