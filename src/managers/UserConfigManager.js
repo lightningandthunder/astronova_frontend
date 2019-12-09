@@ -19,7 +19,7 @@ export default class UserConfigManager {
         if (config) {
             logIfDebug("Loaded user config: ", config);
         } else {
-            logIfDebug("No user config found in LS; using default config");
+            // logIfDebug("No user config found in LS; using default config");
             config = new UserConfig();
         }
         return config;

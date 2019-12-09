@@ -1,17 +1,12 @@
 import React from "react";
 import Popup from "reactjs-popup";
 import axios from "axios";
-import moment from "moment-timezone";
 
 import ChartManager from "../../managers/ChartDataManager";
 import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
-import { TIMEZONES } from "../../timezones";
 import LocationInput from "./LocationInput";
-import Datepicker from "./datepicker";
-import NameInput from "./NameInput";
 import logIfDebug from "../../utils/logIfDebug";
-import APMToggle from "./APMToggle";
 
 const manager = new ChartManager();
 
@@ -23,6 +18,11 @@ export default class relocatePopup extends React.Component {
             locationInput: undefined
         }
         this.queryBackendForRelocation = this.queryBackendForRelocation.bind(this);
+        this.openPopup = this.openPopup.bind(this);
+        this.closePopup = this.closePopup.bind(this);
+        this.handleLocationChange = this.handleLocationChange.bind(this);
+        this.handleError = this.handleError.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     };
 
     openPopup() {
@@ -47,31 +47,8 @@ export default class relocatePopup extends React.Component {
             this.queryBackendForRelocation();
     }
 
-    normalizeDateAndTz(originalDate, timezone) {
-        // Validate date format
-        if (!(/^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/).exec(originalDate)) {
-            this.handleError("Invalid datetime!");
-            return;
-        }
-
-        // Validate timezone
-        if (!(TIMEZONES.has(timezone))) {
-            this.handleError("Invalid timezone!");
-            return;
-        }
-
-        const dt = moment.tz(originalDate, timezone);
-        const hour = dt.hour();
-        if (hour === 12 && this.state.apm === "AM")
-            dt.hour(0)
-        else if (0 < hour < 12 && this.state.apm === "PM")
-            dt.hour(hour + 12);
-
-        return dt;
-    }
-
     async queryBackendForRelocation() {
-        // Query back end for a single chart.
+        // Query back end for relocation.
 
         const locationQuery = this.state.locationInput;
         if (!locationQuery || locationQuery.length === 0 || locationQuery.trim().length === 0) {
@@ -85,7 +62,7 @@ export default class relocatePopup extends React.Component {
             return;
         }
 
-        const relocateQuery = manager.createRelocationQuery(locationResults, props.chart);
+        const relocateQuery = manager.createRelocationQuery(locationResults, this.props.chart);
 
         logIfDebug("Relocation query: ", relocateQuery);
         const response = await axios.post(
@@ -101,7 +78,11 @@ export default class relocatePopup extends React.Component {
         }
 
         try {
-            const newChart = manager.createUniwheel(response.data, locationResults, this.state.nameInput);
+            const newChart = manager.createUniwheel(
+                response.data,
+                locationResults,
+                this.props.chart.name + " " + locationResults.placeName.split(",")[0]
+            );
             logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
@@ -116,8 +97,11 @@ export default class relocatePopup extends React.Component {
     render() {
         return (
             <div onKeyDown={this.handleKeyDown}>
-                <button className="NewChartButton" onClick={this.openPopup}>
-                    New Chart
+                <button className="RelocateChartButton"
+                    disabled={!this.props.enabled}
+                    onClick={this.openPopup}
+                >
+                    Relocate
                 </button>
                 <Popup
                     className="popup"
@@ -127,15 +111,10 @@ export default class relocatePopup extends React.Component {
                     closeOnDocumentClick
                     onClose={this.closePopup}
                 >
-                    <div className="NewChartDialog">
-                        < NameInput onChange={this.handleNameChange} />
-                        <div>
-                            <Datepicker onChange={this.handleDateTimeChange} hourAndMinute={true} />
-                            <APMToggle handleAPMChange={this.handleAPMChange} apm={this.state.apm} />
-                        </div>
+                    <div className="RelocateDialog">
                         <LocationInput updateLocation={this.handleLocationChange} />
                         <div>
-                            <button onClick={this.queryBackendForRadix}>Calculate</button>
+                            <button onClick={this.queryBackendForRelocation}>Relocate</button>
                         </div>
                     </div>
                 </Popup>

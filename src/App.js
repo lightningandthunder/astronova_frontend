@@ -7,6 +7,7 @@ import Chartlist from './views/chartlist';
 import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
+import RelocatePopup from "./views/modals/RelocatePopup"
 import logIfDebug from './utils/logIfDebug';
 import Chart from './views/Chart';
 import ViewButtons from "./views/ViewButtons";
@@ -135,23 +136,8 @@ class App extends React.Component {
         return (
             <div className="App">
                 <div className="Chart">
-                    {/* ======== Uniwheel Chart ======== */}
                     {
                         this.state.selectedChart &&
-                        this.state.selectedChart.type === "Uniwheel" &&
-                        <Chart
-                            width={window.innerWidth * 0.8}
-                            height={window.innerHeight}
-                            chart={this.state.selectedChart}
-                            view={this.state.view}
-                            mode={this.state.mode}
-                            scaleFactor={defaultScaleFactor}
-                        />
-                    }
-                    {/* ======== Biwheel Chart ======== */}
-                    {
-                        this.state.selectedChart &&
-                        this.state.selectedChart.type === "Biwheel" &&
                         <Chart
                             width={window.innerWidth * 0.8}
                             height={window.innerHeight}
@@ -174,6 +160,13 @@ class App extends React.Component {
                     <NewChartPopup
                         saveChart={this.saveChart}
                         setSelectedChartToNewest={this.setSelectedChartToNewest}
+                    />
+                    <RelocatePopup
+                        chart={this.state.selectedChart}
+                        saveChart={this.saveChart}
+                        setSelectedChartToNewest={this.setSelectedChartToNewest}
+                        enabled={this.state.selectedChart
+                            && this.state.selectedChart.type === "Uniwheel"}
                     />
                     {/* ======== Button for solunar return chart ======== */}
 

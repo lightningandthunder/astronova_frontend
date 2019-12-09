@@ -1,10 +1,12 @@
+import moment from "moment";
+
 import Uniwheel from "../models/Uniwheel";
 import Biwheel from "../models/Biwheel";
 import RadixQuery from "../models/RadixQuery";
 import { TIMEZONES } from "../timezones";
 import ReturnParams from "../models/ReturnParams";
 import ReturnQuery from "../models/ReturnQuery";
-import moment from "moment";
+import RelocationQuery from "../models/RelocationQuery";
 
 export default class ChartManager {
 
@@ -116,7 +118,7 @@ export default class ChartManager {
         return new ReturnQuery(radixQ, returnParams);
     }
 
-    createRelocationQuery(location, charts) {
+    createRelocationQuery(location, chart) {
         const expectedProperties = [
             "longitude",
             "latitude",
@@ -124,8 +126,14 @@ export default class ChartManager {
             "placeName"
         ];
         this.validateExpectedProperties(expectedProperties, location);
-        if (!charts.returnChart) {
-
+        if (!chart.returnChart) {
+            return new RelocationQuery(
+                location.longitude,
+                location.latitude,
+                location.tz,
+                location.placeName,
+                chart
+                );
         }
     }
 
