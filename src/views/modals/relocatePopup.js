@@ -7,7 +7,6 @@ import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
 import LocationInput from "./LocationInput";
 import logIfDebug from "../../utils/logIfDebug";
-import { objectTypeAnnotation } from "@babel/types";
 
 const manager = new ChartManager();
 
@@ -81,7 +80,8 @@ export default class relocatePopup extends React.Component {
                 newChart = manager.createBiwheel(
                     response.data,
                     locationResults,
-                    this.props.chart.name + " " + locationResults.placeName.split(",")[0]
+                    // TODO: Clean up this gross naming thing going on here
+                    this.props.chart.name.split(" return")[0] + " " + locationResults.placeName.split(",")[0]
                 );
             } else {
                 newChart = manager.createUniwheel(
@@ -90,7 +90,6 @@ export default class relocatePopup extends React.Component {
                     this.props.chart.name + " " + locationResults.placeName.split(",")[0]
                 );
             }
-
 
             logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
