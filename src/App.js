@@ -165,8 +165,7 @@ class App extends React.Component {
                         chart={this.state.selectedChart}
                         saveChart={this.saveChart}
                         setSelectedChartToNewest={this.setSelectedChartToNewest}
-                        enabled={this.state.selectedChart
-                            && this.state.selectedChart.type === "Uniwheel"}
+                        enabled={this.state.selectedChart}
                     />
                     {/* ======== Button for solunar return chart ======== */}
 

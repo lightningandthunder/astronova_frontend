@@ -133,7 +133,16 @@ export default class ChartManager {
                 location.tz,
                 location.placeName,
                 chart
-                );
+            );
+        } else {
+            return new RelocationQuery(
+                location.longitude,
+                location.latitude,
+                location.tz,
+                location.placeName,
+                chart.radix,
+                chart.returnChart
+            );
         }
     }
 

@@ -5,6 +5,6 @@ export default class RelocationQuery {
         this.tz = tz;
         this.placeName = placeName;
         this.radix = radix;
-        this.returnChart = returnChart;
+        this.return_chart = returnChart;
     }
 }

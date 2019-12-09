@@ -7,6 +7,7 @@ import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
 import LocationInput from "./LocationInput";
 import logIfDebug from "../../utils/logIfDebug";
+import { objectTypeAnnotation } from "@babel/types";
 
 const manager = new ChartManager();
 
@@ -61,7 +62,6 @@ export default class relocatePopup extends React.Component {
             this.handleError("No location found! Please try a different location.");
             return;
         }
-
         const relocateQuery = manager.createRelocationQuery(locationResults, this.props.chart);
 
         logIfDebug("Relocation query: ", relocateQuery);
@@ -70,24 +70,32 @@ export default class relocatePopup extends React.Component {
             relocateQuery,
             { headers: QUERY_HEADERS }
         );
-
         const err = response.data.err;
         if (err) {
             this.handleError(err);
             return;
         }
-
         try {
-            const newChart = manager.createUniwheel(
-                response.data,
-                locationResults,
-                this.props.chart.name + " " + locationResults.placeName.split(",")[0]
-            );
+            let newChart;
+            if ("return_chart" in response.data) {
+                newChart = manager.createBiwheel(
+                    response.data,
+                    locationResults,
+                    this.props.chart.name + " " + locationResults.placeName.split(",")[0]
+                );
+            } else {
+                newChart = manager.createUniwheel(
+                    response.data,
+                    locationResults,
+                    this.props.chart.name + " " + locationResults.placeName.split(",")[0]
+                );
+            }
+
+
             logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
             this.closePopup();
-            this.setState({ apm: "AM" })
         } catch (err) {
             this.handleError(err);
         }
