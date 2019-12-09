@@ -10,7 +10,7 @@ import { TIMEZONES } from "../../timezones";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
-import logIfDevelopment from "../../utils/logIfDevelopment";
+import logIfDebug from "../../utils/logIfDebug";
 import APMToggle from "./APMToggle";
 
 const manager = new ChartManager();
@@ -70,7 +70,7 @@ export default class NewChartPopup extends React.Component {
         if (event.keyCode === 13 && this.state.isOpen === true) {
             if (this.state.nameInput === "debug") {
                 window.novaDebugMode = true;
-                logIfDevelopment("Wizard mode activated");
+                logIfDebug("Wizard mode activated");
                 this.closePopup();
             } else {
                 this.queryBackendForRadix();
@@ -98,7 +98,7 @@ export default class NewChartPopup extends React.Component {
         else if (0 < hour && hour < 12 && this.state.apm === "PM")
             dt.hour(hour + 12);
 
-        logIfDevelopment("Selected datetime: " + dt);
+        logIfDebug("Selected datetime: " + dt);
         return dt;
     }
 
@@ -124,7 +124,7 @@ export default class NewChartPopup extends React.Component {
             locationResults.latitude,
             locationResults.tz);
 
-        logIfDevelopment("Radix query: ", radixQuery);
+        logIfDebug("Radix query: ", radixQuery);
         const response = await axios.post(
             API_ADDRESS + "/radix",
             radixQuery,
@@ -139,7 +139,7 @@ export default class NewChartPopup extends React.Component {
 
         try {
             const newChart = manager.createUniwheel(response.data, locationResults, this.state.nameInput);
-            logIfDevelopment("New chart: ", newChart);
+            logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
             this.closePopup();

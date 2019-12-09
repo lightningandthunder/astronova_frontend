@@ -7,7 +7,7 @@ import Chartlist from './views/chartlist';
 import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
-import logIfDevelopment from './utils/logIfDevelopment';
+import logIfDebug from './utils/logIfDebug';
 import Chart from './views/Chart';
 import ViewButtons from "./views/ViewButtons";
 import ModeButtons from "./views/ModeButtons";
@@ -48,14 +48,14 @@ class App extends React.Component {
         if (chartsArray)
             this.setState({ charts: [...chartsArray] });
         else
-            logIfDevelopment("Found no charts in LS to load");
+            logIfDebug("Found no charts in LS to load");
 
         const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
         if (selectedChartFromLS) {
             this.setState({ selectedChart: selectedChartFromLS });
         }
         else
-            logIfDevelopment("Found no selected chart in LS");
+            logIfDebug("Found no selected chart in LS");
     }
 
     /* ================ onChange methods ================ */
@@ -65,7 +65,7 @@ class App extends React.Component {
         this.setState({ charts: [...this.state.charts, ...charts] },
             () => {
                 localStorage.setItem('charts', JSON.stringify(this.state.charts));
-                logIfDevelopment("Saved charts to LS: " + this.state.charts.length);
+                logIfDebug("Saved charts to LS: " + this.state.charts.length);
             }
         );
     }
@@ -76,7 +76,7 @@ class App extends React.Component {
         const chartIndex = allCharts.indexOf(chart);
 
         if (chartIndex < -1) {
-            logIfDevelopment("Unable to remove chart; not found in chart list");
+            logIfDebug("Unable to remove chart; not found in chart list");
             return;
         }
         allCharts.splice(chartIndex, 1);

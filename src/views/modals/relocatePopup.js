@@ -10,7 +10,7 @@ import { TIMEZONES } from "../../timezones";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
-import logIfDevelopment from "../../utils/logIfDevelopment";
+import logIfDebug from "../../utils/logIfDebug";
 import APMToggle from "./APMToggle";
 
 const manager = new ChartManager();
@@ -87,7 +87,7 @@ export default class relocatePopup extends React.Component {
 
         const relocateQuery = manager.createRelocationQuery(locationResults, props.chart);
 
-        logIfDevelopment("Relocation query: ", relocateQuery);
+        logIfDebug("Relocation query: ", relocateQuery);
         const response = await axios.post(
             API_ADDRESS + "/relocate",
             relocateQuery,
@@ -102,7 +102,7 @@ export default class relocatePopup extends React.Component {
 
         try {
             const newChart = manager.createUniwheel(response.data, locationResults, this.state.nameInput);
-            logIfDevelopment("New chart: ", newChart);
+            logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();
             this.closePopup();

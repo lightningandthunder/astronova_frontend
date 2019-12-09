@@ -1,4 +1,4 @@
-import logIfDevelopment from "../utils/logIfDevelopment";
+import logIfDebug from "../utils/logIfDebug";
 import UserConfig from "../models/UserConfig";
 
 
@@ -9,7 +9,7 @@ export default class UserConfigManager {
 
     saveUserConfig() {
         localStorage.setItem("userConfig", JSON.stringify(this.userConfig));
-        logIfDevelopment("Saved user config: ", this.userConfig);
+        logIfDebug("Saved user config: ", this.userConfig);
     }
 
     // TODO: Save default config into LS to optimize loading via parsing JSON
@@ -17,9 +17,9 @@ export default class UserConfigManager {
     loadUserConfig() {
         let config = JSON.parse(localStorage.getItem('userConfig'));
         if (config) {
-            logIfDevelopment("Loaded user config: ", config);
+            logIfDebug("Loaded user config: ", config);
         } else {
-            logIfDevelopment("No user config found in LS; using default config");
+            logIfDebug("No user config found in LS; using default config");
             config = new UserConfig();
         }
         return config;

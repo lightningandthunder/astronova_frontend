@@ -9,21 +9,16 @@ export function degToMin(deg) {
 }
 
 export function rotateCoordinatesInRA(coords, ramc) {
+    // multiply by -1 since we're adding
+    const rotationalOffset = -1 * (ramc - 270);
     const rotatedCoords = {};
     Object.keys(coords).forEach(k => {
-        let rotated = coords[k] - (ramc - 270);
-        if (rotated >= 0 && rotated < 360)
-            rotatedCoords[k] = rotated;
-        else if (rotated < 0)
-            rotatedCoords[k] = rotated + 360;
-        else  // > 360
-            rotatedCoords[k] = rotated - 360;
-
+        rotatedCoords[k] = getAdjustedLongitude(coords[k], rotationalOffset)
     });
     return rotatedCoords;
 }
 
-export function addToLongitude(long, addition) {
+export function getAdjustedLongitude(long, addition) {
     // Adds a value to a base longitude, and normalizes to within 0-359
     let adjustedLongitude = long + addition;
     if (adjustedLongitude > 360)
@@ -87,7 +82,7 @@ export function getRenderCoords(coords, radius) {
 
         let overlap = minAngle - (obj[key].rawCoord - prev.renderCoord);
         if (overlap > 0) {
-            coords[key].renderCoord = addToLongitude(coords[key].rawCoord, overlap)
+            coords[key].renderCoord = getAdjustedLongitude(coords[key].rawCoord, overlap)
         }
         prev = coords[key];
     });

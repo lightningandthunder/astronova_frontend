@@ -8,7 +8,7 @@ import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
 import { TIMEZONES } from "../../timezones";
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
-import logIfDevelopment from "../../utils/logIfDevelopment";
+import logIfDebug from "../../utils/logIfDebug";
 import moment from "moment-timezone";
 
 const manager = new ChartManager();
@@ -163,7 +163,7 @@ export default class ReturnChartPopup extends React.Component {
         const query = manager.createReturnQuery(inputRadix, planet, harmonic, locationResults.longitude,
             locationResults.latitude, dt, locationResults.tz, quantity)
 
-        logIfDevelopment("Return query: ", query);
+        logIfDebug("Return query: ", query);
         const response = await axios.post(
             API_ADDRESS + "/returns",
             query,
@@ -182,7 +182,7 @@ export default class ReturnChartPopup extends React.Component {
                 alert("No charts to create!");
                 return;
             }
-            logIfDevelopment("Radix & return charts: ", charts);
+            logIfDebug("Radix & return charts: ", charts);
             for (let c = 0; c < charts.length; c++) {
                 const newChart = manager.createBiwheel(charts[c], locationResults, inputRadix.name);
                 this.props.saveChart(newChart);
@@ -191,7 +191,7 @@ export default class ReturnChartPopup extends React.Component {
             this.props.setSelectedChartToNewest();
             this.closePopup();
         } catch (err) {
-            logIfDevelopment(err)
+            logIfDebug(err)
         }
     }
 

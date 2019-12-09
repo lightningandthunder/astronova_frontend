@@ -9,7 +9,7 @@ export default class AspectManager {
         const planetRowVertical = charts[0];
 
         // Need to clean this up and put into a dedicated function to determine
-        // Chart points, for the grid cells as well as their contents.
+        // chart points, for the grid cells as well as their contents.
         planetRowVertical["Asc"] = angles["Asc"];
         planetRowVertical["MC"] = angles["MC"];
 
