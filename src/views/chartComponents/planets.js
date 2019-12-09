@@ -53,24 +53,27 @@ export default function Planets(props) {
     }
 
     const planetSign = (planetInfo) => {
-        const sign = parseSign(planetInfo.rawCoord);
+        const house = Math.trunc(planetInfo.rawCoord / 30) + 1;
+        const sign = props.zodiacal
+            ? parseSign(planetInfo.rawCoord)
+            : house;
+
         const [x, y] = derivePoint(props.scale.origin,
             planetInfo.renderCoord,
             props.scale.planetSignRadius,
             props.rotationalOffset);
         return (
-            <Text 
-            x={x}
-            y={y}
-            key={`${planetInfo.name}-${props.ringLayer}-Sign`}
-            coord={planetInfo.rawCoord}
-            text={SIGN_UNICODE[sign]}
-            stroke={SIGN_COLORS[sign]}
-            strokeWidth={1}
-            fontFamily={"AstroDotBasic"}
-            fontSize={props.scale.planetFontSize}
-            offsetX={props.scale.planetSignOffsetX}
-            offsetY={props.scale.planetSignOffsetY}
+            <Text
+                x={x}
+                y={y}
+                key={`${planetInfo.name}-${props.ringLayer}-Sign`}
+                text={props.zodiacal ? SIGN_UNICODE[sign] : house}
+                stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
+                strokeWidth={1}
+                fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
+                fontSize={props.zodiacal ? props.scale.planetFontSize : props.scale.planetDegreeFontSize}
+                offsetX={props.scale.planetSignOffsetX}
+                offsetY={props.scale.planetSignOffsetY}
             />
         )
     }

@@ -3,7 +3,31 @@ import { Line, Group, Arrow } from "react-konva";
 import { derivePoint } from "../../utils/geometry";
 
 export default function CuspLines(props) {
-    const boldCusps = [1, 4, 7, 10];
+    const angularCusps = [1, 4, 7, 10];
+    const succedentCusps = [2, 5, 8, 11];
+    const cadentCusps = [3, 6, 9, 12];
+
+    const getStrokeColor = (cuspId) => {
+        if (angularCusps.indexOf(cuspId) >= 0)
+            return "black";
+        if (!props.zodiacal && succedentCusps.indexOf(cuspId) >= 0)
+            return "gray";
+        if (!props.zodiacal && cadentCusps.indexOf(cuspId) >= 0)
+            return "gray";
+
+        return "black";
+    }
+
+    const getStrokeWidth = (cuspId) => {
+        if (angularCusps.indexOf(cuspId) >= 0)
+            return 2;
+        if (!props.zodiacal && succedentCusps.indexOf(cuspId) >= 0)
+            return 0.15;
+        if (!props.zodiacal && cadentCusps.indexOf(cuspId) >= 0)
+            return 1;
+
+        return 1;
+    }
 
     const cuspLine = (pos, cuspId) => {
         return (
@@ -18,8 +42,8 @@ export default function CuspLines(props) {
                 : <Line key={cuspId}
                     points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
                     ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
-                    stroke={"black"}
-                    strokeWidth={boldCusps.indexOf(cuspId) >= 0 ? 2 : 1}
+                    stroke={getStrokeColor(cuspId)}
+                    strokeWidth={getStrokeWidth(cuspId)}
                 />
         )
     }
@@ -33,7 +57,7 @@ export default function CuspLines(props) {
     )
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

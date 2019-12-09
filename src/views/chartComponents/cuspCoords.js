@@ -1,25 +1,25 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
-import {SIGN_UNICODE, SIGN_COLORS} from "../../settings";
+import { SIGN_UNICODE, SIGN_COLORS } from "../../settings";
 
 export default function CuspCoords(props) {
     const cuspSign = (cusp, coord) => {
-        const sign = parseSign(coord);
+        const house = Math.trunc(coord / 30) + 1;
+        const sign = props.zodiacal ? parseSign(coord) : house;
         const [x, y] = derivePoint(props.scale.origin, coord, props.scale.cuspSignRadius, props.cuspOffset);
         return (
-            <Text 
-            x={x}
-            y={y}
-            key={`${cusp}-Sign`}
-            coord={coord}            
-            text={SIGN_UNICODE[sign]}
-            stroke={SIGN_COLORS[sign]}
-            strokeWidth={1}
-            fontFamily={"AstroDotBasic"}
-            fontSize={props.scale.planetFontSize}
-            offsetX={props.scale.cuspSignOffsetX}
-            offsetY={props.scale.cuspSignOffsetY}
+            <Text
+                x={x}
+                y={y}
+                key={`${cusp}-Sign`}
+                text={props.zodiacal ? SIGN_UNICODE[sign] : house}
+                stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
+                strokeWidth={1}
+                fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
+                fontSize={props.zodiacal ? props.scale.planetFontSize : props.scale.planetDegreeFontSize}
+                offsetX={props.scale.cuspSignOffsetX}
+                offsetY={props.scale.cuspSignOffsetY}
             />
         )
     }
@@ -76,7 +76,7 @@ export default function CuspCoords(props) {
     )
 }
 
-/* 
+/*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.

@@ -82,10 +82,10 @@ export default function Chart(props) {
                     props.mode === "chart" &&
                     <Group>
                         <Rings scale={scale} />
-                        <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                        <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+                        <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} zodiacal={props.view==="ecliptical"} />
+                        <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} zodiacal={props.view==="ecliptical"} />
                         <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-                        <Planets scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
+                        <Planets scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} zodiacal={props.view==="ecliptical"} />
                         <PlanetLocationMarker scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
                         <AspectLines scale={scale}
                             aspects={new AspectManager().getAspectList(coords, coords, "Uniwheel")}

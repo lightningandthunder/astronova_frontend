@@ -23,7 +23,7 @@ export default function ViewButtons(props) {
                 checked={props.view === "right_ascension"}
                 onChange={props.onChangeView}
             />
-            <label>RightAscension</label>
+            <label>RA</label>
         </div>
     )
 }
