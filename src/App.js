@@ -3,7 +3,6 @@ import './styles/App.css';
 import './styles/index.css';
 
 import Chartlist from './views/chartlist';
-// import RawChartData from './views/rawchartdata';
 import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
@@ -15,8 +14,8 @@ import ModeButtons from "./views/ModeButtons";
 import { TITLE } from "./settings";
 
 const defaultScaleFactor = Math.min(
-    window.innerHeight / 675,  // If the window is wide
-    window.innerWidth * 0.8 / 675 // If the window is narrow, leave room for controls
+    window.innerHeight / 675,  // Diameter of the chart, with padding
+    window.innerWidth * 0.8 / 675 // If the window is tall but narrow, leave room for controls
 );
 
 class App extends React.Component {
@@ -167,7 +166,6 @@ class App extends React.Component {
                         setSelectedChartToNewest={this.setSelectedChartToNewest}
                         enabled={this.state.selectedChart}
                     />
-                    {/* ======== Button for solunar return chart ======== */}
 
                     <ReturnChartPopup
                         saveChart={this.saveChart}
