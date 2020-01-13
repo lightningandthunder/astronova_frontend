@@ -10,7 +10,7 @@ import logIfDebug from "../../utils/logIfDebug";
 
 const manager = new ChartManager();
 
-export default class relocatePopup extends React.Component {
+export default class RelocatePopup extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
