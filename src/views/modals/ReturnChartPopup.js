@@ -176,7 +176,7 @@ export default class ReturnChartPopup extends React.Component {
             this.handleError(err);
             return;
         }
-        let charts = response.data;
+        let charts = JSON.parse(response.data);
         try {
             if (charts.length === 0) {
                 alert("No charts to create!");

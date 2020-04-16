@@ -138,7 +138,8 @@ export default class NewChartPopup extends React.Component {
         }
 
         try {
-            const newChart = manager.createUniwheel(response.data, locationResults, this.state.nameInput);
+            const chartData = JSON.parse(response.data);
+            const newChart = manager.createUniwheel(chartData, locationResults, this.state.nameInput);
             logIfDebug("New chart: ", newChart);
             this.props.saveChart(newChart);
             this.props.setSelectedChartToNewest();

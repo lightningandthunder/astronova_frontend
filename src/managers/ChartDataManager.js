@@ -214,8 +214,9 @@ export default class ChartManager {
             throw new Error("expectedProperties must be instance of Array");
 
         expectedProperties.forEach(p => {
-            if (!obj.hasOwnProperty(p))
+            if (!obj.hasOwnProperty(p)) {
                 throw new Error(`Data is missing expected property: ${p}. Data: ${obj.toString()}`);
+            }
             else if (!obj[p])
                 throw new Error(`Data has null or undefined property: ${p}`);
         });

@@ -74,18 +74,20 @@ export default class RelocatePopup extends React.Component {
             this.handleError(err);
             return;
         }
+        const res = JSON.parse(response.data)
+        console.log(res);
         try {
             let newChart;
-            if ("return_chart" in response.data) {
+            if ("return_chart" in res) {
                 newChart = manager.createBiwheel(
-                    response.data,
+                    res,
                     locationResults,
                     // TODO: Clean up this gross naming thing going on here
                     this.props.chart.name.split(" return")[0] + " " + locationResults.placeName.split(",")[0]
                 );
             } else {
                 newChart = manager.createUniwheel(
-                    response.data,
+                    res,
                     locationResults,
                     this.props.chart.name + " " + locationResults.placeName.split(",")[0]
                 );
