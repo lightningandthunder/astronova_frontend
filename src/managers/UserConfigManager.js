@@ -15,19 +15,11 @@ export default class UserConfigManager {
     // TODO: Save default config into LS to optimize loading via parsing JSON
     // rather than instantiating a new object over and over
     loadUserConfig() {
-        let config = JSON.parse(localStorage.getItem('userConfig'));
-        if (config) {
-            logIfDebug("Loaded user config: ", config);
-        } else {
-            // logIfDebug("No user config found in LS; using default config");
-            config = new UserConfig();
-        }
-        return config;
+        const config = JSON.parse(localStorage.getItem('userConfig'));
+        return config ? config : new UserConfig();
     }
 
-    /* 
-    ** Getters and setters 
-    */
+    // Getters and setters 
 
     getChartPointsEcliptical() {
         return this.userConfig.chartPointsEcliptical;

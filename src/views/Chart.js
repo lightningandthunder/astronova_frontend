@@ -45,7 +45,7 @@ export default function Chart(props) {
             cusps = props.chart.cusps;
             displayOffset = cusps["1"];
             coords = {
-                ...props.chart[props.view],
+                ...props.chart["ecliptical"],
                 EP: props.chart.angles["Eq Asc"],
             };
             chartPoints = configManager.getChartPointsEcliptical();
@@ -53,13 +53,13 @@ export default function Chart(props) {
         else if (props.view === "mundane") {
             cusps = defaultCusps;
             displayOffset = 0;
-            coords = props.chart[props.view];
+            coords = props.chart["mundane"];
             chartPoints = configManager.getChartPointsMundane();
         }
         else if (props.view === "right_ascension") {
             cusps = defaultCusps;
             displayOffset = 0;
-            coords = props.chart[props.view];
+            coords = props.chart["right_ascension"];
             chartPoints = configManager.getChartPointsRightAscension();
 
             // Rotate to RAMC - 270

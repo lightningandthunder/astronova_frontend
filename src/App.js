@@ -123,7 +123,6 @@ class App extends React.Component {
         this.setState({ mode: e.target.value });
     }
 
-    // This should be in another section; will eventually reorganize
     resetCharts() {
         localStorage.removeItem('charts');
         localStorage.removeItem('selectedChart')
