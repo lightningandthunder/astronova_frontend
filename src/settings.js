@@ -1,6 +1,6 @@
 const QUERY_HEADERS = { "Content-Type": "application/json" };
 const API_ADDRESS = "http://localhost:5000";
-const VERSION = "0.1.0a"
+const VERSION = "0.2.0a"
 const TITLE = `Nova ${VERSION}`
 
 const SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"];
