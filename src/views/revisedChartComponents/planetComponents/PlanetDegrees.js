@@ -4,16 +4,24 @@ import { Text } from "react-konva";
 import { derivePoint } from "../../utils/geometry";
 
 export default function PlanetDegrees(props) {
+  const radiusMap = {
+    [WheelRingEnum.UNIWHEEL]: 255,
+    [WheelRingEnum.BIWHEEL_INNER]: 165,
+    [WheelRingEnum.BIWHEEL_OUTER]: 255,
+  };
+
+  const radius = radiusMap[props.ringLayer] * props.scaleFactor;
+
   const [x, y] = derivePoint(props.origin,
-    props.planet.renderCoord,
-    props.radius,
+    props.renderCoordinate,
+    radius,
     props.rotationalOffset);
 
   return (
-    <Text key={`${props.planet.name}-${props.radius}-Degrees`}
+    <Text key={`${props.planetName}-${radius}-Degrees`}
       x={x}
       y={y}
-      text={`${Math.trunc(props.planet.rawCoord) % 30}\u00B0`}
+      text={`${Math.trunc(props.rawCoordinate) % 30}\u00B0`}
       fontSize={14 * props.scaleFactor}
       strokeWidth={1}
       offsetX={8 * props.scaleFactor}

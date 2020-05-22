@@ -4,15 +4,23 @@ import { Text } from "react-konva";
 import { derivePoint, degToMin } from "../../utils/geometry";
 
 export default function PlanetMinutes(props) {
-  const mins = degToMin(props.planet.rawCoord);
+  const radiusMap = {
+    [WheelRingEnum.UNIWHEEL]: 210,
+    [WheelRingEnum.BIWHEEL_INNER]: 120,
+    [WheelRingEnum.BIWHEEL_OUTER]: 220,
+  };
 
-  const [x, y] = derivePoint(props.scale.origin,
-    props.planet.renderCoord,
-    props.radius,
+  const radius = radiusMap[props.ringLayer] * props.scaleFactor;
+  
+  const mins = degToMin(props.rawCoordinate);
+
+  const [x, y] = derivePoint(props.origin,
+    props.renderCoordinate,
+    radius,
     props.rotationalOffset);
 
   return (
-    <Text key={`${props.planet.name}-${props.radius}-Minutes`}
+    <Text key={`${props.planetName}-${radius}-Minutes`}
       x={x}
       y={y}
       text={`${mins}'`}

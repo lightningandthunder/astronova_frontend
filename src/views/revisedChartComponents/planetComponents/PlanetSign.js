@@ -5,25 +5,33 @@ import { derivePoint, parseSign } from "../../../utils/geometry";
 import { SIGN_COLORS, SIGN_UNICODE } from "../../../settings";
 
 export default function PlanetSign(props) {
-  const house = Math.trunc(props.planet.rawCoord / 30) + 1;
-  const sign = props.zodiacal
-    ? parseSign(props.planet.rawCoord)
+  const radiusMap = {
+    [WheelRingEnum.UNIWHEEL]: 235,
+    [WheelRingEnum.BIWHEEL_INNER]: 140,
+    [WheelRingEnum.BIWHEEL_OUTER]: 235,
+  };
+
+  const radius = radiusMap[props.ringLayer] * props.scaleFactor;
+
+  const house = Math.trunc(props.rawCoordinate / 30) + 1;
+  const sign = props.isZodiacal
+    ? parseSign(props.rawCoordinate)
     : house;
 
   const [x, y] = derivePoint(props.origin,
-    props.planet.renderCoord,
-    props.radius,
+    props.renderCoordinate,
+    radius,
     props.rotationalOffset);
   return (
     <Text
       x={x}
       y={y}
-      key={`${props.planet.name}-${props.radius}-Sign`}
-      text={props.zodiacal ? SIGN_UNICODE[sign] : house}
-      stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
+      key={`${props.planetName}-${radius}-Sign`}
+      text={props.isZodiacal ? SIGN_UNICODE[sign] : house}
+      stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
       strokeWidth={1}
-      fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
-      fontSize={props.zodiacal ? 22 : 14}
+      fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
+      fontSize={props.isZodiacal ? 22 : 14}
       offsetX={8}
       offsetY={8}
     />
