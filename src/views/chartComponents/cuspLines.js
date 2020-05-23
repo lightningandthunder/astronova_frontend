@@ -1,60 +1,64 @@
 import React from "react";
 import { Line, Group, Arrow } from "react-konva";
 import { derivePoint } from "../../utils/geometry";
+import { RingLayerEnum } from "../../settings";
 
 export default function CuspLines(props) {
-    const angularCusps = [1, 4, 7, 10];
-    const succedentCusps = [2, 5, 8, 11];
-    const cadentCusps = [3, 6, 9, 12];
+  const angularCusps = [1, 4, 7, 10];
+  const succedentCusps = [2, 5, 8, 11];
+  const cadentCusps = [3, 6, 9, 12];
 
-    const getStrokeColor = (cuspId) => {
-        if (angularCusps.indexOf(cuspId) >= 0)
-            return "black";
-        if (!props.zodiacal && succedentCusps.indexOf(cuspId) >= 0)
-            return "gray";
-        if (!props.zodiacal && cadentCusps.indexOf(cuspId) >= 0)
-            return "gray";
+  const houseRingInnerRadiusMap = {
+    [RingLayerEnum.UNIWHEEL]: 140,
+    [RingLayerEnum.BIWHEEL_INNER]: 75,
+    [RingLayerEnum.BIWHEEL_OUTER]: 75,
+  };
 
-        return "black";
-    }
+  const houseRingInnerRadius = houseRingInnerRadiusMap[props.ringLayer] * props.scaleFactor;
+  const signRingInnerRadius = 300 * props.scaleFactor;
 
-    const getStrokeWidth = (cuspId) => {
-        if (angularCusps.indexOf(cuspId) >= 0)
-            return 2;
-        if (!props.zodiacal && succedentCusps.indexOf(cuspId) >= 0)
-            return 0.15;
-        if (!props.zodiacal && cadentCusps.indexOf(cuspId) >= 0)
-            return 1;
+  const getStrokeColor = (cuspId) => {
+    if (props.isZodiacal || angularCusps.indexOf(cuspId) >= 0)
+      return "black";
 
-        return 1;
-    }
+    return "gray";
+  }
+  const getStrokeWidth = (cuspId) => {
+    if (angularCusps.indexOf(cuspId) >= 0)
+      return props.isZodiacal ? 2 : 1;
+    if (succedentCusps.indexOf(cuspId) >= 0)
+      return props.isZodiacal ? 1 : 0.15;
 
-    const cuspLine = (pos, cuspId) => {
-        return (
-            cuspId === 10
-                ? <Arrow key={`${cuspId}-Line`}
-                    points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
-                    ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
-                    stroke={"black"}
-                    strokeWidth={2}
-                    fill={"black"} />
+    // Cadent cusps
+    return 1;
+  }
 
-                : <Line key={cuspId}
-                    points={[...derivePoint(props.scale.origin, pos, props.scale.houseRingInnerRadius, props.cuspOffset),
-                    ...derivePoint(props.scale.origin, pos, props.scale.signRingInnerRadius, props.cuspOffset)]}
-                    stroke={getStrokeColor(cuspId)}
-                    strokeWidth={getStrokeWidth(cuspId)}
-                />
-        )
-    }
-
+  const cuspLine = (pos, cuspId) => {
+    const [x1, y1] = derivePoint(props.origin, pos, houseRingInnerRadius, props.rotationalOffset);
+    const [x2, y2] = derivePoint(props.origin, pos, signRingInnerRadius, props.rotationalOffset);
     return (
-        <Group>
-            {Object.keys(props.cusps).map((_, index) => (
-                cuspLine(props.cusps[index + 1], index + 1)
-            ))}
-        </Group>
+      cuspId === 10  // MC gets an arrow instead of a line
+        ? <Arrow key={`${cuspId}-Line`}
+          points={[x1, y1, x2, y2]}
+          stroke={"black"}
+          strokeWidth={2}
+          fill={"black"} />
+
+        : <Line key={`${cuspId}-Line`}
+          points={[x1, y1, x2, y2]}
+          stroke={getStrokeColor(cuspId)}
+          strokeWidth={getStrokeWidth(cuspId)}
+        />
     )
+  }
+
+  return (
+    <Group>
+      {Object.keys(props.cusps).map((_, index) => (
+        cuspLine(props.cusps[index + 1], index + 1)
+      ))}
+    </Group>
+  )
 }
 
 /*

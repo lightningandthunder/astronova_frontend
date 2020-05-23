@@ -1,120 +1,55 @@
 import React from "react";
-import { Text, Group } from "react-konva";
+import { Group } from "react-konva";
 
-import { derivePoint, parseSign, degToMin, getRenderCoords } from "../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE, SIGN_COLORS, SIGN_UNICODE } from "../../settings";
+import { getRenderCoords } from "../../utils/geometry";
 import PlanetCoords from "../../models/PlanetCoords";
+import PlanetDegrees from "./planetComponents/PlanetDegrees";
+import PlanetMinutes from "./planetComponents/PlanetMinutes";
+import PlanetSign from "./planetComponents/PlanetSign";
+import PlanetSymbol from "./planetComponents/PlanetSymbol";
+import PlanetLocationMarker from "./planetComponents/PlanetLocationMarker";
+import { RingLayerEnum } from "../../settings";
 
 export default function Planets(props) {
-    const adjustedCoords = getRenderCoords(
-        new PlanetCoords(props.coords),
-        props.scale.planetMinuteRadius
-    );
+  const radiusMap = {
+    [RingLayerEnum.UNIWHEEL]: 210,
+    [RingLayerEnum.BIWHEEL_INNER]: 120,
+    [RingLayerEnum.BIWHEEL_OUTER]: 220,
+  };
 
-    const planetSymbol = (planetInfo) => {
-        const [x, y] = derivePoint(props.scale.origin,
-            planetInfo.renderCoord,
-            props.scale.planetRadius,
-            props.rotationalOffset);
-        return (
-            <Text key={`${planetInfo.name}-${props.ringLayer}-Symbol`}
-                x={x}
-                y={y}
-                text={PLANET_UNICODE[planetInfo.name]}
-                fontSize={
-                    planetInfo.name === "EP" || planetInfo.name === "WP"
-                        ? props.scale.epWPFontSize
-                        : props.scale.planetFontSize
-                }
-                stroke={PLANET_COLORS[planetInfo.name]}
-                strokeWidth={1}
-                offsetX={props.scale.planetOffsetX}
-                offsetY={props.scale.planetOffsetY}
-            />
-        )
+  // Smallest radius on which elements need to be readable
+  const minradius = radiusMap[props.ringLayer] * props.scaleFactor;
+
+  const adjustedCoords = getRenderCoords(new PlanetCoords(props.coords), minradius);
+  const dataBundles = Object.keys(adjustedCoords).map(key => (
+    {
+      // These change per planet object from adjustedCoords
+      planetName: adjustedCoords[key].name,
+      rawCoordinate: adjustedCoords[key].rawCoord,
+      renderCoordinate: adjustedCoords[key].renderCoord,
+
+      // These do not change
+      origin: props.origin,
+      ringLayer: props.ringLayer,
+      rotationalOffset: props.rotationalOffset,
+      scaleFactor: props.scaleFactor,
+      isZodiacal: props.isZodiacal,
     }
+  ));
 
-    const planetDegrees = (planetInfo) => {
-        const [x, y] = derivePoint(props.scale.origin,
-            planetInfo.renderCoord,
-            props.scale.planetDegreeRadius,
-            props.rotationalOffset);
-        return (
-            <Text key={`${planetInfo.name}-${props.ringLayer}-Degrees`}
-                x={x}
-                y={y}
-                text={`${Math.trunc(planetInfo.rawCoord) % 30}\u00B0`}
-                fontSize={props.scale.planetDegreesFontSize}
-                strokeWidth={1}
-                offsetX={props.scale.planetDegreesOffsetX}
-                offsetY={props.scale.planetDegreesOffsetY}
-            />
-        )
-    }
-
-    const planetSign = (planetInfo) => {
-        const house = Math.trunc(planetInfo.rawCoord / 30) + 1;
-        const sign = props.zodiacal
-            ? parseSign(planetInfo.rawCoord)
-            : house;
-
-        const [x, y] = derivePoint(props.scale.origin,
-            planetInfo.renderCoord,
-            props.scale.planetSignRadius,
-            props.rotationalOffset);
-        return (
-            <Text
-                x={x}
-                y={y}
-                key={`${planetInfo.name}-${props.ringLayer}-Sign`}
-                text={props.zodiacal ? SIGN_UNICODE[sign] : house}
-                stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
-                strokeWidth={1}
-                fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
-                fontSize={props.zodiacal ? props.scale.planetFontSize : props.scale.planetDegreeFontSize}
-                offsetX={props.scale.planetSignOffsetX}
-                offsetY={props.scale.planetSignOffsetY}
-            />
-        )
-    }
-
-
-    const planetMinutes = (planetInfo) => {
-        const mins = degToMin(planetInfo.rawCoord)
-        const [x, y] = derivePoint(props.scale.origin,
-            planetInfo.renderCoord,
-            props.scale.planetMinuteRadius,
-            props.rotationalOffset);
-        return (
-            <Text key={`${planetInfo.name}-${props.ringLayer}-Minutes`}
-                x={x}
-                y={y}
-                text={`${mins}'`}
-                fontSize={props.scale.planetMinutesFontSize}
-                strokeWidth={1}
-                offsetX={props.scale.planetMinutesOffsetX}
-                offsetY={props.scale.planetMinutesOffsetY}
-            />
-        )
-    }
-
-    const planetAndCoords = (planetInfo) => {
-        return (
-            <Group key={planetInfo.name}>
-                {planetSymbol(planetInfo)}
-                {planetDegrees(planetInfo)}
-                {planetSign(planetInfo)}
-                {planetMinutes(planetInfo)}
-            </Group>
-        )
-    }
-    return (
-        <Group>
-            {Object.keys(adjustedCoords).map((planet) => (
-                planetAndCoords(adjustedCoords[planet])
-            ))}
+  return (
+    <Group>
+      {Object.keys(dataBundles).map((key) => (
+        <Group key={dataBundles[key].planetName}>
+          <PlanetSign {...dataBundles[key]} />
+          <PlanetSymbol {...dataBundles[key]} />
+          <PlanetDegrees {...dataBundles[key]} />
+          <PlanetMinutes {...dataBundles[key]} />
+          <PlanetLocationMarker {...dataBundles[key]} />
         </Group>
-    )
+      ))}
+    </Group>
+  )
 }
 
 /*

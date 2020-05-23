@@ -8,18 +8,18 @@ export default function CuspCoords(props) {
 
   const cuspSign = (cusp, coord) => {
     const house = Math.trunc(coord / 30) + 1;
-    const sign = props.zodiacal ? parseSign(coord) : house;
-    const [x, y] = derivePoint(props.origin, coord, radius, props.cuspOffset);
+    const sign = props.isZodiacal ? parseSign(coord) : house;
+    const [x, y] = derivePoint(props.origin, coord, radius, props.rotationalOffset);
     return (
       <Text
         x={x}
         y={y}
         key={`${cusp}-Sign`}
-        text={props.zodiacal ? SIGN_UNICODE[sign] : house}
-        stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
+        text={props.isZodiacal ? SIGN_UNICODE[sign] : house}
+        stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
         strokeWidth={1}
-        fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
-        fontSize={(props.zodiacal ? 22 : 14) * props.scaleFactor}
+        fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
+        fontSize={(props.isZodiacal ? 22 : 14) * props.scaleFactor}
         offsetX={8 * props.scaleFactor}
         offsetY={8 * props.scaleFactor}
       />
@@ -30,13 +30,13 @@ export default function CuspCoords(props) {
     // Cusps 7-12 need to have degrees and minutes in opposite places for readability
     const offset = (cusp <= 6 ? -4 : 4) * props.scaleFactor;
     const adjustedCoordPos = Math.trunc(coord + offset);  // TODO: Can I remove Math.trunc?
-    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.cuspOffset);
+    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.rotationalOffset);
     return (
       <Text key={`${cusp}-Degrees`}
         x={x}
         y={y}
         text={`${Math.trunc(coord % 30)}\u00B0`}
-        fontSize={8 * props.scaleFactor}
+        fontSize={14 * props.scaleFactor}
         strokeWidth={1}
         offsetX={8 * props.scaleFactor}
         offsetY={8 * props.scaleFactor}
@@ -49,7 +49,7 @@ export default function CuspCoords(props) {
     const offset = (cusp <= 6 ? 4 : -4) * props.scaleFactor;
     const adjustedCoordPos = Math.trunc(coord + offset);   // TODO: Can I remove Math.trunc?
     const mins = degToMin(coord);
-    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.cuspOffset);
+    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.rotationalOffset);
     return (
       <Text key={`${cusp}-Minutes`}
         x={x}

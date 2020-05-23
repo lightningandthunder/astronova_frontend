@@ -8,7 +8,7 @@ import CuspLines from "./CuspLines";
 import Planets from "./Planets";
 import Rings from "./Rings";
 import BiwheelDivider from "./BiwheelDivider"
-import ChartInfo from "../chartComponents/ChartInfo";
+import ChartInfo from "./ChartInfo";
 import { rotateCoordinatesInRA } from "../../utils/geometry";
 import AspectsLister from "../../managers/AspectManager";
 import AspectLines from "./AspectLines";
@@ -72,8 +72,8 @@ export default function Chart(props) {
     chartPoints: chartPoints,
     cusps: cusps,
   }
-  const aspectLister = new AspectsLister();
-  const aspects = aspectLister.getAspects(config, innerCoords, outerCoords)
+  const aspectLister = new AspectsLister(config, innerCoords, outerCoords);
+  const aspects = aspectLister.getAspects();
 
   return (
     <Stage width={props.width} height={props.height}>
@@ -111,7 +111,7 @@ export default function Chart(props) {
 
           {/* Only show aspect lines for uniwheels */}
           {
-            !!props.outerChart &&
+            !props.outerChart &&
             <AspectLines
               aspects={aspects}
               coords={innerCoords}

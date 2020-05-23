@@ -8,10 +8,7 @@ export default class AspectsLister {
   }
 
   getAspects() {
-    if (!this.coords1 || this.coords1.length === 0)
-      return [];
-
-    const compareSingleChart = !!this.coords2;
+    const compareSingleChart = !this.coords2;
     const aspectList = [];
     const usedKeys = [];
 
