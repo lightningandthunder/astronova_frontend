@@ -2,14 +2,13 @@ import React from "react";
 import { Text } from "react-konva";
 
 import { derivePoint } from "../../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE, WheelRingEnum } from "../../../settings";
-
+import { PLANET_COLORS, PLANET_UNICODE, RingLayerEnum } from "../../../settings";
 
 export default function PlanetSymbol(props) {
   const radiusMap = {
-    [WheelRingEnum.UNIWHEEL]: 280,
-    [WheelRingEnum.BIWHEEL_INNER]: 190,
-    [WheelRingEnum.BIWHEEL_OUTER]: 280,
+    [RingLayerEnum.UNIWHEEL]: 280,
+    [RingLayerEnum.BIWHEEL_INNER]: 190,
+    [RingLayerEnum.BIWHEEL_OUTER]: 280,
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;

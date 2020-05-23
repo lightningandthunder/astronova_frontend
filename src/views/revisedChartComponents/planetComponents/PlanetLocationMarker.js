@@ -1,12 +1,14 @@
 import React from "react";
 import { Line } from "react-konva";
+
 import { derivePoint } from "../../utils/geometry";
+import { RingLayerEnum } from "../../../settings";
 
 export default function PlanetLocationMarker(props) {
   const radiusMap = {
-    [WheelRingEnum.UNIWHEEL]: 170,
-    [WheelRingEnum.BIWHEEL_INNER]: 105,
-    [WheelRingEnum.BIWHEEL_OUTER]: 205,
+    [RingLayerEnum.UNIWHEEL]: 170,
+    [RingLayerEnum.BIWHEEL_INNER]: 105,
+    [RingLayerEnum.BIWHEEL_OUTER]: 205,
   };
 
   const innerRadius = radiusMap[props.ringLayer] * props.scaleFactor;

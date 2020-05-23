@@ -8,13 +8,13 @@ import { PlanetMinutes } from "./planetComponents/PlanetMinutes";
 import { PlanetSign } from "./planetComponents/PlanetSign";
 import { PlanetSymbol } from "./planetComponents/PlanetSymbol";
 import { PlanetLocationMarker } from "./planetComponents/PlanetLocationMarker";
-import { WheelRingEnum } from "../../settings";
+import { RingLayerEnum } from "../../settings";
 
 export default function Planets(props) {
   const radiusMap = {
-    [WheelRingEnum.UNIWHEEL]: 210,
-    [WheelRingEnum.BIWHEEL_INNER]: 120,
-    [WheelRingEnum.BIWHEEL_OUTER]: 220,
+    [RingLayerEnum.UNIWHEEL]: 210,
+    [RingLayerEnum.BIWHEEL_INNER]: 120,
+    [RingLayerEnum.BIWHEEL_OUTER]: 220,
   };
 
   // Smallest radius on which elements need to be readable
@@ -29,7 +29,6 @@ export default function Planets(props) {
       renderCoordinate: planet.renderCoord,
 
       // These do not change
-      origin: props.origin,
       origin: props.origin,
       ringLayer: props.ringLayer,
       rotationalOffset: props.rotationalOffset,

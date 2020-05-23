@@ -2,12 +2,13 @@ import React from "react";
 import { Text } from "react-konva";
 
 import { derivePoint } from "../../utils/geometry";
+import { RingLayerEnum } from "../../../settings";
 
 export default function PlanetDegrees(props) {
   const radiusMap = {
-    [WheelRingEnum.UNIWHEEL]: 255,
-    [WheelRingEnum.BIWHEEL_INNER]: 165,
-    [WheelRingEnum.BIWHEEL_OUTER]: 255,
+    [RingLayerEnum.UNIWHEEL]: 255,
+    [RingLayerEnum.BIWHEEL_INNER]: 165,
+    [RingLayerEnum.BIWHEEL_OUTER]: 255,
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;

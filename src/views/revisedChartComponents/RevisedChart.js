@@ -2,100 +2,115 @@ import React from "react";
 import { Stage, Layer, Group } from "react-konva";
 import moment from "moment-timezone";
 
-import HouseNumbers from "./chartComponents/houseNumbers";
-import CuspCoords from "./chartComponents/cuspCoords";
-import CuspLines from "./chartComponents/cuspLines";
+import HouseNumbers from "../chartComponents/houseNumbers";
+import CuspCoords from "./CuspCoords";
+import CuspLines from "./CuspLines";
 import Planets from "./Planets";
-import Rings from "../chartComponents/rings";
+import Rings from "./Rings";
 import BiwheelDivider from "../chartComponents/BiwheelDivider"
-import { ScaleManager } from "../managers/ScaleManager";
 import ChartInfo from "../chartComponents/ChartInfo";
 import { rotateCoordinatesInRA } from "../utils/geometry";
-import PlanetLocationMarker from "../chartComponents/PlanetLocationMarker";
 import AspectManager from "../managers/AspectManager";
 import AspectLines from "../chartComponents/AspectLines";
-import UserConfigManager from "../managers/UserConfigManager";
-import { WheelRingEnum } from "../../settings";
+import UserConfig from "../../models/UserConfig";
+import { RingLayerEnum, ChartViews } from "../../settings";
 
-const defaultCusps = {
+const DEFAULT_CUSPS = {
   "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
   "7": 180, "8": 210, "9": 240, "10": 270, "11": 300, "12": 330
 };
 
 export default function Chart(props) {
-  if (!props.chart)
-    throw new Error("Missing chart data!");
+  /* Props:
+  *
+  * origin
+  * scaleFactor
+  * chartView
+  * innerChart
+  * middleChart
+  * outerChart
+  */
 
-  const scaleManager = new ScaleManager();
-  const configManager = new UserConfigManager();
+  const config = UserConfig.loadConfig();
+  const chartPoints = config.getPointsForChartView(props.view);
+  const isZodiacal = props.view === ChartViews.ECLIPTICAL;
 
+  const cusps = isZodiacal
+    ? this.outerChart && this.outerChart.cusps || this.innerChart.cusps
+    : DEFAULT_CUSPS;
 
-  // ================== Chart display functions ==================
+  // Lock Ascendant to left side of chart in zodiacal view
+  const displayOffset = isZodiacal ? cusps["1"] : 0;
 
-  const showUniwheel = () => {
-    const scale = scaleManager.getChartScale(props.width, props.height, "Uniwheel", props.scaleFactor);
-    let cusps;
-    let displayOffset;
-    let coords;
-    let chartPoints;
+  const innerCoords = props.innerChart[props.view];
+  const outerCoords = props.outerChart && props.outerChart[props.view];
 
-    if (props.view === "ecliptical") {
-      // Lock left side of chart to Ascendant
-      cusps = props.chart.cusps;
-      displayOffset = cusps["1"];
-      coords = {
-        ...props.chart["ecliptical"],
-        EP: props.chart.angles["Eq Asc"],
-      };
-      chartPoints = configManager.getChartPointsEcliptical();
+  // Rotate to RAMC - 270
+  if (props.view === ChartViews.RIGHT_ASCENSION) {
+    innerCoords = rotateCoordinatesInRA({ ...innerCoords }, props.chart.ramc);
+    if (outerCoords) {
+      outerCoords = rotateCoordinatesInRA({ ...outerCoords }, props.chart.ramc);
     }
-    else if (props.view === "mundane") {
-      cusps = defaultCusps;
-      displayOffset = 0;
-      coords = props.chart["mundane"];
-      chartPoints = configManager.getChartPointsMundane();
-    }
-    else if (props.view === "right_ascension") {
-      cusps = defaultCusps;
-      displayOffset = 0;
-      coords = props.chart["right_ascension"];
-      chartPoints = configManager.getChartPointsRightAscension();
-
-      // Rotate to RAMC - 270
-      coords = rotateCoordinatesInRA({ ...coords }, props.chart.ramc);
-    }
-    else {
-      throw new Error(`Invalid view selected: ${props.view}`)
-    }
-    return (
-      <Group>
-        <ChartInfo
-          name={props.chart.name}
-          longitude={props.chart.longitude}
-          latitude={props.chart.latitude}
-          local_datetime={moment.tz(props.chart.local_datetime, props.chart.tz).toString()}
-          placeName={props.chart.placeName}
-        />
-        {/* =========== Chart View ========== */}
-        {
-          props.mode === "chart" &&
-          <Group>
-            <Rings scale={scale} />
-            <CuspLines scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} zodiacal={props.view === "ecliptical"} />
-            <CuspCoords scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} zodiacal={props.view === "ecliptical"} />
-            <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
-            <Planets scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} zodiacal={props.view === "ecliptical"} />
-            <PlanetLocationMarker scale={scale} ringLayer={"outer"} coords={coords} rotationalOffset={displayOffset} />
-            <AspectLines scale={scale}
-              aspects={new AspectManager().getAspectList(coords, coords, "Uniwheel")}
-              coords={coords}
-              rotationalOffset={displayOffset}
-            />
-          </Group>
-        }
-      </Group>
-    )
   }
+
+  const getChartName = () => {
+    return props.outerChart
+      ? props.outerChart.name
+      : props.innerChart.name
+  };
+  const getChartLocalDatetime = () => {
+    return props.outerChart
+      ? moment.tz(props.outerChart.local_datetime, props.outerChart.tz).toString()
+      : moment.tz(props.innerChart.local_datetime, props.innerChart.tz).toString();
+  };
+  const getChartPlaceName = () => {
+    return props.outerChart
+      ? props.outerChart.placeName
+      : props.innerChart.placeName
+  };
+
+  return (
+    <Group>
+      <ChartInfo
+        name={getChartName()}
+        longitude={props.innerChart.longitude}
+        latitude={props.innerChart.latitude}
+        localDatetime={getChartLocalDatetime()}
+        placeName={getChartPlaceName()}
+      />
+
+      <Planets
+        origin={props.origin}
+        chartPoints={chartPoints}
+        ringLayer={props.outerChart && RingLayerEnum.BIWHEEL_INNER || RingLayerEnum.UNIWHEEL}
+        coords={innerCoords}
+        rotationalOffset={displayOffset}
+        zodiacal={isZodiacal}
+      />
+      {
+        props.outerChart &&
+        <Planets
+          origin={props.origin}
+          chartPoints={chartPoints}
+          ringLayer={RingLayerEnum.BIWHEEL_OUTER}
+          coords={outerCoords}
+          rotationalOffset={displayOffset}
+          zodiacal={isZodiacal}
+        />
+      }
+
+      <Rings origin={props.origin} />
+      <CuspLines origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} />
+
+      <CuspCoords origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} />
+      <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
+      <AspectLines scale={scale}
+        aspects={new AspectManager().getAspectList(coords, coords, "Uniwheel")}
+        coords={coords}
+        rotationalOffset={displayOffset}
+      />
+    </Group>
+  )
 
   const showBiwheel = () => {
     let coordsInner;

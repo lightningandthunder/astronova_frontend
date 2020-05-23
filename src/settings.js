@@ -6,7 +6,7 @@ const TITLE = `Nova ${VERSION}`
 const SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"];
 const CUSPS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
 
-const WheelRingEnum = Object.freeze({
+const RingLayerEnum = Object.freeze({
   UNIWHEEL: "Uniwheel",
   BIWHEEL_INNER: "Biwheel Inner",
   BIWHEEL_OUTER: "Biwheel Outer",
@@ -14,6 +14,12 @@ const WheelRingEnum = Object.freeze({
   TRIWHEEL_MIDDLE: "Triwheel Middle",
   TRIWHEEL_OUTER: "Triwheel Outer",
 });
+
+const ChartViews = Object.freeze({
+  ECLIPTICAL: "ecliptical",
+  MUNDANE: "mundane",
+  RIGHT_ASCENSION: "right_ascension",
+})
 
 const CHART_SCALE_DEFAULTS = {
   outerRingRadii: {
@@ -154,6 +160,28 @@ const CHART_SCALE_DEFAULTS = {
   }
 }
 
+const PLANETARY_CHART_POINTS = [
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto",
+]
+
+const ANGLE_CHART_POINTS = [
+  "EP",
+  "WP",
+  "Asc",
+  "MC",
+  "Dsc",
+  "IC",
+]
+
 const PLANET_UNICODE = {
   "Sun": "\u2609",
   "Moon": "\u263D",
@@ -265,7 +293,7 @@ const SIGN_UNICODE = {
 export {
   QUERY_HEADERS,
   API_ADDRESS,
-  WheelRingEnum,
+  RingLayerEnum,
   PLANET_COLORS,
   PLANET_UNICODE,
   SIGN_COLORS,
@@ -276,5 +304,8 @@ export {
   VERSION,
   TITLE,
   ASPECT_UNICODE,
-  ASPECT_COLORS
+  ASPECT_COLORS,
+  PLANETARY_CHART_POINTS,
+  ANGLE_CHART_POINTS,
+  ChartViews,
 };

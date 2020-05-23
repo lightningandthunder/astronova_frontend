@@ -2,13 +2,13 @@ import React from "react";
 import { Text } from "react-konva";
 
 import { derivePoint, parseSign } from "../../../utils/geometry";
-import { SIGN_COLORS, SIGN_UNICODE } from "../../../settings";
+import { SIGN_COLORS, SIGN_UNICODE, RingLayerEnum } from "../../../settings";
 
 export default function PlanetSign(props) {
   const radiusMap = {
-    [WheelRingEnum.UNIWHEEL]: 235,
-    [WheelRingEnum.BIWHEEL_INNER]: 140,
-    [WheelRingEnum.BIWHEEL_OUTER]: 235,
+    [RingLayerEnum.UNIWHEEL]: 235,
+    [RingLayerEnum.BIWHEEL_INNER]: 140,
+    [RingLayerEnum.BIWHEEL_OUTER]: 235,
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
