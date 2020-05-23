@@ -1,32 +1,31 @@
 import logIfDebug from "../utils/logIfDebug";
-import UserConfig from "./UserConfig";
-import { PLANETARY_CHART_POINTS } from "../settings";
+import { PLANETARY_CHART_POINTS, AspectEnum } from "../settings";
 
-DEFAULT_CONFIG = {
+const DEFAULT_CONFIG = {
   chartViews: {
     ecliptical: [...PLANETARY_CHART_POINTS, "Asc", "MC", "EP"],
     mundane: [...PLANETARY_CHART_POINTS, "Asc", "MC"],
     right_ascension: [...PLANETARY_CHART_POINTS, "EP"],
   },
   orbs: {
-    Cnj: 10,
-    Opp: 10,
-    Sqr: 7.5,
-    Sms: 2,
-    Sqq: 2,
-    Tri: 6,
-    Sxt: 6,
+    [AspectEnum.CONJUNCTION]: 10,
+    [AspectEnum.OPPOSITION]: 10,
+    [AspectEnum.SQUARE]: 7.5,
+    [AspectEnum.SEMISQUARE]: 2,
+    [AspectEnum.SESQUISQUARE]: 2,
+    [AspectEnum.TRINE]: 6,
+    [AspectEnum.SEXTILE]: 6,
   },
   showChartMetadata: false,
 };
 
-export default class UserConfig {
+export default class UserConfigLoader {
   constructor() {
     this.storageString = "userConfig";
     this.config = {};
   }
 
-  static loadConfig() {
+  load() {
     const storedConfig = JSON.parse(localStorage.getItem(this.storageString));
     this.config = storedConfig ? storedConfig : Object.assign({}, DEFAULT_CONFIG);
     return this;
@@ -34,7 +33,7 @@ export default class UserConfig {
 
   saveConfig() {
     localStorage.setItem(this.storageString, JSON.stringify(this.config));
-    logIfDebug("Saved user config: ", this.userConfig);
+    logIfDebug("Saved user config: ", this.config);
   }
 
   getPointsForChartView(chartView) {
@@ -46,13 +45,13 @@ export default class UserConfig {
     this.saveConfig();
   }
 
-  getOrbs() {
-    return this.config.orbs;
+  getOrb(aspectName) {
+    return this.config.orbs[aspectName];
   }
 
   setOrbs(orbs) {
     this.config.orbs = orbs;
-    this.saveConfig;
+    this.saveConfig();
   }
 
   getShowChartMetadata() {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Line } from "react-konva";
 
-import { derivePoint } from "../../utils/geometry";
+import { derivePoint } from "../../../utils/geometry";
 import { RingLayerEnum } from "../../../settings";
 
 export default function PlanetLocationMarker(props) {

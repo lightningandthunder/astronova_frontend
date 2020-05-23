@@ -1,139 +1,138 @@
-import Aspect from "../models/Aspect";
-import UserConfigManager from "./UserConfigManager";
+import { AspectEnum } from "../settings";
 
-export default class AspectManager {
-    constructor(configManager=null) {
-        this.manager = configManager ? configManager : new UserConfigManager();
-    }
-    getAspectsFromCoords(charts, angles, mode) {
-        const planetRowVertical = charts[0];
+export default class AspectsLister {
+  constructor(config, coords1, coords2 = null) {
+    this.config = config;
+    this.coords1 = coords1;
+    this.coords2 = coords2;
+  }
 
-        // Need to clean this up and put into a dedicated function to determine
-        // chart points, for the grid cells as well as their contents.
-        planetRowVertical["Asc"] = angles["Asc"];
-        planetRowVertical["MC"] = angles["MC"];
+  getAspects() {
+    if (!this.coords1 || this.coords1.length === 0)
+      return [];
 
-        let planetRowHorizontal = null;
-        if (charts.length > 1 && angles.length > 1) {
-            planetRowHorizontal = charts[1];
-            planetRowHorizontal["Asc"] = angles[1]["Asc"];
-            planetRowHorizontal["MC"] = angles[1]["MC"];
-        } else {
-            planetRowHorizontal = planetRowVertical;
-        }
-        return this.getAspectList(planetRowHorizontal, planetRowVertical, mode)
-    }
+    const compareSingleChart = !!this.coords2;
+    const aspectList = [];
+    const usedKeys = [];
 
-    // Todo: pass in an array or something for coords, so that 
-    // uniwheels don't need to pass the same coordinate set in twice.
-    getAspectList(planetRowHorizontal, planetRowVertical, mode) {
-        const usedKeys = [];
-        const aspectList = [];
-        for (let planet1 of Object.keys(planetRowHorizontal)) {
-            for (let planet2 of Object.keys(planetRowVertical)) {
+    // If only one set of coordinates, just compare that array to itself
+    const planetRowHorizontal = compareSingleChart ? this.coords1 : this.coords2;
 
-                let aspect;
+    const planetRowVertical = this.coords1;
 
-                if (mode === "Uniwheel"
-                    && (planet1 === planet2 || usedKeys.indexOf(planet2) >= 0)) {
-                    // Don't re-parse aspects in Uniwheels
-                    aspect = null;
-                } else {
-                    aspect = this.parseAspect(
-                        planet1,
-                        planetRowHorizontal[planet1],
-                        planet2,
-                        planetRowVertical[planet2]
-                    );
-                }
+    for (let planet1 of Object.keys(planetRowHorizontal)) {
+      for (let planet2 of Object.keys(planetRowVertical)) {
 
-                aspectList.push(aspect);
-            }
+        const aspectWasAlreadyCompared = compareSingleChart
+          ? planet1 === planet2 || usedKeys.indexOf(planet2) >= 0
+          : false;
 
-            usedKeys.push(planet1);
-        }
+        const aspect = aspectWasAlreadyCompared
+          ? null
+          : this._parseAspect(
+            planet1,
+            planetRowHorizontal[planet1],
+            planet2,
+            planetRowVertical[planet2]
+          );
 
-        return aspectList;
+        // Inner loop
+        aspectList.push(aspect);
+      }
+      // Outer loop
+      usedKeys.push(planet1);
     }
 
-    getOrb(longitude1, longitude2, lowbound, highbound) {
-        const aspectAverage = (lowbound + highbound) / 2;
+    return aspectList;
+  }
 
-        const aspect = Math.abs(longitude1 - longitude2);
+  _getOrb(longitude1, longitude2, lowbound, highbound) {
+    const aspectAverage = (lowbound + highbound) / 2;
 
-        // If one longitude is near 360º and the other is near 0º
-        const aspect360 = Math.abs(aspect - 360);
+    const aspect = Math.abs(longitude1 - longitude2);
 
-        if (lowbound <= aspect && aspect <= highbound) {
-            return lowbound === 0
-                ? aspect
-                : Math.abs(aspect - aspectAverage);
-        }
+    // If one longitude is near 360º and the other is near 0º
+    const aspect360 = Math.abs(aspect - 360);
 
-        else if (lowbound <= aspect360 && aspect360 <= highbound) {
-            return lowbound === 0
-                ? aspect360
-                : Math.abs(aspect360 - aspectAverage);
-        }
-
-        return null;
+    if (lowbound <= aspect && aspect <= highbound) {
+      return lowbound === 0
+        ? aspect
+        : Math.abs(aspect - aspectAverage);
     }
 
-    parseAspect(pname1, plong1, pname2, plong2) {
-        let orb = null;
-
-        // Conjunction
-        const cnjOrb = this.manager.getOrb("Cnj");
-        orb = this.getOrb(plong1, plong2, 0, cnjOrb);
-        if (orb !== null) {
-            // console.log(`${pname1} ${orb} ${pname2}`);
-            return new Aspect(pname1, pname2, orb, "Cnj");
-        }
-
-        // Opposition
-        const oppOrb = this.manager.getOrb("Opp");
-        orb = this.getOrb(plong1, plong2, 180 - oppOrb, 180 + oppOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 180, "Opp");
-        }
-
-        // Square
-        const sqrOrb = this.manager.getOrb("Sqr");
-        orb = this.getOrb(plong1, plong2, 90 - sqrOrb, 90 + sqrOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 90, "Sqr");
-        }
-
-        // Trine
-        const triOrb = this.manager.getOrb("Tri");
-        orb = this.getOrb(plong1, plong2, 120 - triOrb, 120 + triOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 120, "Tri");
-        }
-
-        // Sextile
-        const sxtOrb = this.manager.getOrb("Sxt");
-        orb = this.getOrb(plong1, plong2, 60 - sxtOrb, 60 + sxtOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 60, "Sxt");
-        }
-
-        // Semisquare
-        const smsOrb = this.manager.getOrb("Sms");
-        orb = this.getOrb(plong1, plong2, 45 - smsOrb, 45 + smsOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 45, "Sms");
-        }
-
-        // Sesquisquare
-        const sqqOrb = this.manager.getOrb("Sqq");
-        orb = this.getOrb(plong1, plong2, 135 - sqqOrb, 135 + sqqOrb);
-        if (orb !== null) {
-            return new Aspect(pname1, pname2, orb % 135, "Sqq");
-        }
-
-        return new Aspect(pname1, pname2, null, null);
+    else if (lowbound <= aspect360 && aspect360 <= highbound) {
+      return lowbound === 0
+        ? aspect360
+        : Math.abs(aspect360 - aspectAverage);
     }
+
+    return null;
+  }
+
+  _parseAspect(pname1, plong1, pname2, plong2) {
+    let orb = null;
+
+    // Conjunction
+    const cnjOrb = this.config.getOrb(AspectEnum.CONJUNCTION);
+    orb = this._getOrb(plong1, plong2, 0, cnjOrb);
+    if (orb !== null) {
+      // console.log(`${pname1} ${orb} ${pname2}`);
+      return new Aspect(pname1, pname2, orb, AspectEnum.CONJUNCTION);
+    }
+
+    // Opposition
+    const oppOrb = this.config.getOrb(AspectEnum.OPPOSITION);
+    orb = this._getOrb(plong1, plong2, 180 - oppOrb, 180 + oppOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 180, AspectEnum.OPPOSITION);
+    }
+
+    // Square
+    const sqrOrb = this.config.getOrb(AspectEnum.SQUARE);
+    orb = this._getOrb(plong1, plong2, 90 - sqrOrb, 90 + sqrOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 90, AspectEnum.SQUARE);
+    }
+
+    // Trine
+    const triOrb = this.config.getOrb(AspectEnum.TRINE);
+    orb = this._getOrb(plong1, plong2, 120 - triOrb, 120 + triOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 120, AspectEnum.TRINE);
+    }
+
+    // Sextile
+    const sxtOrb = this.config.getOrb(AspectEnum.SEXTILE);
+    orb = this._getOrb(plong1, plong2, 60 - sxtOrb, 60 + sxtOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 60, AspectEnum.SEXTILE);
+    }
+
+    // Semisquare
+    const smsOrb = this.config.getOrb(AspectEnum.SEMISQUARE);
+    orb = this._getOrb(plong1, plong2, 45 - smsOrb, 45 + smsOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 45, AspectEnum.SEMISQUARE);
+    }
+
+    // Sesquisquare
+    const sqqOrb = this.config.getOrb(AspectEnum.SESQUISQUARE);
+    orb = this._getOrb(plong1, plong2, 135 - sqqOrb, 135 + sqqOrb);
+    if (orb !== null) {
+      return new Aspect(pname1, pname2, orb % 135, AspectEnum.SESQUISQUARE);
+    }
+
+    return new Aspect(pname1, pname2, null, null);
+  }
+}
+
+class Aspect {
+  constructor(planet1, planet2, orb, aspectType) {
+    this.planet1 = planet1;
+    this.planet2 = planet2;
+    this.orb = orb;
+    this.aspectType = aspectType;
+  }
 }
 
 /*

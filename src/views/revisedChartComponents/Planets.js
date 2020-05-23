@@ -3,11 +3,11 @@ import { Group } from "react-konva";
 
 import { getRenderCoords } from "../../utils/geometry";
 import PlanetCoords from "../../models/PlanetCoords";
-import { PlanetDegrees } from "./planetComponents/PlanetDegrees";
-import { PlanetMinutes } from "./planetComponents/PlanetMinutes";
-import { PlanetSign } from "./planetComponents/PlanetSign";
-import { PlanetSymbol } from "./planetComponents/PlanetSymbol";
-import { PlanetLocationMarker } from "./planetComponents/PlanetLocationMarker";
+import PlanetDegrees from "./planetComponents/PlanetDegrees";
+import PlanetMinutes from "./planetComponents/PlanetMinutes";
+import PlanetSign from "./planetComponents/PlanetSign";
+import PlanetSymbol from "./planetComponents/PlanetSymbol";
+import PlanetLocationMarker from "./planetComponents/PlanetLocationMarker";
 import { RingLayerEnum } from "../../settings";
 
 export default function Planets(props) {
@@ -21,12 +21,12 @@ export default function Planets(props) {
   const minradius = radiusMap[props.ringLayer] * props.scaleFactor;
 
   const adjustedCoords = getRenderCoords(new PlanetCoords(props.coords), minradius);
-  const dataBundles = adjustedCoords.map(planet => (
+  const dataBundles = Object.keys(adjustedCoords).map(key => (
     {
       // These change per planet object from adjustedCoords
-      planetName: planet.name,
-      rawCoordinate: planet.rawCoord,
-      renderCoordinate: planet.renderCoord,
+      planetName: adjustedCoords[key].name,
+      rawCoordinate: adjustedCoords[key].rawCoord,
+      renderCoordinate: adjustedCoords[key].renderCoord,
 
       // These do not change
       origin: props.origin,
@@ -39,13 +39,13 @@ export default function Planets(props) {
 
   return (
     <Group>
-      {Object.keys(dataBundles).map((data) => (
-        <Group key={data.planetName}>
-          <PlanetSign {...data} />
-          <PlanetSymbol {...data} />
-          <PlanetDegrees {...data} />
-          <PlanetMinutes {...data} />
-          <PlanetLocationMarker {...data} />
+      {Object.keys(dataBundles).map((key) => (
+        <Group key={dataBundles[key].planetName}>
+          <PlanetSign {...dataBundles[key]} />
+          <PlanetSymbol {...dataBundles[key]} />
+          <PlanetDegrees {...dataBundles[key]} />
+          <PlanetMinutes {...dataBundles[key]} />
+          <PlanetLocationMarker {...dataBundles[key]} />
         </Group>
       ))}
     </Group>

@@ -10,7 +10,6 @@ export default function PlanetSign(props) {
     [RingLayerEnum.BIWHEEL_INNER]: 140,
     [RingLayerEnum.BIWHEEL_OUTER]: 235,
   };
-
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
 
   const house = Math.trunc(props.rawCoordinate / 30) + 1;

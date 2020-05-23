@@ -1,12 +1,13 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 import { derivePoint, avgCoords } from "../../utils/geometry";
+import { RingLayerEnum } from "../../settings";
 
 export default function HouseNumbers(props) {
   const radiusMap = {
-    [RingLayerEnum.UNIWHEEL]: 210,
-    [RingLayerEnum.BIWHEEL_INNER]: 120,
-    [RingLayerEnum.BIWHEEL_OUTER]: 220,
+    [RingLayerEnum.UNIWHEEL]: 155,
+    [RingLayerEnum.BIWHEEL_INNER]: 90,
+    [RingLayerEnum.BIWHEEL_OUTER]: 90,
   };
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
 
@@ -18,7 +19,7 @@ export default function HouseNumbers(props) {
   }
 
   const houseNumber = (num, coord) => {
-    const [x, y] = derivePoint(props.origin, coord, radius, props.cuspOffset)
+    const [x, y] = derivePoint(props.origin, coord, radius, props.rotationalOffset)
     return (
       <Text key={`${num}-HouseNumber`}
         x={x}

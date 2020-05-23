@@ -1,14 +1,14 @@
 import React from "react";
 import { Line, Group } from "react-konva";
 import { derivePoint } from "../../utils/geometry";
-import { ASPECT_COLORS } from "../../settings";
+import { ASPECT_COLORS, AspectEnum } from "../../settings";
 
 export default function AspectLines(props) {
-  const aspects = props.aspects;
-  const dashedAspects = ["Tri", "Sxt"];
+  // const aspects = props.aspects;
+  const dashedAspects = [AspectEnum.TRINE, AspectEnum.SEXTILE];
 
   const aspectLine = (aspect) => {
-    if (aspect && aspect.aspectType && aspect.aspectType !== "Cnj") {
+    if (aspect && aspect.aspectType !== AspectEnum.CONJUNCTION) {
       const pos1 = props.coords[aspect.planet1];
       const pos2 = props.coords[aspect.planet2];
 
@@ -28,7 +28,7 @@ export default function AspectLines(props) {
 
   return (
     <Group>
-      {aspects.map(aspect => (
+      {props.aspects.map(aspect => (
         aspectLine(aspect)
       ))}
     </Group>

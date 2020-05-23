@@ -8,7 +8,8 @@ import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import RelocatePopup from "./views/modals/RelocatePopup"
 import logIfDebug from './utils/logIfDebug';
-import Chart from './views/Chart';
+// import Chart from './views/Chart';
+import Chart from './views/revisedChartComponents/RevisedChart';
 import ViewButtons from "./views/ViewButtons";
 import ModeButtons from "./views/ModeButtons";
 import { TITLE } from "./settings";
@@ -139,9 +140,18 @@ class App extends React.Component {
             <Chart
               width={window.innerWidth * 0.8}
               height={window.innerHeight}
-              chart={this.state.selectedChart}
-              view={this.state.view}
-              mode={this.state.mode}
+              innerChart={
+                this.state.selectedChart && this.state.selectedChart.radix
+                  ? this.state.selectedChart.radix
+                  : this.state.selectedChart
+              }
+              outerChart={
+                this.state.selectedChart && this.state.selectedChart.returnChart
+                  ? this.state.selectedChart.returnChart
+                  : null
+              }
+              middleChart={null}
+              chartView={this.state.view}
               scaleFactor={defaultScaleFactor}
             />
           }

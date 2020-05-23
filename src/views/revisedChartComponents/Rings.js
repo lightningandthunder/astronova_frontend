@@ -1,5 +1,6 @@
 import React from "react";
 import { Ring, Group } from "react-konva";
+import { RingLayerEnum } from "../../settings";
 
 export default function Rings(props) {
   const houseRingInnerRadiusMap = {

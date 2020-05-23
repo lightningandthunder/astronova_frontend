@@ -4,76 +4,74 @@ import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
 import { SIGN_UNICODE, SIGN_COLORS } from "../../settings";
 
 export default function CuspCoords(props) {
-    const cuspSign = (cusp, coord) => {
-        const house = Math.trunc(coord / 30) + 1;
-        const sign = props.zodiacal ? parseSign(coord) : house;
-        const [x, y] = derivePoint(props.scale.origin, coord, props.scale.cuspSignRadius, props.cuspOffset);
-        return (
-            <Text
-                x={x}
-                y={y}
-                key={`${cusp}-Sign`}
-                text={props.zodiacal ? SIGN_UNICODE[sign] : house}
-                stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
-                strokeWidth={1}
-                fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
-                fontSize={props.zodiacal ? props.scale.planetFontSize : props.scale.planetDegreeFontSize}
-                offsetX={props.scale.cuspSignOffsetX}
-                offsetY={props.scale.cuspSignOffsetY}
-            />
-        )
-    }
+  const radius = 315 * props.scaleFactor;
 
-    const cuspDegrees = (cusp, coord) => {
-        // Cusps 7-12 need to have degrees and minutes in opposite places for readability
-        const offset = cusp <= 6
-            ? props.scale.cuspDegreesRotationalOffset
-            : props.scale.cuspMinutesRotationalOffset
-        const adjustedCoordPos = Math.trunc(coord + offset);
-        const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
-        return (
-            <Text key={`${cusp}-Degrees`}
-                x={x}
-                y={y}
-                text={`${Math.trunc(coord % 30)}\u00B0`}
-                fontSize={props.scale.cuspDegreesFontSize}
-                strokeWidth={1}
-                offsetX={props.scale.cuspDegreesOffsetX}
-                offsetY={props.scale.cuspDegreesOffsetY}
-            />
-        )
-    }
-
-    const cuspMins = (cusp, coord) => {
-        // Cusps 7-12 need to have degrees and minutes in opposite places for readability
-        const offset = cusp <= 6
-            ? props.scale.cuspMinutesRotationalOffset
-            : props.scale.cuspDegreesRotationalOffset
-        const adjustedCoordPos = Math.trunc(coord + offset);
-        const mins = degToMin(coord);
-        const [x, y] = derivePoint(props.scale.origin, adjustedCoordPos, props.scale.cuspSignRadius, props.cuspOffset);
-        return (
-            <Text key={`${cusp}-Minutes`}
-                x={x}
-                y={y}
-                text={`${mins}'`}
-                fontSize={props.scale.cuspMinsFontSize}
-                strokeWidth={1}
-                offsetX={props.scale.cuspMinsOffsetX}
-                offsetY={props.scale.cuspMinsOffsetY}
-            />
-        )
-    }
-
+  const cuspSign = (cusp, coord) => {
+    const house = Math.trunc(coord / 30) + 1;
+    const sign = props.isZodiacal ? parseSign(coord) : house;
+    const [x, y] = derivePoint(props.origin, coord, radius, props.rotationalOffset);
     return (
-        <Group>
-            {Object.keys(props.cusps).map((cusp, index) => (
-                [cuspSign(cusp, props.cusps[index + 1]),
-                cuspDegrees(cusp, props.cusps[index + 1]),
-                cuspMins(cusp, props.cusps[index + 1])]
-            ))}
-        </Group>
+      <Text
+        x={x}
+        y={y}
+        key={`${cusp}-Sign`}
+        text={props.isZodiacal ? SIGN_UNICODE[sign] : house}
+        stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
+        strokeWidth={1}
+        fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
+        fontSize={(props.isZodiacal ? 22 : 14) * props.scaleFactor}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
+      />
     )
+  }
+
+  const cuspDegrees = (cusp, coord) => {
+    // Cusps 7-12 need to have degrees and minutes in opposite places for readability
+    const offset = (cusp <= 6 ? -4 : 4) * props.scaleFactor;
+    const adjustedCoordPos = Math.trunc(coord + offset);  // TODO: Can I remove Math.trunc?
+    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.rotationalOffset);
+    return (
+      <Text key={`${cusp}-Degrees`}
+        x={x}
+        y={y}
+        text={`${Math.trunc(coord % 30)}\u00B0`}
+        fontSize={14 * props.scaleFactor}
+        strokeWidth={1}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
+      />
+    )
+  }
+
+  const cuspMins = (cusp, coord) => {
+    // Cusps 7-12 need to have degrees and minutes in opposite places for readability
+    const offset = (cusp <= 6 ? 4 : -4) * props.scaleFactor;
+    const adjustedCoordPos = Math.trunc(coord + offset);   // TODO: Can I remove Math.trunc?
+    const mins = degToMin(coord);
+    const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.rotationalOffset);
+    return (
+      <Text key={`${cusp}-Minutes`}
+        x={x}
+        y={y}
+        text={`${mins}'`}
+        fontSize={14 * props.scaleFactor}
+        strokeWidth={1}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
+      />
+    )
+  }
+
+  return (
+    <Group>
+      {Object.keys(props.cusps).map((cusp, index) => (
+        [cuspSign(cusp, props.cusps[index + 1]),
+        cuspDegrees(cusp, props.cusps[index + 1]),
+        cuspMins(cusp, props.cusps[index + 1])]
+      ))}
+    </Group>
+  )
 }
 
 /*

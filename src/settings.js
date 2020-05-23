@@ -19,7 +19,7 @@ const ChartViews = Object.freeze({
   ECLIPTICAL: "ecliptical",
   MUNDANE: "mundane",
   RIGHT_ASCENSION: "right_ascension",
-})
+});
 
 const AspectEnum = Object.freeze({
   CONJUNCTION: "Cnj",
@@ -29,7 +29,7 @@ const AspectEnum = Object.freeze({
   SESQUISQUARE: "Sqq",
   TRINE: "Tri",
   SEXTILE: "Sxt",
-})
+});
 
 const CHART_SCALE_DEFAULTS = {
   outerRingRadii: {
@@ -226,7 +226,7 @@ const PLANET_COLORS = {
 
 const ASPECT_UNICODE = {
   //AstroDotBasic
-  [AspectAbbreviations.CONJUNCTION]: "m",
+  "Cnj": "m",
   "Opp": "n",
   "Sqr": "o",
   "Sms": "t",
