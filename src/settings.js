@@ -21,6 +21,16 @@ const ChartViews = Object.freeze({
   RIGHT_ASCENSION: "right_ascension",
 })
 
+const AspectEnum = Object.freeze({
+  CONJUNCTION: "Cnj",
+  OPPOSITION: "Opp",
+  SQUARE: "Sqr",
+  SEMISQUARE: "Sms",
+  SESQUISQUARE: "Sqq",
+  TRINE: "Tri",
+  SEXTILE: "Sxt",
+})
+
 const CHART_SCALE_DEFAULTS = {
   outerRingRadii: {
     signRingOuterRadius: 330,
@@ -216,7 +226,7 @@ const PLANET_COLORS = {
 
 const ASPECT_UNICODE = {
   //AstroDotBasic
-  "Cnj": "m",
+  [AspectAbbreviations.CONJUNCTION]: "m",
   "Opp": "n",
   "Sqr": "o",
   "Sms": "t",
@@ -308,4 +318,5 @@ export {
   PLANETARY_CHART_POINTS,
   ANGLE_CHART_POINTS,
   ChartViews,
+  AspectEnum,
 };

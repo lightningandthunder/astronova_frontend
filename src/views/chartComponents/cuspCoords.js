@@ -5,12 +5,6 @@ import { SIGN_UNICODE, SIGN_COLORS } from "../../settings";
 
 export default function CuspCoords(props) {
   const radius = 315 * props.scaleFactor;
-  const planetFontSize = 22 * props.scaleFactor;
-  const planetDegreeFontSize = 14 * props.scaleFactor;
-  const cuspSignOffsetX = 8 * props.scaleFactor;
-  const cuspSignOffsetY = 8 * props.scaleFactor;
-  const clockwiseOffset = 4 * props.scaleFactor;
-  const cuspDegreesFontSize = 8 * props.scaleFactor;
 
   const cuspSign = (cusp, coord) => {
     const house = Math.trunc(coord / 30) + 1;
@@ -25,18 +19,16 @@ export default function CuspCoords(props) {
         stroke={props.zodiacal ? SIGN_COLORS[sign] : "black"}
         strokeWidth={1}
         fontFamily={props.zodiacal ? "AstroDotBasic" : "Arial"}
-        fontSize={props.zodiacal ? planetFontSize : planetDegreeFontSize}
-        offsetX={cuspSignOffsetX}
-        offsetY={cuspSignOffsetY}
+        fontSize={(props.zodiacal ? 22 : 14) * props.scaleFactor}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
       />
     )
   }
 
   const cuspDegrees = (cusp, coord) => {
     // Cusps 7-12 need to have degrees and minutes in opposite places for readability
-    const offset = cusp <= 6
-      ? clockwiseOffset * -1
-      : clockwiseOffset
+    const offset = (cusp <= 6 ? -4 : 4) * props.scaleFactor;
     const adjustedCoordPos = Math.trunc(coord + offset);  // TODO: Can I remove Math.trunc?
     const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.cuspOffset);
     return (
@@ -44,19 +36,17 @@ export default function CuspCoords(props) {
         x={x}
         y={y}
         text={`${Math.trunc(coord % 30)}\u00B0`}
-        fontSize={cuspDegreesFontSize}
+        fontSize={8 * props.scaleFactor}
         strokeWidth={1}
-        offsetX={props.scale.cuspDegreesOffsetX}
-        offsetY={props.scale.cuspDegreesOffsetY}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
       />
     )
   }
 
   const cuspMins = (cusp, coord) => {
     // Cusps 7-12 need to have degrees and minutes in opposite places for readability
-    const offset = cusp <= 6
-      ? clockwiseOffset
-      : clockwiseOffset * -1
+    const offset = (cusp <= 6 ? 4 : -4) * props.scaleFactor;
     const adjustedCoordPos = Math.trunc(coord + offset);   // TODO: Can I remove Math.trunc?
     const mins = degToMin(coord);
     const [x, y] = derivePoint(props.origin, adjustedCoordPos, radius, props.cuspOffset);
@@ -65,10 +55,10 @@ export default function CuspCoords(props) {
         x={x}
         y={y}
         text={`${mins}'`}
-        fontSize={props.scale.cuspMinsFontSize}
+        fontSize={14 * props.scaleFactor}
         strokeWidth={1}
-        offsetX={props.scale.cuspMinsOffsetX}
-        offsetY={props.scale.cuspMinsOffsetY}
+        offsetX={8 * props.scaleFactor}
+        offsetY={8 * props.scaleFactor}
       />
     )
   }

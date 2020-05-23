@@ -2,16 +2,16 @@ import React from "react";
 import { Stage, Layer, Group } from "react-konva";
 import moment from "moment-timezone";
 
-import HouseNumbers from "../chartComponents/houseNumbers";
+import HouseNumbers from "./HouseNumbers";
 import CuspCoords from "./CuspCoords";
 import CuspLines from "./CuspLines";
 import Planets from "./Planets";
 import Rings from "./Rings";
-import BiwheelDivider from "../chartComponents/BiwheelDivider"
+import BiwheelDivider from "./BiwheelDivider"
 import ChartInfo from "../chartComponents/ChartInfo";
 import { rotateCoordinatesInRA } from "../utils/geometry";
 import AspectManager from "../managers/AspectManager";
-import AspectLines from "../chartComponents/AspectLines";
+import AspectLines from "./AspectLines";
 import UserConfig from "../../models/UserConfig";
 import { RingLayerEnum, ChartViews } from "../../settings";
 
@@ -77,6 +77,7 @@ export default function Chart(props) {
         latitude={props.innerChart.latitude}
         localDatetime={getChartLocalDatetime()}
         placeName={getChartPlaceName()}
+        scaleFactor={props.scaleFactor}
       />
 
       <Planets
@@ -86,6 +87,7 @@ export default function Chart(props) {
         coords={innerCoords}
         rotationalOffset={displayOffset}
         zodiacal={isZodiacal}
+        scaleFactor={props.scaleFactor}
       />
       {
         props.outerChart &&
@@ -96,19 +98,25 @@ export default function Chart(props) {
           coords={outerCoords}
           rotationalOffset={displayOffset}
           zodiacal={isZodiacal}
+          scaleFactor={props.scaleFactor}
         />
       }
 
-      <Rings origin={props.origin} />
-      <CuspLines origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} />
+      <Rings origin={props.origin} scaleFactor={props.scaleFactor} />
+      <CuspLines origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} scaleFactor={props.scaleFactor} />
+      <CuspCoords origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} scaleFactor={props.scaleFactor} />
+      <HouseNumbers origin={props.origin} cusps={cusps} cuspOffset={displayOffset} scaleFactor={props.scaleFactor} />
 
-      <CuspCoords origin={props.origin} cusps={cusps} cuspOffset={displayOffset} zodiacal={isZodiacal} />
-      <HouseNumbers scale={scale} coords={coords} cusps={cusps} cuspOffset={displayOffset} />
       <AspectLines scale={scale}
         aspects={new AspectManager().getAspectList(coords, coords, "Uniwheel")}
         coords={coords}
         rotationalOffset={displayOffset}
+        scaleFactor={props.scaleFactor}
       />
+      {
+        props.outerChart &&
+        <BiwheelDivider origin={props.origin} scaleFactor={props.scaleFactor} />
+      }
     </Group>
   )
 
