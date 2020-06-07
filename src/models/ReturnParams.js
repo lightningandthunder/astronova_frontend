@@ -1,4 +1,4 @@
-export default class ReturnParams {
+export default class SolunarParams {
     constructor(return_planet, return_harmonic, return_longitude,
         return_latitude, return_start_date, tz, return_quantity) {
         this.return_planet = return_planet;

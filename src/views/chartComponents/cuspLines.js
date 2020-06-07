@@ -6,7 +6,7 @@ import { RingLayerEnum } from "../../settings";
 export default function CuspLines(props) {
   const angularCusps = [1, 4, 7, 10];
   const succedentCusps = [2, 5, 8, 11];
-  const cadentCusps = [3, 6, 9, 12];
+  // const cadentCusps = [3, 6, 9, 12];
 
   const houseRingInnerRadiusMap = {
     [RingLayerEnum.UNIWHEEL]: 140,

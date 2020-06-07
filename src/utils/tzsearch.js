@@ -1,4 +1,4 @@
-import logIfDebug from './logIfDebug';
+import logIfDebug from './utils';
 
 const tzlookup = require('tz-lookup');
 

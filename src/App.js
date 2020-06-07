@@ -1,32 +1,33 @@
 import React from 'react';
 import './styles/App.css';
 import './styles/index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Chartlist from './views/chartlist';
 import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import RelocatePopup from "./views/modals/RelocatePopup"
-import logIfDebug from './utils/logIfDebug';
-// import Chart from './views/Chart';
-import Chart from './views/revisedChartComponents/RevisedChart';
+import logIfDebug from './utils/utils';
+import Chart from './views/chartComponents/Chart';
 import ViewButtons from "./views/ViewButtons";
 import ModeButtons from "./views/ModeButtons";
-import { TITLE } from "./settings";
+import { TITLE, WheelTypes } from "./settings";
+import Kofi from "./views/ko-fi/Kofi";
+import { errorService } from "./services/errorService";
+import ErrorAlert from "./views/ErrorAlert";
 
-const defaultScaleFactor = Math.min(
-  window.innerHeight / 675,  // Diameter of the chart, with padding
-  window.innerWidth * 0.8 / 675 // If the window is tall but narrow, leave room for controls
-);
+const defaultScaleFactor = window.innerHeight / 680  // Diameter of the chart, with padding
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       charts: [],
-      selectedChart: undefined,
+      selectedChart: null,
       view: "ecliptical",
-      mode: "chart"
+      mode: "chart",
+      error: null,
     }
 
     this.addChartToState = this.saveChart.bind(this);
@@ -38,6 +39,9 @@ class App extends React.Component {
     this.handleModeChange = this.handleModeChange.bind(this);
     this.deleteChart = this.deleteChart.bind(this);
     this.splitCharts = this.splitCharts.bind(this);
+    this.handleError = this.handleError.bind(this);
+
+    this.errorSubscription = errorService.onError().subscribe(err => this.setState({ error: err }));
   }
 
   /* ================ Lifecycle hooks ================ */
@@ -57,6 +61,10 @@ class App extends React.Component {
     }
     else
       logIfDebug("Found no selected chart in LS");
+  }
+
+  componentWillUnmount() {
+    this.errorSubscription.unsubscribe();
   }
 
   /* ================ onChange methods ================ */
@@ -92,11 +100,10 @@ class App extends React.Component {
   }
 
   splitCharts(chart) {
-    if (chart.type !== "Uniwheel") {
-      this.saveChart(chart.radix, chart.returnChart);
+    if (chart.type !== WheelTypes.UNIWHEEL) {
+      this.saveChart(chart.radix, chart.solunar);
       this.onChangeSelectedChart(this.state.charts[this.state.charts.length - 1]);
     }
-
   }
 
   onChangeSelectedChart(chart) {
@@ -124,6 +131,10 @@ class App extends React.Component {
     this.setState({ mode: e.target.value });
   }
 
+  handleError(err) {
+    this.setState({ error: err });
+  }
+
   resetCharts() {
     localStorage.removeItem('charts');
     localStorage.removeItem('selectedChart')
@@ -133,75 +144,74 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="Chart">
+      <div className="app">
+        <ErrorAlert
+          err={this.state.error}
+          resetError={() => errorService.clearErrors()}
+        />
+        <div className="chart-container">
           {
             this.state.selectedChart &&
-            <Chart
-              width={window.innerWidth * 0.8}
-              height={window.innerHeight}
-              innerChart={
-                this.state.selectedChart && this.state.selectedChart.radix
-                  ? this.state.selectedChart.radix
-                  : this.state.selectedChart
-              }
-              outerChart={
-                this.state.selectedChart && this.state.selectedChart.returnChart
-                  ? this.state.selectedChart.returnChart
-                  : null
-              }
-              middleChart={null}
-              chartView={this.state.view}
-              scaleFactor={defaultScaleFactor}
-            />
+            <div className="Chart">
+              <Chart
+                width={window.innerWidth * 0.8}
+                height={window.innerHeight}
+                innerChart={
+                  this.state.selectedChart && this.state.selectedChart.radix
+                    ? this.state.selectedChart.radix
+                    : this.state.selectedChart
+                }
+                outerChart={
+                  this.state.selectedChart && this.state.selectedChart.solunar
+                    ? this.state.selectedChart.solunar
+                    : null
+                }
+                middleChart={null}
+                chartView={this.state.view}
+                scaleFactor={defaultScaleFactor}
+                handleError={this.handleError}
+              />
+            </div>
           }
-        </div>
-        <div className="ControlPanel">
-          <ViewButtons
-            view={this.state.view}
-            onChangeView={this.handleViewChange}
-          />
-          < ModeButtons
-            mode={this.state.mode}
-            onChangeMode={this.handleModeChange}
-          />
-          <NewChartPopup
-            saveChart={this.saveChart}
-            setSelectedChartToNewest={this.setSelectedChartToNewest}
-          />
-          <RelocatePopup
-            chart={this.state.selectedChart}
-            saveChart={this.saveChart}
-            setSelectedChartToNewest={this.setSelectedChartToNewest}
-            enabled={this.state.selectedChart}
-          />
+          <div className="ControlPanel">
+            <ViewButtons
+              view={this.state.view}
+              onChangeView={this.handleViewChange}
+            />
+            < ModeButtons
+              mode={this.state.mode}
+              onChangeMode={this.handleModeChange}
+            />
+            <NewChartPopup
+              saveChart={this.saveChart}
+              setSelectedChartToNewest={this.setSelectedChartToNewest}
+            />
+            <RelocatePopup
+              chart={this.state.selectedChart}
+              saveChart={this.saveChart}
+              setSelectedChartToNewest={this.setSelectedChartToNewest}
+              enabled={this.state.selectedChart}
+            />
 
-          <ReturnChartPopup
-            saveChart={this.saveChart}
-            setSelectedChartToNewest={this.setSelectedChartToNewest}
-            selectedChart={this.state.selectedChart}
-            enabled={this.state.selectedChart
-              && this.state.selectedChart.type === "Uniwheel"}
-          />
-          <ResetChartsButton onClick={this.resetCharts} />
-          <Chartlist className="chartList"
-            charts={this.state.charts ? this.state.charts : []}
-            selectedChart={this.state.selectedChart}
-            onChangeSelectedChart={this.onChangeSelectedChart}
-            deleteChart={this.deleteChart}
-            splitCharts={this.splitCharts}
-          />
-          <div className="donationDiv">
-            <div className="donationText">
-              Want to support Nova?
-                        </div>
-            <a href='https://ko-fi.com/T6T019VKL' target='_blank' rel="noopener noreferrer" >
-              <img height='36'
-                style={{ border: "0px", height: "36px" }}
-                src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=2'
-                border='0'
-                alt='Buy Me a Coffee at ko-fi.com' />
-            </a>
+            <ReturnChartPopup
+              saveChart={this.saveChart}
+              setSelectedChartToNewest={this.setSelectedChartToNewest}
+              selectedChart={this.state.selectedChart}
+              enabled={this.state.selectedChart
+                && this.state.selectedChart.type === "Uniwheel"}
+            />
+            <ResetChartsButton
+              onClick={this.resetCharts}
+            />
+            <Chartlist className="chartList"
+              charts={this.state.charts ? this.state.charts : []}
+              selectedChart={this.state.selectedChart}
+              onChangeSelectedChart={this.onChangeSelectedChart}
+              deleteChart={this.deleteChart}
+              splitCharts={this.splitCharts}
+              handleError={this.handleError}
+            />
+            <Kofi></Kofi>
           </div>
         </div>
       </div>
@@ -213,7 +223,7 @@ export default App;
 
 /*
 * Nova, a free sidereal astrological tool.
-* Copyright (C) 2019  Mike Verducci
+* Copyright (C) 2019 Mike Verducci
 * This project is under the GNU General Public License V3.
 * The full license may be found in src/LICENSE.txt
 */

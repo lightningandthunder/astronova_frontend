@@ -7,7 +7,7 @@ import Location from '../models/Location';
 
 import axios from "axios";
 import tzsearch from './tzsearch';
-import logIfDebug from '../utils/logIfDebug';
+import logIfDebug from './utils';
 
 export default async function geosearch(q) {
     const limit = "1";
@@ -33,7 +33,9 @@ export default async function geosearch(q) {
         // Normalize place name
         let placeArray = res.data.display_name.split(",");
         res.data.placeName = placeArray.length > 3
+            // First, third, and last parts of name
             ? [placeArray[0], placeArray[2], placeArray[placeArray.length - 1]].join(",")
+            // Fist and last parts of name
             : [placeArray[0], placeArray[placeArray.length - 1]].join(",")
 
         return new Location(res);

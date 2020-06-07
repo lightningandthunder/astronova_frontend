@@ -21,6 +21,7 @@ const DEFAULT_CUSPS = {
 };
 
 export default function Chart(props) {
+  console.log(props)
   const getChartName = () => {
     return props.outerChart
       ? props.outerChart.name
@@ -71,71 +72,74 @@ export default function Chart(props) {
     scaleFactor: props.scaleFactor,
     chartPoints: chartPoints,
     cusps: cusps,
-  }
+  };
   const aspectLister = new AspectsLister(config, innerCoords, outerCoords);
   const aspects = aspectLister.getAspects();
 
   return (
-    <Stage width={props.width} height={props.height}>
-      <Layer>
-        <Group>
-          {/* Uniwheel components */}
-          <ChartInfo
-            name={getChartName()}
-            longitude={props.innerChart.longitude}
-            latitude={props.innerChart.latitude}
-            localDatetime={getChartLocalDatetime()}
-            placeName={getChartPlaceName()}
-            scaleFactor={props.scaleFactor}
-          />
+    <div>
 
-          <Planets
-            ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-            coords={innerCoords}
-            {...propData}
-          />
-          <Rings
-            ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-            {...propData}
-          />
-
-          <CuspLines
-            {...propData}
-            ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-          />
-          <CuspCoords {...propData} />
-          <HouseNumbers
-            {...propData}
-            ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-          />
-
-          {/* Only show aspect lines for uniwheels */}
-          {
-            !props.outerChart &&
-            <AspectLines
-              aspects={aspects}
+      <Stage width={props.width} height={props.height}>
+        <Layer>
+          <Group>
+            {/* Uniwheel components */}
+            <ChartInfo
+              name={getChartName()}
+              longitude={props.innerChart.longitude}
+              latitude={props.innerChart.latitude}
+              localDatetime={getChartLocalDatetime()}
+              placeName={getChartPlaceName()}
+              scaleFactor={props.scaleFactor}
+            />
+            <Rings
+              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
+              {...propData}
+            />
+            <Planets
+              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
               coords={innerCoords}
               {...propData}
             />
-          }
 
-          {/* Biwheel-specific components */}
-          {
-            props.outerChart &&
-            <Group>
-              <BiwheelDivider {...propData} />
-              <Planets ringLayer={RingLayerEnum.BIWHEEL_OUTER} coords={outerCoords} {...propData} />
-            </Group>
-          }
-        </Group>
-      </Layer>
-    </Stage>
+
+            <CuspLines
+              {...propData}
+              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
+            />
+            <CuspCoords {...propData} />
+            <HouseNumbers
+              {...propData}
+              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
+            />
+
+            {/* Only show aspect lines for uniwheels */}
+            {
+              !props.outerChart &&
+              <AspectLines
+                aspects={aspects}
+                coords={innerCoords}
+                {...propData}
+              />
+            }
+
+            {/* Biwheel-specific components */}
+            {
+              props.outerChart &&
+              <Group>
+                <BiwheelDivider {...propData} />
+                <Planets ringLayer={RingLayerEnum.BIWHEEL_OUTER} coords={outerCoords} {...propData} />
+              </Group>
+            }
+          </Group>
+        </Layer>
+      </Stage>
+    </div>
   )
 }
 
 /*
 * Nova, a free sidereal astrological tool.
-* Copyright (C) 2019  Mike Verducci
+* Copyright (C) 2019 Mike Verducci
 * This project is under the GNU General Public License V3.
 * The full license may be found in src/LICENSE.txt
 */

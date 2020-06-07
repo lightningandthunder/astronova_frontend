@@ -31,6 +31,12 @@ const AspectEnum = Object.freeze({
   SEXTILE: "Sxt",
 });
 
+const WheelTypes = Object.freeze({
+  UNIWHEEL: "Uniwheel",
+  BIWHEEL: "Biwheel",
+  TRIWHEEL: "Triwheel",
+})
+
 const CHART_SCALE_DEFAULTS = {
   outerRingRadii: {
     signRingOuterRadius: 330,
@@ -319,4 +325,5 @@ export {
   ANGLE_CHART_POINTS,
   ChartViews,
   AspectEnum,
+  WheelTypes,
 };

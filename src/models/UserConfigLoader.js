@@ -1,4 +1,4 @@
-import logIfDebug from "../utils/logIfDebug";
+import logIfDebug from "../utils/utils";
 import { PLANETARY_CHART_POINTS, AspectEnum } from "../settings";
 
 const DEFAULT_CONFIG = {

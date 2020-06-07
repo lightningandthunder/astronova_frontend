@@ -3,183 +3,181 @@ import Popup from "reactjs-popup";
 import axios from "axios";
 import moment from "moment-timezone";
 
-import ChartManager from "../../managers/ChartDataManager";
 import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
-import { TIMEZONES } from "../../timezones";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
-import logIfDebug from "../../utils/logIfDebug";
+import logIfDebug from "../../utils/utils";
 import APMToggle from "./APMToggle";
-
-const manager = new ChartManager();
+import Uniwheel from "../../models/Uniwheel";
+import RadixQuery from "../../models/RadixQuery";
+import { errorService } from "../../services/errorService";
+import ErrorAlert from "../ErrorAlert";
 
 export default class NewChartPopup extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isOpen: false,
-            nameInput: undefined,
-            currentSelectedDatetime: undefined,
-            apm: "AM",
-            locationInput: undefined
-        }
-        this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
-        this.handleAPMChange = this.handleAPMChange.bind(this);
-        this.normalizeDateAndTz = this.normalizeDateAndTz.bind(this);
-        this.handleLocationChange = this.handleLocationChange.bind(this);
-        this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
-        this.openPopup = this.openPopup.bind(this);
-        this.closePopup = this.closePopup.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleError = this.handleError.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-    };
-
-    openPopup() {
-        this.setState({ isOpen: true })
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      nameInput: undefined,
+      currentSelectedDatetime: undefined,
+      apm: "AM",
+      locationInput: undefined,
+      err: undefined,
     }
-    closePopup() {
-        this.setState({ isOpen: false })
-    }
-    handleNameChange(event) {
-        this.setState({ nameInput: event.target.value });
-    }
-    handleLocationChange(event) {
-        this.setState({ locationInput: event.target.value });
-    }
-    handleDateTimeChange(event) {
-        this.setState({ currentSelectedDatetime: event.target.value });
-    }
+    this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
+    this.handleAPMChange = this.handleAPMChange.bind(this);
+    this.normalizeDateAndTz = this.normalizeDateAndTz.bind(this);
+    this.handleLocationChange = this.handleLocationChange.bind(this);
+    this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
+    this.openPopup = this.openPopup.bind(this);
+    this.closePopup = this.closePopup.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  };
 
-    handleAPMChange(e) {
-        if (this.state.apm === "AM")
-            this.setState({ apm: "PM" })
-        else
-            this.setState({ apm: "AM" })
+  openPopup() {
+    this.setState({ isOpen: true, err: undefined })
+  }
+  closePopup() {
+    this.setState({ isOpen: false })
+  }
+  handleNameChange(event) {
+    this.setState({ nameInput: event.target.value });
+  }
+  handleLocationChange(event) {
+    this.setState({ locationInput: event.target.value });
+  }
+  handleDateTimeChange(event) {
+    this.setState({ currentSelectedDatetime: event.target.value });
+  }
+
+  handleAPMChange(e) {
+    if (this.state.apm === "AM")
+      this.setState({ apm: "PM" });
+    else
+      this.setState({ apm: "AM" });
+  }
+
+  handleKeyDown(event) {
+    // Recognize pressing return key
+    if (event.keyCode === 13 && this.state.isOpen === true) {
+
+      // Debug powers!
+      if (this.state.nameInput === "debug") {
+        window.novaDebugMode = true;
+        logIfDebug("Wizard mode activated");
+        this.closePopup();
+      } else {
+        // Normal functionality
+        this.queryBackendForRadix();
+      }
     }
+  }
 
-    handleError(err) {
-        //TODO: Eventually make this more robust
-        alert(err.toString());
-    }
-
-    handleKeyDown(event) {
-        // Recognize pressing return key
-        if (event.keyCode === 13 && this.state.isOpen === true) {
-            if (this.state.nameInput === "debug") {
-                window.novaDebugMode = true;
-                logIfDebug("Wizard mode activated");
-                this.closePopup();
-            } else {
-                this.queryBackendForRadix();
-            }
-        }
-    }
-
-    normalizeDateAndTz(originalDate, timezone) {
-        // Validate date format
-        if (!(/^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/).exec(originalDate)) {
-            this.handleError("Invalid datetime!");
-            return;
-        }
-
-        // Validate timezone
-        if (!(TIMEZONES.has(timezone))) {
-            this.handleError("Invalid timezone!");
-            return;
-        }
-
-        const dt = moment.tz(originalDate, timezone);
-        const hour = dt.hour();
-        if (hour === 12 && this.state.apm === "AM")
-            dt.hour(0)
-        else if (0 < hour && hour < 12 && this.state.apm === "PM")
-            dt.hour(hour + 12);
-
-        logIfDebug("Selected datetime: " + dt);
-        return dt;
+  normalizeDateAndTz(originalDate, timezone) {
+    // Validate date format
+    if (!(/^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/).exec(originalDate)) {
+      this.setState({ err: `Invalid datetime: ${originalDate}` });
+      return;
     }
 
-    async queryBackendForRadix() {
-        // Query back end for a single chart.
+    const dt = moment.tz(originalDate, timezone);
+    const hour = dt.hour();
+    if (hour === 12 && this.state.apm === "AM")
+      dt.hour(0);
+    else if (0 < hour && hour < 12 && this.state.apm === "PM")
+      dt.hour(hour + 12);
 
-        const locationQuery = this.state.locationInput;
-        if (!locationQuery || locationQuery.length === 0 || locationQuery.trim().length === 0) {
-            this.handleError("Invalid location!");
-            return;
-        }
+    logIfDebug("Selected datetime: " + dt);
+    return dt;
+  }
 
-        const locationResults = await geosearch(locationQuery);
-        if (!locationResults) {
-            this.handleError("No location found! Please try a different location.");
-            return;
-        }
+  async queryBackendForRadix() {
+    // Query back end for a single chart.
 
-        const dt = this.normalizeDateAndTz(this.state.currentSelectedDatetime, locationResults.tz);
+    this.setState({ err: undefined });
 
-        const radixQuery = manager.createRadixQueryFromRaw(dt,
-            locationResults.longitude,
-            locationResults.latitude,
-            locationResults.tz);
-
-        logIfDebug("Radix query: ", radixQuery);
-        const response = await axios.post(
-            API_ADDRESS + "/radix",
-            radixQuery,
-            { headers: QUERY_HEADERS }
-        );
-
-        const err = response.data.err;
-        if (err) {
-            this.handleError(err);
-            return;
-        }
-
-        try {
-            const chartData = JSON.parse(response.data);
-            const newChart = manager.createUniwheel(chartData, locationResults, this.state.nameInput);
-            logIfDebug("New chart: ", newChart);
-            this.props.saveChart(newChart);
-            this.props.setSelectedChartToNewest();
-            this.closePopup();
-            this.setState({ apm: "AM" })
-        } catch (err) {
-            this.handleError(err);
-        }
+    const locationQuery = this.state.locationInput;
+    if (!locationQuery || locationQuery.trim().length === 0) {
+      this.setState({ err: "Invalid location!" });
+      return;
     }
 
+    const locationResults = await geosearch(locationQuery);
+    if (!locationResults) {
+      this.setState({ err: "No location found! Please try a different location." });
+      return;
+    }
 
-    render() {
-        return (
-            <div onKeyDown={this.handleKeyDown}>
-                <button className="NewChartButton" onClick={this.openPopup}>
-                    New Chart
+    const dt = this.normalizeDateAndTz(this.state.currentSelectedDatetime, locationResults.tz);
+    const radixQuery = new RadixQuery(dt, locationResults);
+
+    logIfDebug("Radix query: ", radixQuery);
+    const response = await axios.post(
+      API_ADDRESS + "/radix",
+      radixQuery,
+      { headers: QUERY_HEADERS }
+    );
+    logIfDebug("Raw response: " + response.data);
+
+    if (response.data.err) {
+      this.setState({ err: response.data.err });
+      return;
+    }
+
+    try {
+      const newChart = Uniwheel.fromJSON(response.data)
+        .setName(this.state.nameInput)
+        .setPlaceName(locationResults.placeName);
+      logIfDebug("New chart: ", newChart);
+      this.props.saveChart(newChart);
+      this.props.setSelectedChartToNewest();
+      this.closePopup();
+      this.setState({ apm: "AM" })
+    } catch (err) {
+      if (this.state.open)
+        this.setState({ err: err });
+      else
+        errorService.reportError(err);
+    }
+  }
+
+
+  render() {
+    return (
+      <div onKeyDown={this.handleKeyDown}>
+        <button className="NewChartButton" onClick={this.openPopup}>
+          New Chart
                 </button>
-                <Popup
-                    className="popup"
-                    position="right center"
-                    modal
-                    open={this.state.isOpen}
-                    closeOnDocumentClick
-                    onClose={this.closePopup}
-                >
-                    <div className="NewChartDialog">
-                        < NameInput onChange={this.handleNameChange} />
-                        <div>
-                            <Datepicker onChange={this.handleDateTimeChange} hourAndMinute={true} />
-                            <APMToggle handleAPMChange={this.handleAPMChange} apm={this.state.apm} />
-                        </div>
-                        <LocationInput updateLocation={this.handleLocationChange} />
-                        <div>
-                            <button onClick={this.queryBackendForRadix}>Calculate</button>
-                        </div>
-                    </div>
-                </Popup>
+        <Popup
+          className="popup"
+          position="right center"
+          modal
+          open={this.state.isOpen}
+          closeOnDocumentClick
+          onClose={this.closePopup}
+        >
+          <div className="NewChartDialog">
+            < NameInput onChange={this.handleNameChange} />
+            <div>
+              <Datepicker onChange={this.handleDateTimeChange} hourAndMinute={true} />
+              <APMToggle handleAPMChange={this.handleAPMChange} apm={this.state.apm} />
             </div>
-        );
-    }
+            <LocationInput updateLocation={this.handleLocationChange} />
+            <div>
+              <button onClick={this.queryBackendForRadix}>Calculate</button>
+            </div>
+            <ErrorAlert
+              err={this.state.err}
+              resetError={() => this.setState({ err: undefined })}
+            />
+          </div>
+        </Popup>
+      </div>
+    );
+  }
 
 }
 

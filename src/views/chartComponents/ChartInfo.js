@@ -6,27 +6,29 @@ export default function ChartInfo(props) {
   ** TODO: rewrite this with dynamic font sizing and offset.
   */
 
+  const fontSize = 12 * props.scaleFactor;
+
   return (
     <Group>
       <Text key={`ChartInfoName`}
         x={10}
         y={10}
         text={props.name}
-        fontSize={14}
+        fontSize={fontSize}
         strokeWidth={1}
       />
       <Text key={`ChartInfoPlaceName`}
         x={10}
         y={25}
         text={`${props.placeName}`}
-        fontSize={14}
+        fontSize={fontSize}
         strokeWidth={1}
       />
       <Text key={`ChartInfoGeoCoords`}
         x={10}
         y={40}
         text={`${props.longitude}, ${props.latitude}`}
-        fontSize={14}
+        fontSize={fontSize}
         strokeWidth={1}
       />
       <Text key={`ChartInfoDatetime`}
@@ -34,7 +36,7 @@ export default function ChartInfo(props) {
         y={55}
         // Newline to split long text into 2 shorter lines
         text={props.localDatetime.replace("GMT", "\nGMT")}
-        fontSize={14}
+        fontSize={fontSize}
         strokeWidth={1}
       />
     </Group>
