@@ -8,7 +8,7 @@ import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
 import LocationInput from "./LocationInput";
 import Datepicker from "./datepicker";
 import NameInput from "./NameInput";
-import logIfDebug from "../../utils/utils";
+import { logIfDebug } from "../../utils/utils";
 import APMToggle from "./APMToggle";
 import Uniwheel from "../../models/Uniwheel";
 import RadixQuery from "../../models/RadixQuery";

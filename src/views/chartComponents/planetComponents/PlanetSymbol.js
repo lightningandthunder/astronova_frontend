@@ -2,7 +2,8 @@ import React from "react";
 import { Text } from "react-konva";
 
 import { derivePoint } from "../../../utils/geometry";
-import { PLANET_COLORS, PLANET_UNICODE, RingLayerEnum } from "../../../settings";
+import { getSymbol } from "../../../utils/utils";
+import { PLANET_COLORS, RingLayerEnum } from "../../../settings";
 
 export default function PlanetSymbol(props) {
   const radiusMap = {
@@ -23,7 +24,7 @@ export default function PlanetSymbol(props) {
     <Text key={`${props.planetName}-${radius}-Symbol`}
       x={x}
       y={y}
-      text={PLANET_UNICODE[props.planetName]}
+      text={getSymbol(props.planetName)}
       fontSize={
         textualChartPoints.indexOf(props.planetName) >= 0
           ? 14 * props.scaleFactor

@@ -5,7 +5,7 @@ import axios from "axios";
 import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS, WheelTypes } from "../../settings";
 import LocationInput from "./LocationInput";
-import logIfDebug from "../../utils/utils";
+import { logIfDebug } from "../../utils/utils";
 import { errorService } from "../../services/errorService";
 import RelocationQuery from "../../models/RelocationQuery";
 import Uniwheel from "../../models/Uniwheel";

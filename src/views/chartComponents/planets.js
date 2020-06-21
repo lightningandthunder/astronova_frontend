@@ -2,7 +2,7 @@ import React from "react";
 import { Group } from "react-konva";
 
 import { getRenderCoords } from "../../utils/geometry";
-import PlanetCoords from "../../models/PlanetCoords";
+import CoordAdapter from "../../models/PlanetCoords";
 import PlanetDegrees from "./planetComponents/PlanetDegrees";
 import PlanetMinutes from "./planetComponents/PlanetMinutes";
 import PlanetSign from "./planetComponents/PlanetSign";
@@ -20,7 +20,7 @@ export default function Planets(props) {
   // Smallest radius on which elements need to be readable
   const minradius = radiusMap[props.ringLayer] * props.scaleFactor;
 
-  const adjustedCoords = getRenderCoords(new PlanetCoords(props.coords), minradius);
+  const adjustedCoords = getRenderCoords(new CoordAdapter(props.coords), props.cusps, minradius);
   const dataBundles = Object.keys(adjustedCoords).map(key => (
     {
       // These change per planet object from adjustedCoords

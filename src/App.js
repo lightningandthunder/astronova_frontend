@@ -8,25 +8,26 @@ import ResetChartsButton from './views/ResetChartsButton';
 import NewChartPopup from './views/modals/NewChartPopup';
 import ReturnChartPopup from './views/modals/ReturnChartPopup';
 import RelocatePopup from "./views/modals/RelocatePopup"
-import logIfDebug from './utils/utils';
+import { logIfDebug } from './utils/utils';
 import Chart from './views/chartComponents/Chart';
 import ViewButtons from "./views/ViewButtons";
-import ModeButtons from "./views/ModeButtons";
+import PanelToggle from "./views/PanelToggle";
 import { TITLE, WheelTypes } from "./settings";
 import Kofi from "./views/ko-fi/Kofi";
 import { errorService } from "./services/errorService";
 import ErrorAlert from "./views/ErrorAlert";
+import FontFaceObserver from "fontfaceobserver";
 
-const defaultScaleFactor = window.innerHeight / 680  // Diameter of the chart, with padding
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fontsLoaded: false,
       charts: [],
       selectedChart: null,
       view: "ecliptical",
-      mode: "chart",
+      panelToggle: "controlPanel",
       error: null,
     }
 
@@ -36,10 +37,10 @@ class App extends React.Component {
     this.saveChart = this.saveChart.bind(this);
     this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
     this.handleViewChange = this.handleViewChange.bind(this);
-    this.handleModeChange = this.handleModeChange.bind(this);
     this.deleteChart = this.deleteChart.bind(this);
     this.splitCharts = this.splitCharts.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.onToggleControlPanel = this.onToggleControlPanel.bind(this);
 
     this.errorSubscription = errorService.onError().subscribe(err => this.setState({ error: err }));
   }
@@ -48,17 +49,26 @@ class App extends React.Component {
 
   componentDidMount() {
     document.title = TITLE;
-    window.novaDebugMode = false;
-    const chartsArray = JSON.parse(localStorage.getItem('charts'));
-    if (chartsArray)
-      this.setState({ charts: [...chartsArray] });
+
+    // Load fonts
+    new FontFaceObserver("AstroDotBasic")
+      .load()
+      .then(
+        // resolve
+        () => this.setState({ fontsLoaded: true }),
+        // reject
+        () => this.setState({ err: "Unable to load fonts" })
+      );
+
+    const chartsArrayFromLS = JSON.parse(localStorage.getItem('charts'));
+    if (chartsArrayFromLS)
+      this.setState({ charts: [...chartsArrayFromLS] });
     else
       logIfDebug("Found no charts in LS to load");
 
     const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
-    if (selectedChartFromLS) {
+    if (selectedChartFromLS)
       this.setState({ selectedChart: selectedChartFromLS });
-    }
     else
       logIfDebug("Found no selected chart in LS");
   }
@@ -111,11 +121,8 @@ class App extends React.Component {
     if (this.state.charts.indexOf(chart) < 0)
       return;
 
-    // Saves to both state and localStorage
     this.setState({ selectedChart: selection },
-      () => {
-        localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
-      }
+      () => localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart))
     );
   }
 
@@ -127,8 +134,8 @@ class App extends React.Component {
     this.setState({ view: e.target.value });
   }
 
-  handleModeChange(e) {
-    this.setState({ mode: e.target.value });
+  onToggleControlPanel(e) {
+    this.setState({ panelToggle: e.target.value });
   }
 
   handleError(err) {
@@ -149,10 +156,11 @@ class App extends React.Component {
           err={this.state.error}
           resetError={() => errorService.clearErrors()}
         />
-        <div className="chart-container">
-          {
-            this.state.selectedChart &&
-            <div className="Chart">
+        {
+          this.state.fontsLoaded &&
+          <div className="chart-container">
+            {
+              this.state.selectedChart &&
               <Chart
                 width={window.innerWidth * 0.8}
                 height={window.innerHeight}
@@ -167,54 +175,58 @@ class App extends React.Component {
                     : null
                 }
                 middleChart={null}
-                chartView={this.state.view}
-                scaleFactor={defaultScaleFactor}
+                view={this.state.view}
                 handleError={this.handleError}
+                mode={this.state.mode}
               />
-            </div>
-          }
-          <div className="ControlPanel">
-            <ViewButtons
-              view={this.state.view}
-              onChangeView={this.handleViewChange}
+            }
+            <PanelToggle
+              panelToggle={this.state.panelToggle}
+              onToggleControlPanel={this.onToggleControlPanel}
             />
-            < ModeButtons
-              mode={this.state.mode}
-              onChangeMode={this.handleModeChange}
-            />
-            <NewChartPopup
-              saveChart={this.saveChart}
-              setSelectedChartToNewest={this.setSelectedChartToNewest}
-            />
-            <RelocatePopup
-              chart={this.state.selectedChart}
-              saveChart={this.saveChart}
-              setSelectedChartToNewest={this.setSelectedChartToNewest}
-              enabled={this.state.selectedChart}
-            />
+            {
+              this.state.panelToggle === "controlPanel" &&
 
-            <ReturnChartPopup
-              saveChart={this.saveChart}
-              setSelectedChartToNewest={this.setSelectedChartToNewest}
-              selectedChart={this.state.selectedChart}
-              enabled={this.state.selectedChart
-                && this.state.selectedChart.type === "Uniwheel"}
-            />
-            <ResetChartsButton
-              onClick={this.resetCharts}
-            />
-            <Chartlist className="chartList"
-              charts={this.state.charts ? this.state.charts : []}
-              selectedChart={this.state.selectedChart}
-              onChangeSelectedChart={this.onChangeSelectedChart}
-              deleteChart={this.deleteChart}
-              splitCharts={this.splitCharts}
-              handleError={this.handleError}
-            />
-            <Kofi></Kofi>
+              <div className="ControlPanel">
+                <ViewButtons
+                  view={this.state.view}
+                  onChangeView={this.handleViewChange}
+                />
+                <NewChartPopup
+                  saveChart={this.saveChart}
+                  setSelectedChartToNewest={this.setSelectedChartToNewest}
+                />
+                <RelocatePopup
+                  chart={this.state.selectedChart}
+                  saveChart={this.saveChart}
+                  setSelectedChartToNewest={this.setSelectedChartToNewest}
+                  enabled={this.state.selectedChart}
+                />
+
+                <ReturnChartPopup
+                  saveChart={this.saveChart}
+                  setSelectedChartToNewest={this.setSelectedChartToNewest}
+                  selectedChart={this.state.selectedChart}
+                  enabled={this.state.selectedChart
+                    && this.state.selectedChart.type === WheelTypes.UNIWHEEL}
+                />
+                <ResetChartsButton
+                  onClick={this.resetCharts}
+                />
+                <Chartlist
+                  charts={this.state.charts ? this.state.charts : []}
+                  selectedChart={this.state.selectedChart}
+                  onChangeSelectedChart={this.onChangeSelectedChart}
+                  deleteChart={this.deleteChart}
+                  splitCharts={this.splitCharts}
+                  handleError={this.handleError}
+                />
+                <Kofi></Kofi>
+              </div>
+            }
           </div>
-        </div>
-      </div>
+        }
+      </div >
     );
   }
 }

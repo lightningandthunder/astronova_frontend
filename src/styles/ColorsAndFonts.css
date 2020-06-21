@@ -1,0 +1,129 @@
+/* 
+** Planets 
+*/
+.Sun {
+  color: gold;
+}
+
+.Moon {
+  color: gray;
+}
+
+.Mercury {
+  color: orange;
+}
+
+.Venus {
+  color: green;
+}
+
+.Mars {
+  color: red;
+}
+
+.Jupiter {
+  color: purple;
+}
+
+.Saturn {
+  color: indigo;
+}
+
+.Uranus {
+  color: blue;
+}
+
+.Neptune {
+  color: cyan;
+}
+
+.Pluto {
+  color: crimson;
+}
+
+/* 
+** Signs
+*/
+
+.Ari { 
+  color: red; 
+}
+.Tau { 
+  color: green; 
+}
+.Gem { 
+  color: cyan; 
+}
+.Can { 
+  color: blue; 
+}
+.Leo { 
+  color: red; 
+}
+.Vir { 
+  color: green; 
+}
+.Lib { 
+  color: cyan; 
+}
+.Sco { 
+  color: blue; 
+}
+.Sag { 
+  color: red; 
+}
+.Cap { 
+  color: green; 
+}
+.Aqu { 
+  color: cyan; 
+}
+.Pis { 
+  color: blue; 
+}
+
+/* 
+** Aspects 
+*/
+
+.Cnj {
+  color: black;
+  font-family: "AstroDotBasic";
+}
+
+.Opp {
+  color: red;
+  font-family: "AstroDotBasic";
+}
+
+.Sqr {
+  color: blue;
+  font-family: "AstroDotBasic";
+}
+
+.Sms {
+  color: purple;
+  font-family: "AstroDotBasic";
+}
+
+.Sqq {
+  color: purple;
+  font-family: "AstroDotBasic";
+}
+
+.Tri {
+  color: green;
+  font-family: "AstroDotBasic";
+}
+
+.Sxt {
+  color: green;
+  font-family: "AstroDotBasic";
+}
+
+/*
+* Nova, a free sidereal astrological tool.
+* Copyright (C) 2019  Mike Verducci
+* This project is under the GNU General Public License V3.
+* The full license may be found in src/LICENSE.txt
+*/

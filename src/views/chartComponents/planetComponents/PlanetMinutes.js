@@ -12,7 +12,7 @@ export default function PlanetMinutes(props) {
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
-  
+
   const mins = degToMin(props.rawCoordinate);
 
   const [x, y] = derivePoint(props.origin,

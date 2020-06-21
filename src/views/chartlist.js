@@ -1,4 +1,6 @@
 import React from 'react';
+import '../styles/ChartList.css';
+
 import ChartItem from "./chartItem";
 
 export default function ChartList(props) {

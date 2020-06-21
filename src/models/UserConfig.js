@@ -1,5 +1,27 @@
-import logIfDebug from "../utils/utils";
-import { PLANETARY_CHART_POINTS, AspectEnum } from "../settings";
+import { logIfDebug } from "../utils/utils";
+import { AspectEnum } from "../settings";
+
+const PLANETARY_CHART_POINTS = [
+  "Sun",
+  "Moon",
+  "Mercury",
+  "Venus",
+  "Mars",
+  "Jupiter",
+  "Saturn",
+  "Uranus",
+  "Neptune",
+  "Pluto",
+]
+
+// const ANGLE_CHART_POINTS = [
+//   "EP",
+//   "WP",
+//   "Asc",
+//   "MC",
+//   "Dsc",
+//   "IC",
+// ]
 
 const DEFAULT_CONFIG = {
   chartViews: {
@@ -19,16 +41,21 @@ const DEFAULT_CONFIG = {
   showChartMetadata: false,
 };
 
-export default class UserConfigLoader {
+export default class UserConfig {
   constructor() {
     this.storageString = "userConfig";
     this.config = {};
   }
 
-  load() {
+  _load() {
     const storedConfig = JSON.parse(localStorage.getItem(this.storageString));
     this.config = storedConfig ? storedConfig : Object.assign({}, DEFAULT_CONFIG);
-    return this;
+  }
+
+  static loadConfig() {
+    const uc = new UserConfig();
+    uc._load();
+    return uc;
   }
 
   saveConfig() {
@@ -37,28 +64,34 @@ export default class UserConfigLoader {
   }
 
   getPointsForChartView(chartView) {
+    this._load();
     return this.config.chartViews[chartView];
   }
 
   setPointsForChartView(chartView, pointsArray) {
+    this._load();
     this.config[chartView] = pointsArray;
     this.saveConfig();
   }
 
   getOrb(aspectName) {
+    this._load();
     return this.config.orbs[aspectName];
   }
 
   setOrbs(orbs) {
+    this._load();
     this.config.orbs = orbs;
     this.saveConfig();
   }
 
   getShowChartMetadata() {
+    this._load();
     return this.config.showChartMetadata;
   }
 
   setShowChartMetadata(bool) {
+    this._load();
     this.config.showChartMetadata = bool;
     this.saveConfig();
   }

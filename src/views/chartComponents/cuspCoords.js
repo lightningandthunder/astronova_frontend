@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, Group } from "react-konva";
 import { derivePoint, parseSign, degToMin } from "../../utils/geometry";
-import { SIGN_UNICODE, SIGN_COLORS } from "../../settings";
+import { getSymbol } from "../../utils/utils";
+import { SIGN_COLORS } from "../../settings";
 
 export default function CuspCoords(props) {
   const radius = 315 * props.scaleFactor;
@@ -15,7 +16,7 @@ export default function CuspCoords(props) {
         x={x}
         y={y}
         key={`${cusp}-Sign`}
-        text={props.isZodiacal ? SIGN_UNICODE[sign] : house}
+        text={props.isZodiacal ? getSymbol(sign) : house}
         stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
         strokeWidth={1}
         fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}

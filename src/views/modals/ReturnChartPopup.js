@@ -6,7 +6,7 @@ import geosearch from '../../utils/geosearch';
 import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
 import LocationInput from './LocationInput';
 import Datepicker from './datepicker';
-import logIfDebug from "../../utils/utils";
+import { logIfDebug } from "../../utils/utils";
 import moment from "moment-timezone";
 import RadixQuery from "../../models/RadixQuery";
 import SolunarQuery from "../../models/SolunarQuery";

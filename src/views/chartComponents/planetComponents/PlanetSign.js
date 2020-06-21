@@ -2,7 +2,8 @@ import React from "react";
 import { Text } from "react-konva";
 
 import { derivePoint, parseSign } from "../../../utils/geometry";
-import { SIGN_COLORS, SIGN_UNICODE, RingLayerEnum } from "../../../settings";
+import { getSymbol } from "../../../utils/utils";
+import { SIGN_COLORS, RingLayerEnum } from "../../../settings";
 
 export default function PlanetSign(props) {
   const radiusMap = {
@@ -26,7 +27,7 @@ export default function PlanetSign(props) {
       x={x}
       y={y}
       key={`${props.planetName}-${radius}-Sign`}
-      text={props.isZodiacal ? SIGN_UNICODE[sign] : house}
+      text={props.isZodiacal ? getSymbol(sign) : house}
       stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
       strokeWidth={1}
       fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}

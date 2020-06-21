@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Stage, Group, Layer } from "react-konva";
 import moment from "moment-timezone";
 
@@ -12,8 +12,9 @@ import ChartInfo from "./ChartInfo";
 import { rotateCoordinatesInRA } from "../../utils/geometry";
 import AspectsLister from "../../managers/AspectManager";
 import AspectLines from "./AspectLines";
-import UserConfigLoader from "../../models/UserConfigLoader";
-import { RingLayerEnum, ChartViews } from "../../settings";
+import { RingLayerEnum, ChartViews, WheelTypes } from "../../settings";
+import UserConfig from "../../models/UserConfig";
+import AspectPanel from "../aspectPanelComponents/AspectPanel";
 
 const DEFAULT_CUSPS = {
   "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -21,7 +22,23 @@ const DEFAULT_CUSPS = {
 };
 
 export default function Chart(props) {
-  console.log(props)
+  const calcStageWidth = () => window.innerWidth < 992 ? window.innerWidth : window.innerWidth * 0.8;
+
+  const [scaleFactor, setScaleFactor] = useState(window.innerHeight / 680)  // Diameter of the chart, with padding
+  const [width, setWidth] = useState(calcStageWidth());
+  const [height, setHeight] = useState(window.innerHeight);
+
+  const setDimensions = () => {
+    setWidth(calcStageWidth());
+    setHeight(window.innerHeight);
+    setScaleFactor(window.innerHeight / 680);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", setDimensions);
+    return () => window.removeEventListener("resize", setDimensions);
+  }, []);
+
   const getChartName = () => {
     return props.outerChart
       ? props.outerChart.name
@@ -39,13 +56,13 @@ export default function Chart(props) {
   };
 
   const origin = {
-    x: props.width / 2,
-    y: props.height / 2
+    x: width / 2,
+    y: height / 2
   }
 
-  const config = new UserConfigLoader().load();
-  const chartPoints = config.getPointsForChartView(props.chartView);
-  const isZodiacal = props.chartView === ChartViews.ECLIPTICAL;
+  const config = UserConfig.loadConfig();
+  const chartPoints = config.getPointsForChartView(props.view);
+  const isZodiacal = props.view === ChartViews.ECLIPTICAL;
 
   const cusps = isZodiacal
     ? (props.outerChart && props.outerChart.cusps) || props.innerChart.cusps
@@ -54,11 +71,11 @@ export default function Chart(props) {
   // Lock Ascendant to left side of chart in zodiacal view
   const rotationalOffset = isZodiacal ? cusps["1"] : 0;
 
-  let innerCoords = props.innerChart[props.chartView];
-  let outerCoords = props.outerChart && props.outerChart[props.chartView];
+  let innerCoords = props.innerChart[props.view];
+  let outerCoords = props.outerChart && props.outerChart[props.view];
 
   // Rotate to RAMC - 270
-  if (props.chartView === ChartViews.RIGHT_ASCENSION) {
+  if (props.view === ChartViews.RIGHT_ASCENSION) {
     innerCoords = rotateCoordinatesInRA({ ...innerCoords }, props.innerChart.ramc);
     if (outerCoords) {
       outerCoords = rotateCoordinatesInRA({ ...outerCoords }, props.outerChart.ramc);
@@ -69,17 +86,16 @@ export default function Chart(props) {
     origin: origin,
     rotationalOffset: rotationalOffset,
     isZodiacal: isZodiacal,
-    scaleFactor: props.scaleFactor,
+    scaleFactor: scaleFactor,
     chartPoints: chartPoints,
     cusps: cusps,
   };
   const aspectLister = new AspectsLister(config, innerCoords, outerCoords);
-  const aspects = aspectLister.getAspects();
+  const aspectList = aspectLister.getAspects();
 
   return (
     <div>
-
-      <Stage width={props.width} height={props.height}>
+      <Stage width={width} height={height} className="chart">
         <Layer>
           <Group>
             {/* Uniwheel components */}
@@ -89,7 +105,7 @@ export default function Chart(props) {
               latitude={props.innerChart.latitude}
               localDatetime={getChartLocalDatetime()}
               placeName={getChartPlaceName()}
-              scaleFactor={props.scaleFactor}
+              scaleFactor={scaleFactor}
             />
             <Rings
               ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
@@ -106,7 +122,9 @@ export default function Chart(props) {
               {...propData}
               ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
             />
-            <CuspCoords {...propData} />
+            <CuspCoords
+              {...propData}
+            />
             <HouseNumbers
               {...propData}
               ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
@@ -116,7 +134,7 @@ export default function Chart(props) {
             {
               !props.outerChart &&
               <AspectLines
-                aspects={aspects}
+                aspects={aspectList}
                 coords={innerCoords}
                 {...propData}
               />
@@ -133,6 +151,7 @@ export default function Chart(props) {
           </Group>
         </Layer>
       </Stage>
+      <AspectPanel aspects={aspectList} />
     </div>
   )
 }

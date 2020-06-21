@@ -1,0 +1,16 @@
+.chartList{
+  height: 75%;
+  width: 100%;
+  background-color: rgb(237, 240, 245);
+  overflow-y: scroll;
+}
+
+.selectedChartItem {
+  background-color: lightblue;
+}
+
+.chart-delete-button {
+  margin-left: auto;
+  margin-right: 0;
+  text-align: right;    
+}
