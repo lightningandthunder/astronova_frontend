@@ -24,13 +24,13 @@ export default function AspectPanel(props) {
 
                 return (
                   <tr key={`aspect-${a.planet1}-${a.planet2}`}>
-                    <td className={a.planet1}>
+                    <td className={`symbol ${a.planet1}`}>
                       {`${getSymbol(a.planet1)} `}
                     </td>
-                    <td className={a.aspectType}>
+                    <td className={`symbol ${a.aspectType}`}>
                       {`${getSymbol(a.aspectType)} `}
                     </td>
-                    <td className={a.planet2}>
+                    <td className={`symbol ${a.planet2}`}>
                       {`${getSymbol(a.planet2)} `}
                     </td>
                     <td>
@@ -44,7 +44,7 @@ export default function AspectPanel(props) {
           }
         </tbody>
       </table>
-    </div>
+    </div >
   )
 }
 

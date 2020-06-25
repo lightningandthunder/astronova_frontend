@@ -17,6 +17,7 @@ import Kofi from "./views/ko-fi/Kofi";
 import { errorService } from "./services/errorService";
 import ErrorAlert from "./views/ErrorAlert";
 import FontFaceObserver from "fontfaceobserver";
+import "boxicons";
 
 
 class App extends React.Component {
@@ -27,7 +28,9 @@ class App extends React.Component {
       charts: [],
       selectedChart: null,
       view: "ecliptical",
-      panelToggle: "controlPanel",
+      panelState: "control",
+      cogIsAnimated: false,
+      animationTimeoutId: null,
       error: null,
     }
 
@@ -36,7 +39,7 @@ class App extends React.Component {
     this.resetCharts = this.resetCharts.bind(this);
     this.saveChart = this.saveChart.bind(this);
     this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
-    this.handleViewChange = this.handleViewChange.bind(this);
+    this.handleSettingsClick = this.handleSettingsClick.bind(this);
     this.deleteChart = this.deleteChart.bind(this);
     this.splitCharts = this.splitCharts.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -130,8 +133,21 @@ class App extends React.Component {
     this.onChangeSelectedChart(this.state.charts[this.state.charts.length - 1]);
   }
 
-  handleViewChange(e) {
-    this.setState({ view: e.target.value });
+  handleSettingsClick() {
+    // Handle animation
+    this.setState({ cogIsAnimated: true });
+    clearTimeout(this.state.animationTimeoutId);
+
+    const timeoutId = setTimeout(
+      () => this.setState({ cogIsAnimated: false })
+      , 650);
+    this.setState({ animationTimeoutId: timeoutId });
+
+    // Handle actual button behavior
+    if (this.state.panelState === "control")
+      this.setState({ panelState: "aspects" });
+    else
+      this.setState({ panelState: "control" });
   }
 
   onToggleControlPanel(e) {
@@ -180,17 +196,25 @@ class App extends React.Component {
                 mode={this.state.mode}
               />
             }
+
+            <box-icon
+              name="cog"
+              type="solid"
+              {...this.state.cogIsAnimated && { "animation": "spin" }}
+              onClick={this.handleSettingsClick}>
+            </box-icon>
+
             <PanelToggle
               panelToggle={this.state.panelToggle}
               onToggleControlPanel={this.onToggleControlPanel}
             />
             {
-              this.state.panelToggle === "controlPanel" &&
+              this.state.panelState === "control" &&
 
               <div className="ControlPanel">
                 <ViewButtons
                   view={this.state.view}
-                  onChangeView={this.handleViewChange}
+                  onChangeView={this.handleSettingsClick}
                 />
                 <NewChartPopup
                   saveChart={this.saveChart}

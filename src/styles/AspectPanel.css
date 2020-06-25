@@ -1,21 +1,26 @@
 .aspect-panel {
   border-left: 1px solid black;
   overflow-y: scroll;
-  line-height: 1.2;
+  /* line-height: 1.2; */
   height: 100vh;
-  display: flex;
-  flex: 1;
+  /* display: flex; */
+  /* flex: 1; */
+  width: 20%;
 }
 
 .aspect-panel tr:nth-child(even) {
   background-color: whitesmoke;
 }
 
-.aspect-panel td {
-  padding: 10px;
-  text-align: center;
+.aspect-panel table {
+  width: 100%;
 }
 
 .aspect-panel th {
+  text-align: center;
+}
+
+.aspect-panel td {
+  padding: 4px 10px;
   text-align: center;
 }

@@ -26,7 +26,6 @@ export default function Rings(props) {
         y={props.origin.y}
         outerRadius={signRingOuterRadius}
         innerRadius={signRingInnerRadius}
-        fill={'white'}
         stroke={'black'}
         strokeWidth={1}
       />
@@ -35,7 +34,6 @@ export default function Rings(props) {
         y={props.origin.y}
         outerRadius={houseRingOuterRadius}
         innerRadius={houseRingInnerRadius}
-        fill={'white'}
         stroke={'black'}
         strokeWidth={1}
       />

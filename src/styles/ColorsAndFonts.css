@@ -121,6 +121,10 @@
   font-family: "AstroDotBasic";
 }
 
+.symbol {
+  font-size: 1.2rem;
+}
+
 /*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
