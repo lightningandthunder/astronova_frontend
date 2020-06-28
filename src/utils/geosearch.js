@@ -3,6 +3,8 @@
 ** originally written by Armando Magalhães
 */
 
+// © OpenStreetMap contributors
+
 import Location from '../models/Location';
 
 import axios from "axios";
@@ -14,7 +16,8 @@ export default async function geosearch(q) {
   const params = new URLSearchParams({
     q,
     limit,
-    format: "json"
+    format: "json",
+    addressdetails: 1,
   });
 
   const endpoint = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
@@ -28,7 +31,7 @@ export default async function geosearch(q) {
 
   try {
     const tz = tzsearch(res.data.lon, res.data.lat)
-    res.tz = tz;
+    res.data.tz = tz;
 
     // Normalize place name
     let placeArray = res.data.display_name.split(",");
@@ -38,7 +41,7 @@ export default async function geosearch(q) {
       // Fist and last parts of name
       : [placeArray[0], placeArray[placeArray.length - 1]].join(",")
 
-    return new Location(res);
+    return new Location(res.data);
   } catch (err) {
     throw new Error(`Geocoding failed: ${err}`)
   }

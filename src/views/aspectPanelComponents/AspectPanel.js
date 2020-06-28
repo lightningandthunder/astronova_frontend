@@ -9,12 +9,16 @@ export default function AspectPanel(props) {
     <div className="aspect-panel">
       <table>
         <thead>
-          <th colSpan={"4"}>Aspects</th>
+          <tr>
+            <th>T</th>
+            <th>Asp</th>
+            <th>R</th>
+            <th>Orb</th>
+          </tr>
         </thead>
         <tbody>
           {
             props.aspects.map(a => {
-              console.log(a)
               if (a && a.aspectType) {
 
                 const orbDegrees = Math.trunc(a.orb) % 30;

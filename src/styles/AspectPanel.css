@@ -1,11 +1,12 @@
 .aspect-panel {
   border-left: 1px solid black;
   overflow-y: scroll;
-  /* line-height: 1.2; */
   height: 100vh;
-  /* display: flex; */
-  /* flex: 1; */
   width: 20%;
+}
+
+.aspect-panel thead {
+  border-bottom: 1px solid darkgrey;
 }
 
 .aspect-panel tr:nth-child(even) {
@@ -21,6 +22,6 @@
 }
 
 .aspect-panel td {
-  padding: 4px 10px;
+  padding: px 10px;
   text-align: center;
 }

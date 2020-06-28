@@ -11,7 +11,6 @@ import RelocatePopup from "./views/modals/RelocatePopup"
 import { logIfDebug } from './utils/utils';
 import Chart from './views/chartComponents/Chart';
 import ViewButtons from "./views/ViewButtons";
-import PanelToggle from "./views/PanelToggle";
 import { TITLE, WheelTypes } from "./settings";
 import Kofi from "./views/ko-fi/Kofi";
 import { errorService } from "./services/errorService";
@@ -29,7 +28,7 @@ class App extends React.Component {
       selectedChart: null,
       view: "ecliptical",
       panelState: "control",
-      cogIsAnimated: false,
+      settingsCogIsAnimated: false,
       animationTimeoutId: null,
       error: null,
     }
@@ -43,7 +42,7 @@ class App extends React.Component {
     this.deleteChart = this.deleteChart.bind(this);
     this.splitCharts = this.splitCharts.bind(this);
     this.handleError = this.handleError.bind(this);
-    this.onToggleControlPanel = this.onToggleControlPanel.bind(this);
+    this.onChangeView = this.onChangeView.bind(this);
 
     this.errorSubscription = errorService.onError().subscribe(err => this.setState({ error: err }));
   }
@@ -80,7 +79,7 @@ class App extends React.Component {
     this.errorSubscription.unsubscribe();
   }
 
-  /* ================ onChange methods ================ */
+  /* ============== Chart CRUD Methods =============== */
 
   saveChart(...charts) {
     // Saves to both state and localStorage
@@ -119,6 +118,15 @@ class App extends React.Component {
     }
   }
 
+  resetCharts() {
+    localStorage.removeItem('charts');
+    localStorage.removeItem('selectedChart')
+    this.setState({ charts: [] });
+    this.setState({ selectedChart: undefined })
+  }
+
+  /* ================= Event handlers ================= */
+
   onChangeSelectedChart(chart) {
     let selection = chart;
     if (this.state.charts.indexOf(chart) < 0)
@@ -127,6 +135,10 @@ class App extends React.Component {
     this.setState({ selectedChart: selection },
       () => localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart))
     );
+  }
+
+  onChangeView(e) {
+    this.setState({ view: e.target.value });
   }
 
   setSelectedChartToNewest() {
@@ -150,19 +162,8 @@ class App extends React.Component {
       this.setState({ panelState: "control" });
   }
 
-  onToggleControlPanel(e) {
-    this.setState({ panelToggle: e.target.value });
-  }
-
   handleError(err) {
     this.setState({ error: err });
-  }
-
-  resetCharts() {
-    localStorage.removeItem('charts');
-    localStorage.removeItem('selectedChart')
-    this.setState({ charts: [] });
-    this.setState({ selectedChart: undefined })
   }
 
   render() {
@@ -178,8 +179,6 @@ class App extends React.Component {
             {
               this.state.selectedChart &&
               <Chart
-                width={window.innerWidth * 0.8}
-                height={window.innerHeight}
                 innerChart={
                   this.state.selectedChart && this.state.selectedChart.radix
                     ? this.state.selectedChart.radix
@@ -193,28 +192,23 @@ class App extends React.Component {
                 middleChart={null}
                 view={this.state.view}
                 handleError={this.handleError}
-                mode={this.state.mode}
               />
             }
 
             <box-icon
               name="cog"
               type="solid"
-              {...this.state.cogIsAnimated && { "animation": "spin" }}
+              {...this.state.settingsCogIsAnimated && { "animation": "spin" }}
               onClick={this.handleSettingsClick}>
             </box-icon>
 
-            <PanelToggle
-              panelToggle={this.state.panelToggle}
-              onToggleControlPanel={this.onToggleControlPanel}
-            />
             {
               this.state.panelState === "control" &&
 
               <div className="ControlPanel">
                 <ViewButtons
                   view={this.state.view}
-                  onChangeView={this.handleSettingsClick}
+                  onChangeView={this.onChangeView}
                 />
                 <NewChartPopup
                   saveChart={this.saveChart}

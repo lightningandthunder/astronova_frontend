@@ -12,7 +12,7 @@ import ChartInfo from "./ChartInfo";
 import { rotateCoordinatesInRA } from "../../utils/geometry";
 import AspectsLister from "../../managers/AspectManager";
 import AspectLines from "./AspectLines";
-import { RingLayerEnum, ChartViews, WheelTypes } from "../../settings";
+import { RingLayerEnum, ChartViews } from "../../settings";
 import UserConfig from "../../models/UserConfig";
 import AspectPanel from "../aspectPanelComponents/AspectPanel";
 
@@ -22,22 +22,26 @@ const DEFAULT_CUSPS = {
 };
 
 export default function Chart(props) {
+  // Use 80% of the window width if the window is wide enough to have a side panel
   const calcStageWidth = () => window.innerWidth < 992 ? window.innerWidth : window.innerWidth * 0.8;
 
-  const [scaleFactor, setScaleFactor] = useState(window.innerHeight / 680)  // Diameter of the chart, with padding
+  // Diameter of the chart, with padding
+  const defaultScaleFactor = Math.min(window.innerHeight / 680, window.innerWidth / 680);
+
+  const [scaleFactor, setScaleFactor] = useState(defaultScaleFactor)
   const [width, setWidth] = useState(calcStageWidth());
   const [height, setHeight] = useState(window.innerHeight);
 
   const setDimensions = () => {
     setWidth(calcStageWidth());
     setHeight(window.innerHeight);
-    setScaleFactor(window.innerHeight / 680);
+    setScaleFactor(defaultScaleFactor);
   };
 
   useEffect(() => {
     window.addEventListener("resize", setDimensions);
     return () => window.removeEventListener("resize", setDimensions);
-  }, []);
+  });
 
   const getChartName = () => {
     return props.outerChart
@@ -116,7 +120,6 @@ export default function Chart(props) {
               coords={innerCoords}
               {...propData}
             />
-
 
             <CuspLines
               {...propData}

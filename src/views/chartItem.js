@@ -12,7 +12,7 @@ export default function ChartItem(props) {
         className="chart-delete-button"
         onClick={() => props.deleteChart(props.chart)}
       >
-        X
+        &times;
             </button>
       {
         props.chart.type !== WheelTypes.UNIWHEEL &&

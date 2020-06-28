@@ -136,7 +136,7 @@ export default class ReturnChartPopup extends React.Component {
       this.setState({ err: response.data.err });
       return;
     }
-    console.log("raw reponse: " + response.data)
+
     try {
       const chartArray = Biwheel.arrayFromJSON(response.data);
 

@@ -1,4 +1,4 @@
-import { AspectEnum, WheelTypes } from "../settings";
+import { AspectEnum } from "../settings";
 import { getOrb } from "../utils/geometry";
 
 export default class AspectLister {
@@ -14,31 +14,30 @@ export default class AspectLister {
     const usedKeys = [];
 
     // If only one set of coordinates, just compare that array to itself
-    const planetRowHorizontal = compareSingleChart ? this.coords1 : this.coords2;
+    const transitingPlanets = compareSingleChart ? this.coords1 : this.coords2;
+    const natalPlanets = this.coords1;
 
-    const planetRowVertical = this.coords1;
-
-    for (let planet1 of Object.keys(planetRowHorizontal)) {
-      for (let planet2 of Object.keys(planetRowVertical)) {
-
+    for (let transitingPlanetName of Object.keys(transitingPlanets)) {
+      for (let natalPlanetName of Object.keys(natalPlanets)) {
         const aspectWasAlreadyCompared = compareSingleChart
-          ? planet1 === planet2 || usedKeys.indexOf(planet2) >= 0
+          ? transitingPlanetName === natalPlanetName || usedKeys.indexOf(natalPlanetName) >= 0
           : false;
 
         const aspect = aspectWasAlreadyCompared
           ? null
           : this._parseAspect(
-            planet1,
-            planetRowHorizontal[planet1],
-            planet2,
-            planetRowVertical[planet2]
+            transitingPlanetName,
+            transitingPlanets[transitingPlanetName],
+            natalPlanetName,
+            natalPlanets[natalPlanetName]
           );
 
         // Inner loop
-        aspectList.push(aspect);
+        if (aspect)
+          aspectList.push(aspect);
       }
       // Outer loop
-      usedKeys.push(planet1);
+      usedKeys.push(transitingPlanetName);
     }
 
     return aspectList;
@@ -51,7 +50,6 @@ export default class AspectLister {
     const cnjOrb = this.config.getOrb(AspectEnum.CONJUNCTION);
     orb = getOrb(plong1, plong2, 0, cnjOrb);
     if (orb !== null) {
-      // console.log(`${pname1} ${orb} ${pname2}`);
       return new Aspect(pname1, pname2, orb, AspectEnum.CONJUNCTION);
     }
 
