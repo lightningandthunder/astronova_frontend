@@ -75,7 +75,7 @@ export default class RelocatePopup extends React.Component {
       if (err)
         this.setState({ err: err });
 
-      logIfDebug("Response: ", response.data);
+      logIfDebug("Response: ", JSON.parse(response.data));
 
       const newChart = this.props.chart.type === WheelTypes.BIWHEEL
         ? Biwheel.fromJSON(response.data)

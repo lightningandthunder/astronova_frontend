@@ -19,6 +19,8 @@ import { errorService } from "./services/errorService";
 import ErrorAlert from "./views/ErrorAlert";
 import AspectLister from "./models/AspectLister";
 import UserConfig from "./models/UserConfig";
+import AspectPanel from "./views/AspectPanel";
+import ControlPanel from "./views/ControlPanel";
 
 
 class App extends React.Component {
@@ -46,6 +48,7 @@ class App extends React.Component {
     this.splitCharts = this.splitCharts.bind(this);
     this.handleError = this.handleError.bind(this);
     this.onChangeView = this.onChangeView.bind(this);
+    this.setAspectsForSelectedChart = this.setAspectsForSelectedChart.bind(this);
 
     this.errorSubscription = errorService.onError().subscribe(err => this.setState({ error: err }));
   }
@@ -73,7 +76,8 @@ class App extends React.Component {
 
     const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
     if (selectedChartFromLS)
-      this.setState({ selectedChart: selectedChartFromLS });
+      this.setState({ selectedChart: selectedChartFromLS },
+        () => this.setAspectsForSelectedChart(this.state.selectedChart));
     else
       logIfDebug("Found no selected chart in LS");
   }
@@ -128,6 +132,20 @@ class App extends React.Component {
     this.setState({ selectedChart: undefined })
   }
 
+
+  setAspectsForSelectedChart(chart) {
+    const radixChart = chart && chart.radix ? chart.radix : chart;
+    const transitingChart = chart && chart.solunar ? chart.solunar : null;
+
+    const radixCoords = radixChart[this.state.view];
+    const transitingCoords = transitingChart && transitingChart[this.state.view];
+
+    const config = UserConfig.loadConfig();
+    const aspectLister = new AspectLister(config, radixCoords, transitingCoords);
+    const aspectList = aspectLister.getAspects();
+    this.setState({ selectedChartAspects: aspectList });
+  }
+
   /* ================= Event handlers ================= */
 
   onChangeSelectedChart(chart) {
@@ -138,10 +156,12 @@ class App extends React.Component {
     this.setState({ selectedChart: selection },
       () => localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart))
     );
+    this.setAspectsForSelectedChart(chart);
   }
 
   onChangeView(e) {
     this.setState({ view: e.target.value });
+    this.setAspectsForSelectedChart(this.state.selectedChart);
   }
 
   setSelectedChartToNewest() {
@@ -167,24 +187,6 @@ class App extends React.Component {
 
   handleError(err) {
     this.setState({ error: err });
-  }
-
-  setAspectsForSelectedChart() {
-    const innerChart = this.state.selectedChart && this.state.selectedChart.radix
-      ? this.state.selectedChart.radix
-      : this.state.selectedChart;
-
-    const outerChart = this.state.selectedChart && this.state.selectedChart.solunar
-      ? this.state.selectedChart.solunar
-      : null;
-
-    const innerCoords = innerChart[this.state.view];
-    const outerCoords = outerChart && outerChart[this.state.view];
-
-    const config = UserConfig.loadConfig();
-    const aspectLister = new AspectLister(config, innerCoords, outerCoords);
-    const aspectList = aspectLister.getAspects();
-    this.setState({ selectedChartAspects: aspectList });
   }
 
   render() {
@@ -213,6 +215,7 @@ class App extends React.Component {
                 middleChart={null}
                 view={this.state.view}
                 handleError={this.handleError}
+                aspects={this.state.selectedChartAspects}
               />
             }
 
@@ -222,46 +225,24 @@ class App extends React.Component {
               {...this.state.settingsCogIsAnimated && { "animation": "spin" }}
               onClick={this.handleSettingsClick}>
             </box-icon>
+            <AspectPanel aspects={this.state.selectedChartAspects} />
 
             {
               this.state.panelState === "control" &&
-
-              <div className="ControlPanel">
-                <ViewButtons
-                  view={this.state.view}
-                  onChangeView={this.onChangeView}
-                />
-                <NewChartPopup
-                  saveChart={this.saveChart}
-                  setSelectedChartToNewest={this.setSelectedChartToNewest}
-                />
-                <RelocatePopup
-                  chart={this.state.selectedChart}
-                  saveChart={this.saveChart}
-                  setSelectedChartToNewest={this.setSelectedChartToNewest}
-                  enabled={this.state.selectedChart}
-                />
-
-                <ReturnChartPopup
-                  saveChart={this.saveChart}
-                  setSelectedChartToNewest={this.setSelectedChartToNewest}
-                  selectedChart={this.state.selectedChart}
-                  enabled={this.state.selectedChart
-                    && this.state.selectedChart.type === WheelTypes.UNIWHEEL}
-                />
-                <ResetChartsButton
-                  onClick={this.resetCharts}
-                />
-                <Chartlist
-                  charts={this.state.charts ? this.state.charts : []}
-                  selectedChart={this.state.selectedChart}
-                  onChangeSelectedChart={this.onChangeSelectedChart}
-                  deleteChart={this.deleteChart}
-                  splitCharts={this.splitCharts}
-                  handleError={this.handleError}
-                />
-                <Kofi></Kofi>
-              </div>
+              <ControlPanel
+                enabled={this.state.panelState === "control"}
+                view={this.state.view}
+                charts={this.state.charts}
+                selectedChart={this.state.selectedChart}
+                onChangeView={this.onChangeView}
+                saveChart={this.saveChart}
+                setSelectedChartToNewest={this.setSelectedChartToNewest}
+                resetCharts={this.resetCharts}
+                deleteCharts={this.deleteCharts}
+                splitCharts={this.splitCharts}
+                handleError={this.handleError}
+                onChangeSelectedChart={this.onChangeSelectedChart}
+              />
             }
           </div>
         }

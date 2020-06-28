@@ -10,7 +10,6 @@ import Rings from "./Rings";
 import BiwheelDivider from "./BiwheelDivider"
 import ChartInfo from "./ChartInfo";
 import { rotateCoordinatesInRA } from "../../utils/geometry";
-import AspectsLister from "../../models/AspectLister";
 import AspectLines from "./AspectLines";
 import { RingLayerEnum, ChartViews } from "../../settings";
 import UserConfig from "../../models/UserConfig";
@@ -94,8 +93,6 @@ export default function Chart(props) {
     chartPoints: chartPoints,
     cusps: cusps,
   };
-  const aspectLister = new AspectsLister(config, innerCoords, outerCoords);
-  const aspectList = aspectLister.getAspects();
 
   return (
     <div>
@@ -137,7 +134,7 @@ export default function Chart(props) {
             {
               !props.outerChart &&
               <AspectLines
-                aspects={aspectList}
+                aspects={props.aspects}
                 coords={innerCoords}
                 {...propData}
               />
@@ -154,7 +151,6 @@ export default function Chart(props) {
           </Group>
         </Layer>
       </Stage>
-      <AspectPanel aspects={aspectList} />
     </div>
   )
 }

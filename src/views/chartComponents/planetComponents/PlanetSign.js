@@ -7,9 +7,9 @@ import { SIGN_COLORS, RingLayerEnum } from "../../../settings";
 
 export default function PlanetSign(props) {
   const radiusMap = {
-    [RingLayerEnum.UNIWHEEL]: 235,
+    [RingLayerEnum.UNIWHEEL]: 230,
     [RingLayerEnum.BIWHEEL_INNER]: 140,
-    [RingLayerEnum.BIWHEEL_OUTER]: 235,
+    [RingLayerEnum.BIWHEEL_OUTER]: 230,
   };
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
 

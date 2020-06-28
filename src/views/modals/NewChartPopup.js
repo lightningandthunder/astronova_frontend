@@ -120,7 +120,7 @@ export default class NewChartPopup extends React.Component {
       radixQuery,
       { headers: QUERY_HEADERS }
     );
-    logIfDebug("Raw response: " + response.data);
+    logIfDebug("Raw response: ", JSON.parse(response.data));
 
     if (response.data.err) {
       this.setState({ err: response.data.err });
