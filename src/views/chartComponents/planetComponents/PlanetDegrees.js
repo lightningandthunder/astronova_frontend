@@ -23,10 +23,11 @@ export default function PlanetDegrees(props) {
       x={x}
       y={y}
       text={`${Math.trunc(props.rawCoordinate) % 30}\u00B0`}
-      fontSize={14 * props.scaleFactor}
+      fontSize={14}
       strokeWidth={1}
-      offsetX={8 * props.scaleFactor}
-      offsetY={8 * props.scaleFactor}
+      offsetX={8}
+      offsetY={8}
+      scale={{ x: props.scaleFactor, y: props.scaleFactor }}
     />
   )
 }

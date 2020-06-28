@@ -34,6 +34,7 @@ export default function PlanetSign(props) {
       fontSize={props.isZodiacal ? 22 : 14}
       offsetX={8}
       offsetY={8}
+      scale={{ x: props.scaleFactor, y: props.scaleFactor }}
     />
   )
 }

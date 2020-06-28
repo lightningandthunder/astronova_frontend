@@ -1,4 +1,6 @@
 import React from 'react';
+import FontFaceObserver from "fontfaceobserver";
+import "boxicons";
 import './styles/App.css';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,8 +17,8 @@ import { TITLE, WheelTypes } from "./settings";
 import Kofi from "./views/ko-fi/Kofi";
 import { errorService } from "./services/errorService";
 import ErrorAlert from "./views/ErrorAlert";
-import FontFaceObserver from "fontfaceobserver";
-import "boxicons";
+import AspectLister from "./models/AspectLister";
+import UserConfig from "./models/UserConfig";
 
 
 class App extends React.Component {
@@ -26,6 +28,7 @@ class App extends React.Component {
       fontsLoaded: false,
       charts: [],
       selectedChart: null,
+      selectedChartAspects: null,
       view: "ecliptical",
       panelState: "control",
       settingsCogIsAnimated: false,
@@ -164,6 +167,24 @@ class App extends React.Component {
 
   handleError(err) {
     this.setState({ error: err });
+  }
+
+  setAspectsForSelectedChart() {
+    const innerChart = this.state.selectedChart && this.state.selectedChart.radix
+      ? this.state.selectedChart.radix
+      : this.state.selectedChart;
+
+    const outerChart = this.state.selectedChart && this.state.selectedChart.solunar
+      ? this.state.selectedChart.solunar
+      : null;
+
+    const innerCoords = innerChart[this.state.view];
+    const outerCoords = outerChart && outerChart[this.state.view];
+
+    const config = UserConfig.loadConfig();
+    const aspectLister = new AspectLister(config, innerCoords, outerCoords);
+    const aspectList = aspectLister.getAspects();
+    this.setState({ selectedChartAspects: aspectList });
   }
 
   render() {

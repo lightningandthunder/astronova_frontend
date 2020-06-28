@@ -25,10 +25,11 @@ export default function HouseNumbers(props) {
         x={x}
         y={y}
         text={num}
-        fontSize={16 * props.scaleFactor}
+        fontSize={16}
         strokeWidth={1}
-        offsetX={8 * props.scaleFactor}
-        offsetY={8 * props.scaleFactor}
+        offsetX={8}
+        offsetY={8}
+        scale={{ x: props.scaleFactor, y: props.scaleFactor }}
       />
     )
   }

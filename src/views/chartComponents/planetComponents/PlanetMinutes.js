@@ -25,10 +25,11 @@ export default function PlanetMinutes(props) {
       x={x}
       y={y}
       text={`${mins}'`}
-      fontSize={12 * props.scaleFactor}
+      fontSize={12}
       strokeWidth={1}
-      offsetX={8 * props.scaleFactor}
-      offsetY={8 * props.scaleFactor}
+      offsetX={8}
+      offsetY={8}
+      scale={{ x: props.scaleFactor, y: props.scaleFactor }}
     />
   )
 }

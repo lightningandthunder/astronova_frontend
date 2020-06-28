@@ -26,14 +26,13 @@ export default function PlanetSymbol(props) {
       y={y}
       text={getSymbol(props.planetName)}
       fontSize={
-        textualChartPoints.indexOf(props.planetName) >= 0
-          ? 14 * props.scaleFactor
-          : 22 * props.scaleFactor
+        textualChartPoints.indexOf(props.planetName) >= 0 ? 14 : 22
       }
       stroke={PLANET_COLORS[props.planetName]}
       strokeWidth={1}
-      offsetX={8 * props.scaleFactor}
-      offsetY={8 * props.scaleFactor}
+      offsetX={8}
+      offsetY={8}
+      scale={{ x: props.scaleFactor, y: props.scaleFactor }}
     />
   )
 }

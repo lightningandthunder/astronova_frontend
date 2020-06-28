@@ -10,11 +10,11 @@ import Rings from "./Rings";
 import BiwheelDivider from "./BiwheelDivider"
 import ChartInfo from "./ChartInfo";
 import { rotateCoordinatesInRA } from "../../utils/geometry";
-import AspectsLister from "../../managers/AspectManager";
+import AspectsLister from "../../models/AspectLister";
 import AspectLines from "./AspectLines";
 import { RingLayerEnum, ChartViews } from "../../settings";
 import UserConfig from "../../models/UserConfig";
-import AspectPanel from "../aspectPanelComponents/AspectPanel";
+import AspectPanel from "../AspectPanel";
 
 const DEFAULT_CUSPS = {
   "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,

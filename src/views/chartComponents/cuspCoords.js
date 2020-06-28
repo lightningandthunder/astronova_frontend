@@ -20,9 +20,10 @@ export default function CuspCoords(props) {
         stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
         strokeWidth={1}
         fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
-        fontSize={(props.isZodiacal ? 22 : 14) * props.scaleFactor}
-        offsetX={8 * props.scaleFactor}
-        offsetY={8 * props.scaleFactor}
+        fontSize={(props.isZodiacal ? 22 : 14)}
+        offsetX={8}
+        offsetY={8}
+        scale={{ x: props.scaleFactor, y: props.scaleFactor }}
       />
     )
   }

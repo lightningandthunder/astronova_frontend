@@ -1,8 +1,8 @@
 import React from "react";
-import { getSymbol } from "../../utils/utils";
-import { degToMin } from "../../utils/geometry";
-import "../../styles/AspectPanel.css";
-import "../../styles/ColorsAndFonts.css";
+import { getSymbol } from "../utils/utils";
+import { degToMin } from "../utils/geometry";
+import "../styles/AspectPanel.css";
+import "../styles/ColorsAndFonts.css";
 
 export default function AspectPanel(props) {
   return (
