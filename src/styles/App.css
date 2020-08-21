@@ -1,54 +1,36 @@
-/* Globals
-*/
-
 html, body {
   height: 100vh;
 }
 
 .chart {
-  float: left;
   background-color: #f9f9f9;
+  float: left;
 }
-
-/* Calculation Popup
-*/
 
 .NewChartDialog, .ReturnChartDialog, .RelocateChartDialog {
-    height: 200px;
-    width: auto;
+  height: 200px;
+  width: auto;
 }
 
-
-
-/* Title
-*/
-
-
-/* Control Panel
-*/
-
 .ControlPanel {
-    background-color: lightcyan;
-    width: 20%;
-    height: 100vh;
+  background-color: lightcyan;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+  width: 20%;
 }
 
 .SolunarReturnButton, .NewChartButton, .RelocateChartButton {
-    height: 20px;
-    width: 100%;
-    border-radius: 5px;
+  border-radius: 5px;
+  height: 20px;
+  width: 100%;
 }
 
 .ResetChartsButton {
-    height: 20px;
-    width: 100%;
-    border-radius: 5px;
-    background-color: rgb(246, 227, 227);
+  height: 20px;
+  width: 100%;
+  border-radius: 5px;
+  background-color: rgb(246, 227, 227);
 }
-
-
-/* Footer
-*/
 
 /* 
 * Nova, a free sidereal astrological tool.

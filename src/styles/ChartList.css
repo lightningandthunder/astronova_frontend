@@ -1,8 +1,8 @@
 .chartList{
-  height: 75%;
-  width: 100%;
   background-color: rgb(237, 240, 245);
+  height: 70%;
   overflow-y: scroll;
+  width: 100%;
 }
 
 .selectedChartItem {

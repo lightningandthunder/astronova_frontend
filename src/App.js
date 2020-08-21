@@ -21,6 +21,7 @@ import AspectLister from "./models/AspectLister";
 import UserConfig from "./models/UserConfig";
 import AspectPanel from "./views/AspectPanel";
 import ControlPanel from "./views/ControlPanel";
+import NovaNavbar from "./views/NovaNavbar";
 
 
 class App extends React.Component {
@@ -33,8 +34,6 @@ class App extends React.Component {
       selectedChartAspects: null,
       view: "ecliptical",
       panelState: "control",
-      settingsCogIsAnimated: false,
-      animationTimeoutId: null,
       error: null,
     }
 
@@ -169,15 +168,6 @@ class App extends React.Component {
   }
 
   handleSettingsClick() {
-    // Handle animation
-    this.setState({ cogIsAnimated: true });
-    clearTimeout(this.state.animationTimeoutId);
-
-    const timeoutId = setTimeout(
-      () => this.setState({ cogIsAnimated: false })
-      , 650);
-    this.setState({ animationTimeoutId: timeoutId });
-
     // Handle actual button behavior
     if (this.state.panelState === "control")
       this.setState({ panelState: "aspects" });
@@ -192,6 +182,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
+        <NovaNavbar
+          handleSettingsClick={this.handleSettingsClick}
+          panelState={this.state.panelState}
+        />
         <ErrorAlert
           err={this.state.error}
           resetError={() => errorService.clearErrors()}
@@ -218,19 +212,10 @@ class App extends React.Component {
                 aspects={this.state.selectedChartAspects}
               />
             }
-
-            <box-icon
-              name="cog"
-              type="solid"
-              {...this.state.settingsCogIsAnimated && { "animation": "spin" }}
-              onClick={this.handleSettingsClick}>
-            </box-icon>
-            <AspectPanel aspects={this.state.selectedChartAspects} />
-
             {
               this.state.panelState === "control" &&
               <ControlPanel
-                enabled={this.state.panelState === "control"}
+                // enabled={this.state.panelState === "control"}
                 view={this.state.view}
                 charts={this.state.charts}
                 selectedChart={this.state.selectedChart}
@@ -238,11 +223,15 @@ class App extends React.Component {
                 saveChart={this.saveChart}
                 setSelectedChartToNewest={this.setSelectedChartToNewest}
                 resetCharts={this.resetCharts}
-                deleteCharts={this.deleteCharts}
+                deleteChart={this.deleteChart}
                 splitCharts={this.splitCharts}
                 handleError={this.handleError}
                 onChangeSelectedChart={this.onChangeSelectedChart}
               />
+            }
+            {
+              this.state.panelState === "aspects" &&
+              <AspectPanel aspects={this.state.selectedChartAspects} />
             }
           </div>
         }

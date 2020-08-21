@@ -14,15 +14,6 @@ const PLANETARY_CHART_POINTS = [
   "Pluto",
 ]
 
-// const ANGLE_CHART_POINTS = [
-//   "EP",
-//   "WP",
-//   "Asc",
-//   "MC",
-//   "Dsc",
-//   "IC",
-// ]
-
 const DEFAULT_CONFIG = {
   chartViews: {
     ecliptical: [...PLANETARY_CHART_POINTS, "Asc", "MC", "EP"],

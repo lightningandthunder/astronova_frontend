@@ -13,7 +13,6 @@ import { rotateCoordinatesInRA } from "../../utils/geometry";
 import AspectLines from "./AspectLines";
 import { RingLayerEnum, ChartViews } from "../../settings";
 import UserConfig from "../../models/UserConfig";
-import AspectPanel from "../AspectPanel";
 
 const DEFAULT_CUSPS = {
   "1": 0, "2": 30, "3": 60, "4": 90, "5": 120, "6": 150,
@@ -22,18 +21,19 @@ const DEFAULT_CUSPS = {
 
 export default function Chart(props) {
   // Use 80% of the window width if the window is wide enough to have a side panel
-  const calcStageWidth = () => window.innerWidth < 992 ? window.innerWidth : window.innerWidth * 0.8;
+  const calcStageWidth = () => window.innerWidth < 576 ? window.innerWidth : window.innerWidth * 0.8;
+  const calcStageHeight = () => window.innerWidth < 576 ? window.innerHeight : window.innerHeight - 50;
 
   // Diameter of the chart, with padding
-  const defaultScaleFactor = Math.min(window.innerHeight / 680, window.innerWidth / 680);
+  const defaultScaleFactor = Math.min(calcStageHeight() / 680, calcStageWidth() / 680);
 
   const [scaleFactor, setScaleFactor] = useState(defaultScaleFactor)
   const [width, setWidth] = useState(calcStageWidth());
-  const [height, setHeight] = useState(window.innerHeight);
+  const [height, setHeight] = useState(calcStageHeight());
 
   const setDimensions = () => {
     setWidth(calcStageWidth());
-    setHeight(window.innerHeight);
+    setHeight();
     setScaleFactor(defaultScaleFactor);
   };
 
@@ -99,7 +99,7 @@ export default function Chart(props) {
       <Stage width={width} height={height} className="chart">
         <Layer>
           <Group>
-            {/* Uniwheel components */}
+            {/* Components for uni and biwheels */}
             <ChartInfo
               name={getChartName()}
               longitude={props.innerChart.longitude}
@@ -140,7 +140,7 @@ export default function Chart(props) {
               />
             }
 
-            {/* Biwheel-specific components */}
+            {/* Only show inner/outer divider for biwheels */}
             {
               props.outerChart &&
               <Group>
