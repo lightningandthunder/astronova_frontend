@@ -144,7 +144,6 @@ export default class NewChartPopup extends React.Component {
     }
   }
 
-
   render() {
     return (
       <div onKeyDown={this.handleKeyDown}>

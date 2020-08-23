@@ -1,5 +1,6 @@
 html, body {
   height: 100vh;
+  box-sizing: border-box !important;
 }
 
 .chart {
@@ -10,26 +11,6 @@ html, body {
 .NewChartDialog, .ReturnChartDialog, .RelocateChartDialog {
   height: 200px;
   width: auto;
-}
-
-.ControlPanel {
-  background-color: lightcyan;
-  height: calc(100vh - 50px);
-  overflow-y: auto;
-  width: 20%;
-}
-
-.SolunarReturnButton, .NewChartButton, .RelocateChartButton {
-  border-radius: 5px;
-  height: 20px;
-  width: 100%;
-}
-
-.ResetChartsButton {
-  height: 20px;
-  width: 100%;
-  border-radius: 5px;
-  background-color: rgb(246, 227, 227);
 }
 
 /* 

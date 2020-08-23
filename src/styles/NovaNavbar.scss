@@ -1,10 +1,10 @@
 .navbar  {
-  height: 50px;
+  height: 40px;
   border-bottom: 1px solid gray;
+  justify-content: flex-end;
 }
 
-#nav-icon {
-  text-align: right;
+.nav-icon {
   animation: fadeIn ease 750ms;
   -webkit-animation: fadeIn ease 750ms;
   -moz-animation: fadeIn ease 750ms;

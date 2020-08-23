@@ -1,8 +1,10 @@
 import React from "react";
 import { getSymbol } from "../utils/utils";
 import { degToMin } from "../utils/geometry";
-import "../styles/AspectPanel.css";
-import "../styles/ColorsAndFonts.css";
+import "../styles/AspectPanel.scss";
+import "../styles/ColorsAndFonts.scss";
+
+import Kofi from "./ko-fi/Kofi";
 
 export default function AspectPanel(props) {
   return (
@@ -48,6 +50,7 @@ export default function AspectPanel(props) {
           }
         </tbody>
       </table>
+      <Kofi></Kofi>
     </div >
   )
 }

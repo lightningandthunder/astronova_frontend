@@ -1,20 +1,13 @@
 import React from 'react';
 import FontFaceObserver from "fontfaceobserver";
 import "boxicons";
-import './styles/App.css';
+import './styles/App.scss';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Chartlist from './views/chartlist';
-import ResetChartsButton from './views/ResetChartsButton';
-import NewChartPopup from './views/modals/NewChartPopup';
-import ReturnChartPopup from './views/modals/ReturnChartPopup';
-import RelocatePopup from "./views/modals/RelocatePopup"
 import { logIfDebug } from './utils/utils';
 import Chart from './views/chartComponents/Chart';
-import ViewButtons from "./views/ViewButtons";
 import { TITLE, WheelTypes } from "./settings";
-import Kofi from "./views/ko-fi/Kofi";
 import { errorService } from "./services/errorService";
 import ErrorAlert from "./views/ErrorAlert";
 import AspectLister from "./models/AspectLister";
@@ -22,6 +15,7 @@ import UserConfig from "./models/UserConfig";
 import AspectPanel from "./views/AspectPanel";
 import ControlPanel from "./views/ControlPanel";
 import NovaNavbar from "./views/NovaNavbar";
+import UserSettings from "./views/UserSettings";
 
 
 class App extends React.Component {
@@ -42,7 +36,7 @@ class App extends React.Component {
     this.resetCharts = this.resetCharts.bind(this);
     this.saveChart = this.saveChart.bind(this);
     this.setSelectedChartToNewest = this.setSelectedChartToNewest.bind(this);
-    this.handleSettingsClick = this.handleSettingsClick.bind(this);
+    this.handleIconClick = this.handleIconClick.bind(this);
     this.deleteChart = this.deleteChart.bind(this);
     this.splitCharts = this.splitCharts.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -167,12 +161,8 @@ class App extends React.Component {
     this.onChangeSelectedChart(this.state.charts[this.state.charts.length - 1]);
   }
 
-  handleSettingsClick() {
-    // Handle actual button behavior
-    if (this.state.panelState === "control")
-      this.setState({ panelState: "aspects" });
-    else
-      this.setState({ panelState: "control" });
+  handleIconClick(event) {
+    this.setState({ panelState: event });
   }
 
   handleError(err) {
@@ -183,7 +173,7 @@ class App extends React.Component {
     return (
       <div className="app">
         <NovaNavbar
-          handleSettingsClick={this.handleSettingsClick}
+          handleIconClick={this.handleIconClick}
           panelState={this.state.panelState}
         />
         <ErrorAlert
@@ -232,6 +222,10 @@ class App extends React.Component {
             {
               this.state.panelState === "aspects" &&
               <AspectPanel aspects={this.state.selectedChartAspects} />
+            }
+            {
+              this.state.panelState === "settings" &&
+              <UserSettings />
             }
           </div>
         }

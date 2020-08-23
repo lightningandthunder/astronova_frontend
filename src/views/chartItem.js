@@ -3,28 +3,30 @@ import { WheelTypes } from "../settings";
 
 export default function ChartItem(props) {
   return (
-    <div className={props.selected ? "selectedChartItem" : "unselectedChartItem"}
+    <div className={`chart-item ${props.selected ? "selected" : ""}`}
       onClick={() => props.onChangeSelectedChart(props.chart)}>
-      {props.chart.name}
+      <span>
+        {props.chart.name}
+      </span>
 
-      <button
-        id={props.chart.name}
-        className="chart-delete-button"
-        onClick={() => props.deleteChart(props.chart)}
-      >
-        &times;
-            </button>
       {
         props.chart.type !== WheelTypes.UNIWHEEL &&
-        <button
-          id={props.chart.name}
-          className="chart-split-button"
-          onClick={() => props.splitCharts(props.chart)}
-        >
-          split
-            </button>
+        <div className="action-icon">
+          <box-icon
+            name="collection"
+            type="solid"
+            onClick={() => props.splitCharts(props.chart)}>
+          </box-icon>
+        </div>
       }
 
+      <div className="action-icon">
+        <box-icon
+          name="x-circle"
+          type="solid"
+          onClick={() => props.deleteChart(props.chart)}>
+        </box-icon>
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import ReturnChartPopup from "./modals/ReturnChartPopup";
 import Chartlist from "./chartlist";
 import Kofi from "./ko-fi/Kofi";
 import { WheelTypes } from "../settings";
+import "../styles/ControlPanel.scss";
 
 export default function ControlPanel(props) {
   return (

@@ -141,7 +141,7 @@ export default class ReturnChartPopup extends React.Component {
       const chartArray = Biwheel.arrayFromJSON(response.data);
 
       for (let chart of chartArray) {
-        chart.setName(`${inputRadix.name} ${harmonic} Harmonic Solunar Return`)
+        chart.setName(`${inputRadix.name} ${harmonic} Solunar Return`)
           .setPlaceName(locationResults.placeName)
           .setRadixName(`${inputRadix.name} (Precessed Radix)`)
           .setRadixPlaceName(locationResults.placeName)

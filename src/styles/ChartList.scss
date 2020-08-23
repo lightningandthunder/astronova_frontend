@@ -1,11 +1,20 @@
 .chartList{
   background-color: rgb(237, 240, 245);
-  height: 70%;
+  height: calc(82% - 36px);
   overflow-y: scroll;
   width: 100%;
 }
 
-.selectedChartItem {
+.action-icon {
+  margin-left: 0;
+  /* float: right; */
+}
+
+.chart-item {
+  display: flex;
+}
+
+.selected {
   background-color: lightblue;
 }
 

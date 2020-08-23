@@ -22,7 +22,7 @@ const DEFAULT_CUSPS = {
 export default function Chart(props) {
   // Use 80% of the window width if the window is wide enough to have a side panel
   const calcStageWidth = () => window.innerWidth < 576 ? window.innerWidth : window.innerWidth * 0.8;
-  const calcStageHeight = () => window.innerWidth < 576 ? window.innerHeight : window.innerHeight - 50;
+  const calcStageHeight = () => window.innerWidth < 576 ? window.innerHeight : window.innerHeight - 40;
 
   // Diameter of the chart, with padding
   const defaultScaleFactor = Math.min(calcStageHeight() / 680, calcStageWidth() / 680);
@@ -33,13 +33,26 @@ export default function Chart(props) {
 
   const setDimensions = () => {
     setWidth(calcStageWidth());
-    setHeight();
+    setHeight(calcStageHeight());
     setScaleFactor(defaultScaleFactor);
   };
 
+  // Add resize listeners
+  const resizeEvents = [
+    "resize",
+    "fullscreenchange",  // standard
+    "mozfullscreenchange",  // Firefox
+    "webkitfullscreenchange",  // Chrome, Opera, Safari
+    "msfullscreenchange",  // IE and Edge
+  ];
   useEffect(() => {
-    window.addEventListener("resize", setDimensions);
-    return () => window.removeEventListener("resize", setDimensions);
+    for (let event of resizeEvents)
+      window.addEventListener(event, setDimensions);
+
+    return () => {
+      for (let event of resizeEvents)
+        window.removeEventListener(event, setDimensions);
+    };
   });
 
   const getChartName = () => {
@@ -85,13 +98,28 @@ export default function Chart(props) {
     }
   }
 
-  const propData = {
+  const propDataInnerChart = {
+    aspects: props.aspects,
     origin: origin,
     rotationalOffset: rotationalOffset,
     isZodiacal: isZodiacal,
     scaleFactor: scaleFactor,
     chartPoints: chartPoints,
     cusps: cusps,
+    ringLayer: props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL,
+    coords: innerCoords,
+  };
+
+  const propDataOuterChart = {
+    aspects: props.aspecs,
+    origin: origin,
+    rotationalOffset: rotationalOffset,
+    isZodiacal: isZodiacal,
+    scaleFactor: scaleFactor,
+    chartPoints: chartPoints,
+    cusps: cusps,
+    ringLayer: RingLayerEnum.BIWHEEL_OUTER,
+    coords: outerCoords,
   };
 
   return (
@@ -108,44 +136,24 @@ export default function Chart(props) {
               placeName={getChartPlaceName()}
               scaleFactor={scaleFactor}
             />
-            <Rings
-              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-              {...propData}
-            />
-            <Planets
-              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-              coords={innerCoords}
-              {...propData}
-            />
-
-            <CuspLines
-              {...propData}
-              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-            />
-            <CuspCoords
-              {...propData}
-            />
-            <HouseNumbers
-              {...propData}
-              ringLayer={props.outerChart ? RingLayerEnum.BIWHEEL_INNER : RingLayerEnum.UNIWHEEL}
-            />
+            <Rings {...propDataInnerChart} />
+            <Planets {...propDataInnerChart} />
+            <CuspLines {...propDataInnerChart} />
+            <CuspCoords {...propDataInnerChart} />
+            <HouseNumbers {...propDataInnerChart} />
 
             {/* Only show aspect lines for uniwheels */}
             {
               !props.outerChart &&
-              <AspectLines
-                aspects={props.aspects}
-                coords={innerCoords}
-                {...propData}
-              />
+              <AspectLines {...propDataInnerChart} />
             }
 
             {/* Only show inner/outer divider for biwheels */}
             {
               props.outerChart &&
               <Group>
-                <BiwheelDivider {...propData} />
-                <Planets ringLayer={RingLayerEnum.BIWHEEL_OUTER} coords={outerCoords} {...propData} />
+                <BiwheelDivider {...propDataInnerChart} />
+                <Planets {...propDataOuterChart} />
               </Group>
             }
           </Group>

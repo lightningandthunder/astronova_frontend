@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/ChartList.css';
+import '../styles/ChartList.scss';
 
 import ChartItem from "./chartItem";
 

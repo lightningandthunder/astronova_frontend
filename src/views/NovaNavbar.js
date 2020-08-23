@@ -1,27 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import "../styles/NovaNavbar.css";
+import Popup from "reactjs-popup";
+
+import Faq from "./faqPage/Faq";
+import "../styles/NovaNavbar.scss";
 
 export default function NovaNavbar(props) {
+  const [faqIsOpen, openFaq] = useState(false);
 
   return (
-    <Navbar expand="sm" className="navbar" bg="light" variant="primary">
+    <Navbar id="navbar" expand="sm" className="navbar" bg="light" variant="primary">
       {
-        props.panelState === "aspects" &&
-        <box-icon
-          id="nav-icon"
-          name="customize"
-          onClick={props.handleSettingsClick}>
-        </box-icon>
+        props.panelState !== "control" &&
+        <div className="nav-icon">
+          <box-icon
+            name="customize"
+            onClick={() => props.handleIconClick("control")}>
+          </box-icon>
+        </div>
       }
       {
-        props.panelState === "control" &&
-        <box-icon
-          id="nav-icon"
-          name="shape-triangle"
-          onClick={props.handleSettingsClick}>
-        </box-icon>
+        props.panelState !== "aspects" &&
+        <div className="nav-icon">
+          <box-icon
+            name="shape-triangle"
+            onClick={() => props.handleIconClick("aspects")}>
+          </box-icon>
+        </div>
       }
+      {
+        props.panelState !== "settings" &&
+        <div className="nav-icon">
+          <box-icon
+            name="cog"
+            onClick={() => props.handleIconClick("settings")}>
+          </box-icon>
+        </div>
+      }
+      <div className="nav-icon">
+        <box-icon
+          name="help-circle"
+          onClick={() => openFaq(true)}>
+        </box-icon>
+      </div>
+      <Popup
+        className="popup"
+        position="right center"
+        modal
+        open={faqIsOpen}
+        closeOnDocumentClick
+        onClose={() => openFaq(false)}
+      >
+        <Faq></Faq>
+      </Popup>
     </Navbar>
   );
 }
