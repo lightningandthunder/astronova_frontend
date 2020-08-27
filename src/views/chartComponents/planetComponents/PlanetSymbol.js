@@ -9,7 +9,7 @@ export default function PlanetSymbol(props) {
   const radiusMap = {
     [RingLayerEnum.UNIWHEEL]: 280,
     [RingLayerEnum.BIWHEEL_INNER]: 190,
-    [RingLayerEnum.BIWHEEL_OUTER]: 280,
+    [RingLayerEnum.BIWHEEL_OUTER]: 285,
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
@@ -29,7 +29,8 @@ export default function PlanetSymbol(props) {
         textualChartPoints.indexOf(props.planetName) >= 0 ? 14 : 22
       }
       stroke={PLANET_COLORS[props.planetName]}
-      strokeWidth={1}
+      fill={PLANET_COLORS[props.planetName]}
+      strokeWidth={0.5}
       offsetX={8}
       offsetY={8}
       scale={{ x: props.scaleFactor, y: props.scaleFactor }}

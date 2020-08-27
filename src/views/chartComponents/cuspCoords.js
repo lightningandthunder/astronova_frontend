@@ -18,7 +18,8 @@ export default function CuspCoords(props) {
         key={`${cusp}-Sign`}
         text={props.isZodiacal ? getSymbol(sign) : house}
         stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
-        strokeWidth={1}
+        fill={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
+        strokeWidth={0.5}
         fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
         fontSize={(props.isZodiacal ? 22 : 14)}
         offsetX={8}

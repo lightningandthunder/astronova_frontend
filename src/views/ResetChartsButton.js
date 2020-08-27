@@ -1,8 +1,9 @@
 import React from 'react';
+import "../styles/ControlPanel.scss"
 
 export default function ResetChartsButton(props) {
     return (
-        <button className={"ResetChartsButton"}
+        <button className="btn btn-red"
             onClick={props.onClick}>
             Reset Charts
             </button>

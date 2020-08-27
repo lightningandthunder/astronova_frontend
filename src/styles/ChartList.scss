@@ -1,5 +1,7 @@
+@import "./variables.scss";
+
 .chartList{
-  background-color: rgb(237, 240, 245);
+  background-image: linear-gradient(to top right, $cyan-process, $blue-crayola);
   height: calc(82% - 36px);
   overflow-y: scroll;
   width: 100%;
@@ -7,6 +9,7 @@
 
 .action-icon {
   margin-left: 0;
+  color: $jet;
   /* float: right; */
 }
 
@@ -15,7 +18,7 @@
 }
 
 .selected {
-  background-color: lightblue;
+  background-color: $amethyst;
 }
 
 .chart-delete-button {

@@ -107,7 +107,7 @@ export default class RelocatePopup extends React.Component {
     return (
       <div onKeyDown={this.handleKeyDown}>
         <button
-          className="RelocateChartButton"
+          className="btn btn-blue"
           disabled={!this.props.enabled}
           onClick={this.openPopup}
         >

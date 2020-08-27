@@ -2,28 +2,31 @@ import React from "react";
 
 export default function ViewButtons(props) {
   return (
-    <div className="viewButtons">
+    <div className="view-buttons">
       <input type="radio"
+        className="radio-input"
         id="ecliptical"
         value="ecliptical"
         checked={props.view === "ecliptical"}
         onChange={props.onChangeView}
       />
-      <label>Ecliptical</label>
+      <label htmlFor="ecliptical">Ecliptical</label>
       <input type="radio"
+        className="radio-input"
         id="mundane"
         value="mundane"
         checked={props.view === "mundane"}
         onChange={props.onChangeView}
       />
-      <label>Mundane</label>
+      <label htmlFor="mundane">Mundane</label>
       <input type="radio"
+        className="radio-input"
         id="right_ascension"
         value="right_ascension"
         checked={props.view === "right_ascension"}
         onChange={props.onChangeView}
       />
-      <label>RA</label>
+      <label htmlFor="right_ascension">RA</label>
     </div>
   )
 }

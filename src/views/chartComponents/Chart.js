@@ -83,7 +83,7 @@ export default function Chart(props) {
   const cusps = isZodiacal
     ? (props.outerChart && props.outerChart.cusps) || props.innerChart.cusps
     : DEFAULT_CUSPS;
-
+  
   // Lock Ascendant to left side of chart in zodiacal view
   const rotationalOffset = isZodiacal ? cusps["1"] : 0;
 

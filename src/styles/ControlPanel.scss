@@ -1,19 +1,53 @@
+@import "./variables.scss";
+
 .ControlPanel {
-  background-color: lightcyan;
+  background-image: linear-gradient(to top right, $cyan-process, $blue-crayola);
   height: calc(100vh - 40px);
   overflow-y: auto;
   width: 20%;
 }
 
-.SolunarReturnButton, .NewChartButton, .RelocateChartButton {
-  border-radius: 5px;
-  height: 20px;
+.btn-blue {
+  align-items: center;
+  background-color: $cyan-process;
+  border-color: $jet;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  font-weight: bold;
+  height: 1.5rem;
+  justify-content: center;
+  letter-spacing: 0.05em;
   width: 100%;
 }
 
-.ResetChartsButton {
-  height: 20px;
+.btn-red {
+  align-items: center;
+  background-color: $radical-red;
+  border-radius: 6px;
+  border-color: black;
+  color: #fff;
+  display: flex;
+  font-weight: bold;
+  height: 1.5rem;
+  justify-content: center;
+  letter-spacing: 0.05em;
   width: 100%;
-  border-radius: 5px;
-  background-color: rgb(246, 227, 227);
+}
+
+.view-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+input {
+  align-items: center;
+  display: inline-flex;
+  margin: 0.3rem 0;
+}
+
+label {
+  align-items: center;
+  display: inline-flex;
+  margin-bottom: 0rem;
 }

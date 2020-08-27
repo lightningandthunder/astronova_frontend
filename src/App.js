@@ -5,6 +5,7 @@ import './styles/App.scss';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { DEFAULT_CHARTS } from './defaultCharts'
 import { logIfDebug } from './utils/utils';
 import Chart from './views/chartComponents/Chart';
 import { TITLE, WheelTypes } from "./settings";
@@ -42,6 +43,7 @@ class App extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.onChangeView = this.onChangeView.bind(this);
     this.setAspectsForSelectedChart = this.setAspectsForSelectedChart.bind(this);
+    this.loadRandomChart = this.loadRandomChart.bind(this);
 
     this.errorSubscription = errorService.onError().subscribe(err => this.setState({ error: err }));
   }
@@ -71,8 +73,10 @@ class App extends React.Component {
     if (selectedChartFromLS)
       this.setState({ selectedChart: selectedChartFromLS },
         () => this.setAspectsForSelectedChart(this.state.selectedChart));
-    else
+    else {
       logIfDebug("Found no selected chart in LS");
+      this.loadRandomChart()
+    }
   }
 
   componentWillUnmount() {
@@ -96,10 +100,9 @@ class App extends React.Component {
     const allCharts = this.state.charts;
     const chartIndex = allCharts.indexOf(chart);
 
-    if (chartIndex < -1) {
-      logIfDebug("Unable to remove chart; not found in chart list");
+    if (chartIndex < -1)
       return;
-    }
+
     allCharts.splice(chartIndex, 1);
     this.setState({ charts: [...allCharts] },
       () => {
@@ -109,6 +112,9 @@ class App extends React.Component {
       this.onChangeSelectedChart(currentSelectedChart)
     else
       this.onChangeSelectedChart(allCharts[chartIndex - 1 >= 0 ? chartIndex - 1 : 0]);
+
+    if (!this.state.charts.length || !this.state.selectedChart)
+      this.loadRandomChart();
   }
 
   splitCharts(chart) {
@@ -118,13 +124,14 @@ class App extends React.Component {
     }
   }
 
+  unsplitCharts(chart) { }
+
   resetCharts() {
     localStorage.removeItem('charts');
     localStorage.removeItem('selectedChart')
     this.setState({ charts: [] });
-    this.setState({ selectedChart: undefined })
+    this.loadRandomChart();
   }
-
 
   setAspectsForSelectedChart(chart) {
     const radixChart = chart && chart.radix ? chart.radix : chart;
@@ -139,6 +146,13 @@ class App extends React.Component {
     this.setState({ selectedChartAspects: aspectList });
   }
 
+  loadRandomChart() {
+    const keys = Object.keys(DEFAULT_CHARTS);
+    const randomChart = DEFAULT_CHARTS[keys[keys.length * Math.random() << 0]];
+    this.setAspectsForSelectedChart(randomChart);
+    this.setState({ selectedChart: randomChart });
+  }
+
   /* ================= Event handlers ================= */
 
   onChangeSelectedChart(chart) {
@@ -147,14 +161,18 @@ class App extends React.Component {
       return;
 
     this.setState({ selectedChart: selection },
-      () => localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart))
+      () => {
+        localStorage.setItem('selectedChart', JSON.stringify(this.state.selectedChart));
+        this.setAspectsForSelectedChart(chart);
+      }
     );
-    this.setAspectsForSelectedChart(chart);
   }
 
   onChangeView(e) {
-    this.setState({ view: e.target.value });
-    this.setAspectsForSelectedChart(this.state.selectedChart);
+    this.setState(
+      { view: e.target.value },
+      () => this.setAspectsForSelectedChart(this.state.selectedChart)
+    );
   }
 
   setSelectedChartToNewest() {

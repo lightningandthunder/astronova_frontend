@@ -34,10 +34,7 @@ export default function ControlPanel(props) {
         enabled={props.selectedChart
           && props.selectedChart.type === WheelTypes.UNIWHEEL}
       />
-      <button
-        className={"ResetChartsButton"}
-        onClick={props.resetCharts}
-      >
+      <button className="btn btn-red" onClick={props.resetCharts}>
         Reset Charts
       </button>
       <Chartlist

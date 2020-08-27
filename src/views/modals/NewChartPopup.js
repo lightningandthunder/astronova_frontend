@@ -5,11 +5,7 @@ import moment from "moment-timezone";
 
 import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
-import LocationInput from "./LocationInput";
-import Datepicker from "./datepicker";
-import NameInput from "./NameInput";
 import { logIfDebug } from "../../utils/utils";
-import APMToggle from "./APMToggle";
 import Uniwheel from "../../models/Uniwheel";
 import RadixQuery from "../../models/RadixQuery";
 import { errorService } from "../../services/errorService";
@@ -27,8 +23,6 @@ export default class NewChartPopup extends React.Component {
       err: undefined,
     }
     this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
-    this.handleAPMChange = this.handleAPMChange.bind(this);
-    this.normalizeDateAndTz = this.normalizeDateAndTz.bind(this);
     this.handleLocationChange = this.handleLocationChange.bind(this);
     this.queryBackendForRadix = this.queryBackendForRadix.bind(this);
     this.openPopup = this.openPopup.bind(this);
@@ -53,13 +47,6 @@ export default class NewChartPopup extends React.Component {
     this.setState({ currentSelectedDatetime: event.target.value });
   }
 
-  handleAPMChange(e) {
-    if (this.state.apm === "AM")
-      this.setState({ apm: "PM" });
-    else
-      this.setState({ apm: "AM" });
-  }
-
   handleKeyDown(event) {
     // Recognize pressing return key
     if (event.keyCode === 13 && this.state.isOpen === true) {
@@ -74,24 +61,6 @@ export default class NewChartPopup extends React.Component {
         this.queryBackendForRadix();
       }
     }
-  }
-
-  normalizeDateAndTz(originalDate, timezone) {
-    // Validate date format
-    if (!(/^[1-3]\d{3}-[01]\d-[0-3]\dT[0-5]\d:[0-5]\d/).exec(originalDate)) {
-      this.setState({ err: `Invalid datetime: ${originalDate}` });
-      return;
-    }
-
-    const dt = moment.tz(originalDate, timezone);
-    const hour = dt.hour();
-    if (hour === 12 && this.state.apm === "AM")
-      dt.hour(0);
-    else if (0 < hour && hour < 12 && this.state.apm === "PM")
-      dt.hour(hour + 12);
-
-    logIfDebug("Selected datetime: " + dt);
-    return dt;
   }
 
   async queryBackendForRadix() {
@@ -111,7 +80,7 @@ export default class NewChartPopup extends React.Component {
       return;
     }
 
-    const dt = this.normalizeDateAndTz(this.state.currentSelectedDatetime, locationResults.tz);
+    const dt = moment.tz(this.state.currentSelectedDatetime, locationResults.tz)
     const radixQuery = new RadixQuery(dt, locationResults);
 
     logIfDebug("Radix query: ", radixQuery);
@@ -120,7 +89,6 @@ export default class NewChartPopup extends React.Component {
       radixQuery,
       { headers: QUERY_HEADERS }
     );
-    logIfDebug("Raw response: ", JSON.parse(response.data));
 
     if (response.data.err) {
       this.setState({ err: response.data.err });
@@ -147,7 +115,7 @@ export default class NewChartPopup extends React.Component {
   render() {
     return (
       <div onKeyDown={this.handleKeyDown}>
-        <button className="NewChartButton" onClick={this.openPopup}>
+        <button className="btn btn-blue" onClick={this.openPopup}>
           New Chart
                 </button>
         <Popup
@@ -158,13 +126,17 @@ export default class NewChartPopup extends React.Component {
           closeOnDocumentClick
           onClose={this.closePopup}
         >
-          <div className="NewChartDialog">
-            < NameInput onChange={this.handleNameChange} />
+          <div className="new-chart-dialogue">
             <div>
-              <Datepicker onChange={this.handleDateTimeChange} hourAndMinute={true} />
-              <APMToggle handleAPMChange={this.handleAPMChange} apm={this.state.apm} />
+              <input placeholder='Name' onChange={this.handleNameChange}>
+              </input>
             </div>
-            <LocationInput updateLocation={this.handleLocationChange} />
+            <div>
+              <input type="datetime-local" onChange={this.handleDateTimeChange} />
+            </div>
+            <div>
+              <input placeholder='Location' onChange={this.handleLocationChange} />
+            </div>
             <div>
               <button onClick={this.queryBackendForRadix}>Calculate</button>
             </div>

@@ -1,16 +1,17 @@
+@import "./variables.scss";
+
 html, body {
   height: 100vh;
   box-sizing: border-box !important;
 }
 
 .chart {
-  background-color: #f9f9f9;
+  background-color: $white;
   float: left;
 }
 
-.NewChartDialog, .ReturnChartDialog, .RelocateChartDialog {
-  height: 200px;
-  width: auto;
+.new-chart-dialogue, .return-chart-dialog, .RelocateChartDialog {
+  height: auto;
 }
 
 /* 

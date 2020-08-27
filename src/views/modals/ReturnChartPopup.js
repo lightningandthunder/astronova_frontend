@@ -4,14 +4,13 @@ import axios from 'axios';
 
 import geosearch from '../../utils/geosearch';
 import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
-import LocationInput from './LocationInput';
-import Datepicker from './datepicker';
 import { logIfDebug } from "../../utils/utils";
 import moment from "moment-timezone";
 import RadixQuery from "../../models/RadixQuery";
 import SolunarQuery from "../../models/SolunarQuery";
 import Biwheel from "../../models/Biwheel";
 import ErrorAlert from "../ErrorAlert";
+import { errorService } from "../../services/errorService";
 
 export default class ReturnChartPopup extends React.Component {
   constructor(props) {
@@ -28,7 +27,6 @@ export default class ReturnChartPopup extends React.Component {
 
     this.queryBackendForReturn = this.queryBackendForReturn.bind(this);
     this.handleDateTimeChange = this.handleDateTimeChange.bind(this);
-    this.normalizeDatetimeAndTz = this.normalizeDatetimeAndTz.bind(this);
     this.handleLocationChange = this.handleLocationChange.bind(this);
     this.openPopup = this.openPopup.bind(this);
     this.closePopup = this.closePopup.bind(this);
@@ -42,12 +40,7 @@ export default class ReturnChartPopup extends React.Component {
   /* ============= Popup handlers ============= */
 
   openPopup() {
-    this.setState({
-      isOpen: true,
-      planetInput: "Sun",
-      harmonicInput: 1,
-      quantityInput: 1
-    })
+    this.setState({ isOpen: true })
   }
   closePopup() { this.setState({ isOpen: false }) }
   handleKeyDown(event) {
@@ -63,16 +56,6 @@ export default class ReturnChartPopup extends React.Component {
   handlePlanetChange(event) { this.setState({ planetInput: event.target.value }); }
   handleHarmonicChange(event) { this.setState({ harmonicInput: event.target.value }); }
   handleQuantityChange(event) { this.setState({ quantityInput: event.target.value }); }
-
-  /* ======== Validation & error handling ======= */
-
-  normalizeDatetimeAndTz(dt, timezone) {
-    if (!(/^[1-3]\d{3}-[01]\d-[0-3]\d/.exec(dt))) {
-      this.setState({ err: "Invalid datetime!" });
-      return;
-    }
-    return moment.tz(dt, timezone);
-  }
 
   /* ==================== Query ================= */
 
@@ -112,7 +95,7 @@ export default class ReturnChartPopup extends React.Component {
       return;
     }
 
-    const dt = this.normalizeDatetimeAndTz(this.state.currentSelectedDatetime, locationResults.tz);
+    const dt = moment.tz(this.state.currentSelectedDatetime, locationResults.tz);
     const radixQuery = RadixQuery.fromUniwheel(inputRadix);
     const query = new SolunarQuery(radixQuery,
       {
@@ -141,7 +124,7 @@ export default class ReturnChartPopup extends React.Component {
       const chartArray = Biwheel.arrayFromJSON(response.data);
 
       for (let chart of chartArray) {
-        chart.setName(`${inputRadix.name} ${harmonic} Solunar Return`)
+        chart.setName(`${inputRadix.name} Solunar Return`)
           .setPlaceName(locationResults.placeName)
           .setRadixName(`${inputRadix.name} (Precessed Radix)`)
           .setRadixPlaceName(locationResults.placeName)
@@ -155,10 +138,10 @@ export default class ReturnChartPopup extends React.Component {
       this.closePopup();
     } catch (err) {
       logIfDebug(err);
-      // if (this.state.isOpen)
-      //   this.setState({ err: err })
-      // else
-      //   errorService.reportError(err);
+      if (this.state.isOpen)
+        this.setState({ err: err })
+      else
+        errorService.reportError(err);
     }
   }
 
@@ -166,7 +149,7 @@ export default class ReturnChartPopup extends React.Component {
     return (
       <div onKeyDown={this.handleKeyDown}>
         <button
-          className={"SolunarReturnButton"}
+          className="btn btn-blue"
           disabled={!this.props.enabled}
           onClick={this.openPopup}>
           New Solunar Return
@@ -178,9 +161,13 @@ export default class ReturnChartPopup extends React.Component {
           closeOnDocumentClick
           onClose={this.closePopup}
         >
-          <div className="ReturnChartDialog">
-            <Datepicker onChange={this.handleDateTimeChange} />
-            <LocationInput updateLocation={this.handleLocationChange} />
+          <div className="return-chart-dialog">
+            <div>
+              <input type="datetime-local" onChange={this.handleDateTimeChange} />
+            </div>
+            <div>
+              <input placeholder='Location' onChange={this.handleLocationChange} />
+            </div>
             <select onChange={this.handlePlanetChange}>
               <option value="Sun" key="Sun">Sun</option>
               <option value="Moon" key="Moon">Moon</option>

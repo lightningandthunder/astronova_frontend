@@ -9,7 +9,7 @@ export default function PlanetSign(props) {
   const radiusMap = {
     [RingLayerEnum.UNIWHEEL]: 230,
     [RingLayerEnum.BIWHEEL_INNER]: 140,
-    [RingLayerEnum.BIWHEEL_OUTER]: 230,
+    [RingLayerEnum.BIWHEEL_OUTER]: 245,
   };
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
 
@@ -29,7 +29,8 @@ export default function PlanetSign(props) {
       key={`${props.planetName}-${radius}-Sign`}
       text={props.isZodiacal ? getSymbol(sign) : house}
       stroke={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
-      strokeWidth={1}
+      fill={props.isZodiacal ? SIGN_COLORS[sign] : "black"}
+      strokeWidth={0.5}
       fontFamily={props.isZodiacal ? "AstroDotBasic" : "Arial"}
       fontSize={props.isZodiacal ? 22 : 14}
       offsetX={8}

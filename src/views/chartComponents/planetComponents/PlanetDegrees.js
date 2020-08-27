@@ -8,7 +8,7 @@ export default function PlanetDegrees(props) {
   const radiusMap = {
     [RingLayerEnum.UNIWHEEL]: 255,
     [RingLayerEnum.BIWHEEL_INNER]: 165,
-    [RingLayerEnum.BIWHEEL_OUTER]: 255,
+    [RingLayerEnum.BIWHEEL_OUTER]: 265,
   };
 
   const radius = radiusMap[props.ringLayer] * props.scaleFactor;
