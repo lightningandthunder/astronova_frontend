@@ -3,7 +3,6 @@ import Popup from "reactjs-popup";
 import axios from "axios";
 import moment from "moment-timezone";
 
-import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS } from "../../settings";
 import { logIfDebug } from "../../utils/utils";
 import Uniwheel from "../../models/Uniwheel";
@@ -74,14 +73,8 @@ export default class NewChartPopup extends React.Component {
       return;
     }
 
-    const locationResults = await geosearch(locationQuery);
-    if (!locationResults) {
-      this.setState({ err: "No location found! Please try a different location." });
-      return;
-    }
-
-    const dt = moment.tz(this.state.currentSelectedDatetime, locationResults.tz)
-    const radixQuery = new RadixQuery(dt, locationResults);
+    const dt = moment(this.state.currentSelectedDatetime)
+    const radixQuery = new RadixQuery(dt, locationQuery);
 
     logIfDebug("Radix query: ", radixQuery);
     const response = await axios.post(
@@ -97,8 +90,7 @@ export default class NewChartPopup extends React.Component {
 
     try {
       const newChart = Uniwheel.fromJSON(response.data)
-        .setName(this.state.nameInput)
-        .setPlaceName(locationResults.placeName);
+        .setName(this.state.nameInput);
       logIfDebug("New chart: ", newChart);
       this.props.saveChart(newChart);
       this.props.setSelectedChartToNewest();
@@ -127,23 +119,35 @@ export default class NewChartPopup extends React.Component {
           onClose={this.closePopup}
         >
           <div className="new-chart-dialogue">
-            <div>
-              <input placeholder='Name' onChange={this.handleNameChange}>
-              </input>
+            <div className="mb-3">
+              <ErrorAlert
+                err={this.state.err}
+                resetError={() => this.setState({ err: undefined })}
+              />
             </div>
-            <div>
-              <input type="datetime-local" onChange={this.handleDateTimeChange} />
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="nameInput">Name</label>
+              <div className="col-sm-10">
+                <input className="form-control" placeholder="Name" id="nameInput" onChange={this.handleNameChange} />
+              </div>
             </div>
-            <div>
-              <input placeholder='Location' onChange={this.handleLocationChange} />
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="datetimeInput">Date</label>
+              <div className="col-sm-10">
+                <input className="form-control" type="datetime-local" id="datetimeInput" onChange={this.handleDateTimeChange} />
+              </div>
             </div>
-            <div>
-              <button onClick={this.queryBackendForRadix}>Calculate</button>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="locationInput">Location</label>
+              <div className="col-sm-10">
+                <input className="form-control" placeholder='Location' onChange={this.handleLocationChange} />
+              </div>
             </div>
-            <ErrorAlert
-              err={this.state.err}
-              resetError={() => this.setState({ err: undefined })}
-            />
+            <div className="form-group row">
+              <div className="col-sm-10">
+                <button className="btn btn-primary" onClick={this.queryBackendForRadix}>Calculate</button>
+              </div>
+            </div>
           </div>
         </Popup>
       </div>

@@ -1,14 +1,9 @@
 export default class Location {
   constructor(data) {
-    this.longitude = data.lon;
+    this.longitude = data.long;
     this.latitude = data.lat;
     this.tz = data.tz;
-
-    const _state = data.address.country_code === "us"
-      ? data.address.state
-      : data.address.country;
-
-    this.placeName = `${data.address.city}, ${_state}`;
+    this.placeName = data.place_name;
   }
 }
 

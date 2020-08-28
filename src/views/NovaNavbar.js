@@ -15,6 +15,7 @@ export default function NovaNavbar(props) {
         <div className="nav-icon">
           <box-icon
             name="customize"
+            type="solid"
             onClick={() => props.handleIconClick("control")}>
           </box-icon>
         </div>
@@ -33,6 +34,7 @@ export default function NovaNavbar(props) {
         <div className="nav-icon">
           <box-icon
             name="cog"
+            type="solid"
             onClick={() => props.handleIconClick("settings")}>
           </box-icon>
         </div>
@@ -40,6 +42,7 @@ export default function NovaNavbar(props) {
       <div className="nav-icon">
         <box-icon
           name="help-circle"
+          type="solid"
           onClick={() => openFaq(true)}>
         </box-icon>
       </div>

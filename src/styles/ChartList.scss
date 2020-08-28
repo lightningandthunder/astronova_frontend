@@ -10,7 +10,6 @@
 .action-icon {
   margin-left: 0;
   color: $jet;
-  /* float: right; */
 }
 
 .chart-item {
@@ -18,7 +17,7 @@
 }
 
 .selected {
-  background-color: $amethyst;
+  border: 2px solid $jet;
 }
 
 .chart-delete-button {

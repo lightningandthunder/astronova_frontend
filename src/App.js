@@ -17,6 +17,7 @@ import AspectPanel from "./views/AspectPanel";
 import ControlPanel from "./views/ControlPanel";
 import NovaNavbar from "./views/NovaNavbar";
 import UserSettings from "./views/UserSettings";
+require('dotenv').config({debug: true});
 
 
 class App extends React.Component {

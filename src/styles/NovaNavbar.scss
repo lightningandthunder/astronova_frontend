@@ -2,15 +2,16 @@
 
 .navbar {
   height: 40px;
-  background-image: linear-gradient(to bottom right, $amethyst, $blue-crayola);
+  // background-image: linear-gradient(to bottom right, $amethyst, $blue-crayola);
+  background-color: $white;
   border-bottom: 1px solid $jet;
   justify-content: flex-end;
 }
 
 .nav-icon {
-  stroke: $jet;
-  stroke-width: 0.25;
-  fill: $white;
+  fill: $blue-crayola;
+  stroke: $blue-crayola;
+  stroke-width: 0.15;
   animation: fadeIn ease 750ms;
   -webkit-animation: fadeIn ease 750ms;
   -moz-animation: fadeIn ease 750ms;

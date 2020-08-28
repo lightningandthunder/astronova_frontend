@@ -2,6 +2,7 @@ import { WheelTypes } from "../settings";
 
 export default class Uniwheel {
   constructor(data) {
+    console.log(data)
     this.ecliptical = data.ecliptical;
     this.mundane = data.mundane;
     this.right_ascension = data.right_ascension;
@@ -17,9 +18,9 @@ export default class Uniwheel {
     this.local_datetime = data.local_datetime;
     this.tz = data.tz;
     this.type = WheelTypes.UNIWHEEL;
+    this.placeName = data.place_name;
 
     this.name = null;
-    this.placeName = null;
   }
 
   static fromJSON(json) {

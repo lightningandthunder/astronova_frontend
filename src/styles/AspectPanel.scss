@@ -1,6 +1,7 @@
 .aspect-panel {
   border-left: 1px solid black;
   height: calc(100vh - 40px);
+  min-height: 80%;
   overflow-y: scroll;
   width: 20%;
 }

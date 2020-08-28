@@ -2,7 +2,6 @@ import React from "react";
 import Popup from "reactjs-popup";
 import axios from 'axios';
 
-import geosearch from '../../utils/geosearch';
 import { QUERY_HEADERS, API_ADDRESS } from '../../settings';
 import { logIfDebug } from "../../utils/utils";
 import moment from "moment-timezone";
@@ -42,7 +41,7 @@ export default class ReturnChartPopup extends React.Component {
   openPopup() {
     this.setState({ isOpen: true })
   }
-  closePopup() { this.setState({ isOpen: false }) }
+  closePopup() { this.setState({ isOpen: false, err: null }) }
   handleKeyDown(event) {
     // Recognize pressing return key
     if (event.keyCode === 13 && this.state.isOpen === true)
@@ -56,6 +55,12 @@ export default class ReturnChartPopup extends React.Component {
   handlePlanetChange(event) { this.setState({ planetInput: event.target.value }); }
   handleHarmonicChange(event) { this.setState({ harmonicInput: event.target.value }); }
   handleQuantityChange(event) { this.setState({ quantityInput: event.target.value }); }
+
+  /* ==================== Validation ================= */
+
+  get formIsValid() {
+    return this.state.quantityInput >= 1 && this.state.quantityInput <= 50;
+  }
 
   /* ==================== Query ================= */
 
@@ -88,23 +93,14 @@ export default class ReturnChartPopup extends React.Component {
       return;
     }
 
-    // Setup and make query
-    const locationResults = await geosearch(locationQuery);
-    if (!locationResults) {
-      this.setState({ err: "No location found! Please try a different location." });
-      return;
-    }
-
-    const dt = moment.tz(this.state.currentSelectedDatetime, locationResults.tz);
+    const dt = moment(this.state.currentSelectedDatetime);
     const radixQuery = RadixQuery.fromUniwheel(inputRadix);
     const query = new SolunarQuery(radixQuery,
       {
         return_planet: planet,
         return_harmonic: harmonic,
-        return_longitude: locationResults.longitude,
-        return_latitude: locationResults.latitude,
         return_start_date: dt,
-        tz: locationResults.tz,
+        return_location: locationQuery,
         return_quantity: quantity,
       });
 
@@ -125,11 +121,9 @@ export default class ReturnChartPopup extends React.Component {
 
       for (let chart of chartArray) {
         chart.setName(`${inputRadix.name} Solunar Return`)
-          .setPlaceName(locationResults.placeName)
+          .setPlaceName(chart.solunar.placeName)
           .setRadixName(`${inputRadix.name} (Precessed Radix)`)
-          .setRadixPlaceName(locationResults.placeName)
           .setSolunarName(`${inputRadix.name} (Transiting Planets)`)
-          .setSolunarPlaceName(locationResults.placeName);
         this.props.saveChart(chart);
       }
 
@@ -162,37 +156,65 @@ export default class ReturnChartPopup extends React.Component {
           onClose={this.closePopup}
         >
           <div className="return-chart-dialog">
-            <div>
-              <input type="datetime-local" onChange={this.handleDateTimeChange} />
+            <div className="mb-3">
+              <ErrorAlert
+                err={this.state.err}
+                resetError={() => this.setState({ err: undefined })}
+              />
             </div>
-            <div>
-              <input placeholder='Location' onChange={this.handleLocationChange} />
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="datetimeInput">Date</label>
+              <div className="col-sm-10">
+                <input className="form-control" id="datetimeInput" type="date" onChange={this.handleDateTimeChange} />
+              </div>
             </div>
-            <select onChange={this.handlePlanetChange}>
-              <option value="Sun" key="Sun">Sun</option>
-              <option value="Moon" key="Moon">Moon</option>
-            </select>
-            <select label="Harmonic" onChange={this.handleHarmonicChange}>
-              {this.state.planetInput === "Sun"
-                ? [1, 2, 4, 9, 36].map((item) => (
-                  <option value={item} key={item}>{item}</option>
-                ))
-                : [1, 2, 4].map((item) => (
-                  <option value={item} key={item}>{item}</option>
-                ))}
-            </select>
-            <select onChange={this.handleQuantityChange}>
-              {this.createQuantityRange().map((item) => (
-                <option value={item} key={item}>{item}</option>
-              ))}
-            </select>
-            <div>
-              <button onClick={this.queryBackendForReturn}>Calculate</button>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="locationInput">Location</label>
+              <div className="col-sm-10">
+                <input className="form-control" id="locationInput" placeholder='Location' onChange={this.handleLocationChange} />
+              </div>
             </div>
-            <ErrorAlert
-              err={this.state.err}
-              resetError={() => this.setState({ err: undefined })}
-            />
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="planetInput">Planet</label>
+              <div className="col-sm-10">
+                <select className="form-control" id="planetInput" onChange={this.handlePlanetChange}>
+                  <option value="Sun" key="Sun">Sun</option>
+                  <option value="Moon" key="Moon">Moon</option>
+                </select>
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label" htmlFor="harmonicInut">Harmonic</label>
+              <div className="col-sm-10">
+                <select className="form-control" id="harmonicInput" onChange={this.handleHarmonicChange}>
+                  {this.state.planetInput === "Sun"
+                    ? [1, 2, 4, 9, 36].map((item) => (
+                      <option value={item} key={item}>{item}</option>
+                    ))
+                    : [1, 2, 4].map((item) => (
+                      <option value={item} key={item}>{item}</option>
+                    ))}
+                </select>
+                <small className="form-text text-muted">
+                  Select a harmonic: 1 for standard return, 2 for demi, 4 for quarti, etc.
+                </small>
+              </div>
+            </div>
+            <div className="form-group row">
+              <label htmlFor="quantityInput" className="col-sm-2 col-form-label">Quantity</label>
+              <div className="col-sm-10">
+                <input type="number" min="1" max="50" defaultValue="1" id="quantityInput" className="form-control" onChange={this.handleQuantityChange} />
+              </div>
+              {
+                (this.state.quantityInput > 50 || this.state.quantityInput < 1) &&
+                <small className="ml-3 form-text text-danger">
+                  Please enter a quantity from 1-50
+                </small>
+              }
+            </div>
+            <div className="col-sm-10">
+              <button className="btn btn-primary" disabled={!this.formIsValid} onClick={this.queryBackendForReturn}>Calculate</button>
+            </div>
           </div>
         </Popup>
       </div>

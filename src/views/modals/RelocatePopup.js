@@ -2,9 +2,7 @@ import React from "react";
 import Popup from "reactjs-popup";
 import axios from "axios";
 
-import geosearch from "../../utils/geosearch";
 import { QUERY_HEADERS, API_ADDRESS, WheelTypes } from "../../settings";
-import LocationInput from "./LocationInput";
 import { logIfDebug } from "../../utils/utils";
 import { errorService } from "../../services/errorService";
 import RelocationQuery from "../../models/RelocationQuery";
@@ -54,15 +52,9 @@ export default class RelocatePopup extends React.Component {
         return;
       }
 
-      const locationResults = await geosearch(locationQuery);
-      if (!locationResults) {
-        this.setState({ err: "No location found! Please try a different location." });
-        return;
-      }
-
       const relocateQuery = RelocationQuery
         .fromWheel(this.props.chart)
-        .setLocation(locationResults);
+        .setLocation(locationQuery);
 
       logIfDebug("Relocation query: ", relocateQuery);
       const response = await axios.post(
@@ -82,12 +74,8 @@ export default class RelocatePopup extends React.Component {
           .setName(`${this.props.chart.name} (Relocated)`)
           .setRadixName(`${this.props.chart.radix.name} Radix (Relocated)`)
           .setSolunarName(`${this.props.chart.solunar.name} Solunar (Relocated)`)
-          .setPlaceName(locationResults.placeName)
-          .setRadixPlaceName(locationResults.placeName)
-          .setSolunarPlaceName(locationResults.placeName)
         : Uniwheel.fromJSON(response.data)
           .setName(`${this.props.chart.name} (Relocated)`)
-          .setPlaceName(locationResults.placeName);
 
       logIfDebug("New chart: ", newChart);
       this.props.saveChart(newChart);
@@ -122,14 +110,24 @@ export default class RelocatePopup extends React.Component {
           onClose={this.closePopup}
         >
           <div className="RelocateChartDialog">
-            <LocationInput updateLocation={this.handleLocationChange} />
-            <div>
-              <button onClick={this.queryBackendForRelocation}>Relocate</button>
+            <div className="mb-3">
+              <ErrorAlert
+                err={this.state.err}
+                resetError={() => this.setState({ err: undefined })}
+              />
             </div>
-            <ErrorAlert
-              err={this.state.err}
-              resetError={() => this.setState({ err: undefined })}
-            />
+            <div className="form-group row">
+              <label htmlFor="locationInput" className="col-sm-2 col-form-label">Location</label>
+              <div className="col-sm-10">
+                <input className="form-control" id="locationInput" placeholder='Location' onChange={this.handleLocationChange} />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-sm-10">
+                <button className="btn btn-primary" onClick={this.queryBackendForRelocation}>Relocate</button>
+              </div>
+            </div>
+
           </div>
         </Popup>
       </div>

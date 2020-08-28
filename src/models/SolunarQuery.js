@@ -4,10 +4,8 @@ export default class SolunarQuery {
     this.return_params = {
       return_planet: solunarParams.return_planet,
       return_harmonic: solunarParams.return_harmonic,
-      return_longitude: solunarParams.return_longitude,
-      return_latitude: solunarParams.return_latitude,
       return_start_date: solunarParams.return_start_date,
-      tz: solunarParams.tz,
+      return_location: solunarParams.return_location,
       return_quantity: solunarParams.return_quantity,
     }
   }

@@ -12,9 +12,9 @@ export default function Faq(props) {
       </p>
       <ol>
         <li>to remove the price barrier that prevents many aspiring students from using quality software</li>
-        <li>to provide to veterans powerful features not found in other software - and make it mobile-friendly</li>
+        <li>to provide veterans with powerful features not found in other software - and make it mobile-friendly</li>
         <li>to create a tool dedicated specifically to sidereal astrology,
-                    focusing on the specific calculations and visualizations that are unique to that line of study.</li>
+                    focusing on the calculations and visualizations that are unique to that line of study.</li>
       </ol>
       <h4 className={"FaqHeader"}>What is Nova best used for?</h4>
       <p>
@@ -22,16 +22,16 @@ export default function Faq(props) {
         particularly in batches (read as: a few dozen charts at once).
         Since it does not have remote storage, you’re unlikely to amass a huge library of charts
         in this tool the way you might with some others.
-        In other words, this is a forensic tool, not a phone book.
+        In other words, this is a calculator, not a phone book.
       </p>
 
       <h4 className={"FaqHeader"}>Who maintains and develops Nova?</h4>
       <p>
-        Just <a
+        <a
           href="https://www.linkedin.com/in/mikepverducci/"
           target="_blank"
           rel="noopener noreferrer"
-        > me </a>!
+        >Just me</a>!
         I’m a professional software developer and a student of astrology.
       </p>
 
@@ -74,12 +74,9 @@ export default function Faq(props) {
       </p>
 
       <h4 className={"FaqHeader"}>I’m a developer. Is this project open source?</h4>
-      <p>
-        It is:
-      </p>
       <ul>
-        <li><a href="http://www.github.com/lightningandthunder/nova_ui" target="blank">Front end</a></li>
-        <li><a href="http://www.github.com/lightningandthunder/nova_api" target="blank">Back end</a></li>
+        <li><a href="http://www.github.com/lightningandthunder/nova_ui" target="blank">Here's the front end (React)</a></li>
+        <li><a href="http://www.github.com/lightningandthunder/nova_api" target="blank">Here's the back end (Python)</a></li>
       </ul>
 
       <h4 className={"FaqHeader"}>How can I report bugs or give feedback?</h4>
@@ -94,17 +91,15 @@ export default function Faq(props) {
       </p>
 
       <h4 className={"FaqHeader"}>How can I support the Nova project?</h4>
-      <p>
-        Test out my work and let me know if there are any bugs I missed.
-      </p>
-      <p>
-        Or, you could <a
+      <ul>
+        <li>Test out my work and let me know if there are any bugs I missed.</li>
+        <li>Tell your friends about Nova.</li>
+        <li>Or, you could <a
           href="https://ko-fi.com/lightningandthunder"
           target="blank"
-        >
-          buy me a coffee :)
-                </a>
-      </p>
+        >buy me a coffee :)</a>
+        </li>
+      </ul>
     </div>
   )
 }
