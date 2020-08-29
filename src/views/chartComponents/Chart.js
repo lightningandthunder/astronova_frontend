@@ -22,6 +22,7 @@ const DEFAULT_CUSPS = {
 export default function Chart(props) {
   // Use 80% of the window width if the window is wide enough to have a side panel
   const calcStageWidth = () => window.innerWidth < 576 ? window.innerWidth : window.innerWidth * 0.8;
+  // Leave room for nav bar
   const calcStageHeight = () => window.innerWidth < 576 ? window.innerHeight : window.innerHeight - 40;
 
   // Diameter of the chart, with padding

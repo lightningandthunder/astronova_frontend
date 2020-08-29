@@ -82,20 +82,20 @@ export default class NewChartPopup extends React.Component {
       radixQuery,
       { headers: QUERY_HEADERS }
     );
-
-    if (response.data.err) {
-      this.setState({ err: response.data.err });
+    const data = JSON.parse(response.data);
+    if (data.err) {
+      this.closePopup();
+      errorService.reportError(`API error: ${data.err}`);
       return;
     }
 
     try {
-      const newChart = Uniwheel.fromJSON(response.data)
+      const newChart = Uniwheel.fromJSON(data)
         .setName(this.state.nameInput);
       logIfDebug("New chart: ", newChart);
       this.props.saveChart(newChart);
       this.props.setSelectedChartToNewest();
       this.closePopup();
-      this.setState({ apm: "AM" })
     } catch (err) {
       if (this.state.open)
         this.setState({ err: err });

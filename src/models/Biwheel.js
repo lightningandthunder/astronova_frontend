@@ -10,14 +10,19 @@ export default class Biwheel {
   }
 
   static fromJSON(json) {
-    const parsedJson = JSON.parse(json);
-    const radix = new Uniwheel(parsedJson.radix);
-    const solunar = new Uniwheel(parsedJson.solunar);
+    if (typeof (json) === "string")
+      json = JSON.parse(json);
+
+    const radix = new Uniwheel(json.radix);
+    const solunar = new Uniwheel(json.solunar);
     return new Biwheel(radix, solunar);
   }
 
   static arrayFromJSON(json) {
-    const charts = JSON.parse(json);
+    if (typeof (json) === "string")
+      json = JSON.parse(json);
+
+    const charts = json;
     const arr = [];
     for (let c = 0; c < charts.length; c++) {
       const radix = new Uniwheel(charts[c].radix);

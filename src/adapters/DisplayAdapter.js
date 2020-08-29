@@ -3,29 +3,37 @@ import { logIfDebug } from "../utils/utils";
 
 export default class DisplayAdapter {
   constructor(coords, cusps, radius) {
-    this.coords = Object.keys(coords).forEach(key => {
+    Object.keys(coords).forEach(key => {
       this[key] = {
         name: key,
-        rawCoord: coords[key],
-        renderCoord: coords[key],
+        raw: coords[key],
+        display: coords[key],
       };
-    })
-    this.cusps = Object.keys(cusps).forEach(key => {
+    });
+    Object.keys(cusps).forEach(key => {
       this[key] = {
         name: key,
-        rawCoord: cusps[key],
-        renderCoord: cusps[key],
+        raw: cusps[key],
+        display: cusps[key],
       };
-    })
-    this.minAngle = (500 - radius) * 0.022;
-    this.smooth(coords, 0, 360, this.minAngle);
+    });
+    this.getRenderCoords(radius);
+    // this.smooth(coords, 0, 360, this.minAngle);
   }
 
-  useCusps(cusps) {
-    this.cusps = cusps;
+  get planets() {
+    return Object.keys(this)
+      .filter(key => !parseInt(key))
+      .map(key => this[key]);
   }
 
-  smooth(coords, lowerBound, upperBound, minAngle) {
+  get cusps() {
+    return Object.keys(this)
+      .filter(key => parseInt(key))
+      .map(key => this[key]);
+  }
+
+  smooth_v1(coords, lowerBound, upperBound, minAngle) {
     let prev = { renderCoord: lowerBound };
 
     // Iterate from first to last planet
@@ -67,39 +75,60 @@ export default class DisplayAdapter {
     return coords;
   }
 
+  getRenderCoords(radius) {
+    const minAngle = (500 - radius) * 0.022;
+    const sorted = this.mergeSortCoordinates(this);
+
+    let prev = null;
+    sorted.forEach((obj, index) => {
+      const key = obj.name;
+      if (parseInt(key))
+        return;  // skip cusps
+
+      if (!prev) {
+        prev = this[key];
+        return;
+      }
+
+      let overlap = minAngle - (this[key].raw - prev.display);
+      if (overlap > 0) {
+        this[key].display = getAdjustedLongitude(this[key].raw, overlap)
+      }
+      prev = this[key];
+    });
+    return;
+  }
+
   mergeSortCoordinates(coords) {
     if (coords.length < 2)
       return coords;
-  
+
     let arrayOfCoords = [];
-    if (!(Array.isArray(coords))) {
-      // Add coordinates to array as individual objects
-      Object.keys(coords).map(key => (
-        arrayOfCoords.push({ [key]: coords[key] })
-      ));
-    } else {
-      arrayOfCoords = coords;
-    }
-  
+    // Add coordinates to array as individual objects
+    // Object.keys(coords).map(key => (
+    //   arrayOfCoords.push({ [key]: coords[key] })
+    // ));
+    Object.keys(coords).map(key => (
+      arrayOfCoords.push(coords[key])
+    ));
+
     const middle = Math.floor(arrayOfCoords.length / 2);
     const left = arrayOfCoords.slice(0, middle);
     const right = arrayOfCoords.slice(middle);
-  
-    return merge(mergeSortCoordinates(left), mergeSortCoordinates(right));
+
+    return this.merge(this.mergeSortCoordinates(left), this.mergeSortCoordinates(right));
   }
-  
+
   merge(left, right) {
     let arr = [];
-  
     while (left.length && right.length) {
-      // TODO: This is gross; clean this up
-      if (Object.values(left[0])[0].rawCoord < Object.values(right[0])[0].rawCoord) {
+      if (left[0].raw < right[0].raw) {
         arr.push(left.shift());
       } else {
         arr.push(right.shift());
       }
     }
-  
+
     // Concat anything left over and return the whole array
     return arr.concat(left.slice().concat(right.slice()));
   }

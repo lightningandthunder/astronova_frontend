@@ -111,13 +111,15 @@ export default class ReturnChartPopup extends React.Component {
       { headers: QUERY_HEADERS }
     );
 
-    if (response.data.err) {
-      this.setState({ err: response.data.err });
+    const data = JSON.parse(response.data);
+    if (data.err) {
+      this.closePopup();
+      errorService.reportError(`API error: ${data.err}`);
       return;
     }
 
     try {
-      const chartArray = Biwheel.arrayFromJSON(response.data);
+      const chartArray = Biwheel.arrayFromJSON(data);
 
       for (let chart of chartArray) {
         chart.setName(`${inputRadix.name} Solunar Return`)
