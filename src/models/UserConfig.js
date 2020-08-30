@@ -16,9 +16,14 @@ const PLANETARY_CHART_POINTS = [
 
 const DEFAULT_CONFIG = {
   chartViews: {
-    ecliptical: [...PLANETARY_CHART_POINTS, "Asc", "MC", "EP"],
+    ecliptical: [...PLANETARY_CHART_POINTS],
+    mundane: [...PLANETARY_CHART_POINTS],
+    right_ascension: [...PLANETARY_CHART_POINTS],
+  },
+  aspectViews: {
+    ecliptical: [...PLANETARY_CHART_POINTS, "Asc", "MC"],
     mundane: [...PLANETARY_CHART_POINTS, "Asc", "MC"],
-    right_ascension: [...PLANETARY_CHART_POINTS, "EP"],
+    right_ascension: [...PLANETARY_CHART_POINTS],
   },
   orbs: {
     [AspectEnum.CONJUNCTION]: 10,
@@ -61,7 +66,18 @@ export default class UserConfig {
 
   setPointsForChartView(chartView, pointsArray) {
     this._load();
-    this.config[chartView] = pointsArray;
+    this.config.chartViews[chartView] = pointsArray;
+    this.saveConfig();
+  }
+
+  getPointsForAspectView(chartView) {
+    this._load();
+    return this.config.aspectViews[chartView];
+  }
+
+  setPointsForAspectView(aspectView, pointsArray) {
+    this._load();
+    this.config.aspectViews[aspectView] = pointsArray;
     this.saveConfig();
   }
 

@@ -10,6 +10,9 @@ import SolunarQuery from "../../models/SolunarQuery";
 import Biwheel from "../../models/Biwheel";
 import ErrorAlert from "../ErrorAlert";
 import { errorService } from "../../services/errorService";
+import AspectLister from "../../models/AspectLister";
+import { AspectEnum } from "../../settings";
+import UserConfig from "../../models/UserConfig";
 
 export default class ReturnChartPopup extends React.Component {
   constructor(props) {
@@ -33,7 +36,6 @@ export default class ReturnChartPopup extends React.Component {
     this.handleHarmonicChange = this.handleHarmonicChange.bind(this);
     this.handlePlanetChange = this.handlePlanetChange.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
-    this.createQuantityRange = this.createQuantityRange.bind(this);
   }
 
   /* ============= Popup handlers ============= */
@@ -62,16 +64,44 @@ export default class ReturnChartPopup extends React.Component {
     return this.state.quantityInput >= 1 && this.state.quantityInput <= 50;
   }
 
-  /* ==================== Query ================= */
+  /* ==================== Utils ================= */
 
-  createQuantityRange() {
-    // [1, 2, 3, ... 60]
-    let arr = [];
-    for (let c = 1; c < 61; c++)
-      arr.push(c);
-
-    return arr;
+  getReturnType(aspectLister, planet, chart) {
+    const transit = Math.trunc(chart.solunar.ecliptical[planet]);
+    const radix = Math.trunc(chart.radix.ecliptical[planet]);
+    let aspect = aspectLister.parseAspect(planet, radix, planet, transit);
+    if (planet === "Sun") {
+      switch (aspect.aspectType) {
+        case AspectEnum.CONJUNCTION:
+          return "Solar Return";
+        case AspectEnum.OPPOSITION:
+          return "Demi-Solar Return";
+        case AspectEnum.SQUARE:
+          return "Quarti-Solar Return";
+        default:
+          // Parse ennead manually
+          if (Math.abs(transit - radix) % 40 <= 1)
+            return "Ennead"
+          if (Math.abs(transit - radix) % 20 <= 1)
+            return "Demi-Ennead"
+          if (Math.abs(transit - radix) % 10 <= 1)
+            return "Quarti-Ennead"
+      }
+    } else {
+      switch (aspect.aspectType) {
+        case AspectEnum.CONJUNCTION:
+          return "Lunar Return";
+        case AspectEnum.OPPOSITION:
+          return "Demi-Lunar Return";
+        case AspectEnum.SQUARE:
+          return "Quarti-Lunar Return";
+        default:
+          return "Unknown Lunar Return";
+      }
+    }
   }
+
+  /* ==================== Query ================= */
 
   async queryBackendForReturn() {
     this.setState({ err: undefined });
@@ -120,12 +150,15 @@ export default class ReturnChartPopup extends React.Component {
 
     try {
       const chartArray = Biwheel.arrayFromJSON(data);
+      const config = UserConfig.loadConfig()
+      const aspectLister = new AspectLister(config);
 
       for (let chart of chartArray) {
-        chart.setName(`${inputRadix.name} Solunar Return`)
+        const returnName = this.getReturnType(aspectLister, planet, chart)
+        chart.setName(`${inputRadix.name} ${returnName}`)
           .setPlaceName(chart.solunar.placeName)
-          .setRadixName(`${inputRadix.name} (Precessed Radix)`)
-          .setSolunarName(`${inputRadix.name} (Transiting Planets)`)
+          .setRadixName(`${inputRadix.name} ${returnName} (Radix)`)
+          .setSolunarName(`${inputRadix.name} ${returnName} (Transits)`)
         this.props.saveChart(chart);
       }
 

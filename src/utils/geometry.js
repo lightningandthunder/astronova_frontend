@@ -92,89 +92,9 @@ export function getAdjustedLongitude(baseLongitude, addition) {
   return adjustedLongitude;
 }
 
-export function mergeSortCoordinates(coords) {
-  if (coords.length < 2)
-    return coords;
-
-  let arrayOfCoords = [];
-  if (!(Array.isArray(coords))) {
-    // Add coordinates to array as individual objects
-    Object.keys(coords).map(key => (
-      arrayOfCoords.push({ [key]: coords[key] })
-    ));
-  } else {
-    arrayOfCoords = coords;
-  }
-
-  const middle = Math.floor(arrayOfCoords.length / 2);
-  const left = arrayOfCoords.slice(0, middle);
-  const right = arrayOfCoords.slice(middle);
-
-  return merge(mergeSortCoordinates(left), mergeSortCoordinates(right));
-}
-
-export function merge(left, right) {
-  let arr = [];
-
-  while (left.length && right.length) {
-    // TODO: This is gross; clean this up
-    if (Object.values(left[0])[0].rawCoord < Object.values(right[0])[0].rawCoord) {
-      arr.push(left.shift());
-    } else {
-      arr.push(right.shift());
-    }
-  }
-
-  // Concat anything left over and return the whole array
-  return arr.concat(left.slice().concat(right.slice()));
-}
-
-// export function getRenderCoords(coords, cusps, radius) {
-//   // TODO: Though this works, these are kind of magic numbers; 
-//   // find something more logical
-//   const minAngle = (500 - radius) * 0.022;
-//   const sorted = mergeSortCoordinates(coords);
-
-//   const [asc, ic, dsc, mc] = [cusps["1"], cusps["4"], cusps["7"], cusps["10"]];
-
-//   smooth(sorted, asc, ic, minAngle);
-//   smooth(sorted, ic, dsc, minAngle);
-//   smooth(sorted, dsc, mc, minAngle);
-//   smooth(sorted, mc, asc, minAngle);
-
-//   return coords;
-// }
-
-
-
-
-
 /*
 * Nova, a free sidereal astrological tool.
 * Copyright (C) 2019  Mike Verducci
 * This project is under the GNU General Public License V3.
 * The full license may be found in src/LICENSE.txt
 */
-
-export function getRenderCoords(coords, cusps, radius) {
-  // TODO: Though this works, these are kind of magic numbers; 
-  // find something more logical
-  const minAngle = (500 - radius) * 0.022;
-  const sorted = mergeSortCoordinates(coords);
-
-  let prev = null;
-  sorted.forEach((obj, index) => {
-    const key = Object.keys(obj)[0];
-    if (index === 0) {
-      prev = coords[key];
-      return;
-    }
-
-    let overlap = minAngle - (obj[key].rawCoord - prev.renderCoord);
-    if (overlap > 0) {
-      coords[key].renderCoord = getAdjustedLongitude(coords[key].rawCoord, overlap)
-    }
-    prev = coords[key];
-  });
-  return coords;
-}

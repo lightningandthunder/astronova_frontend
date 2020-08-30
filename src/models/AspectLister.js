@@ -2,7 +2,7 @@ import { AspectEnum } from "../settings";
 import { getOrb } from "../utils/geometry";
 
 export default class AspectLister {
-  constructor(config, coords1, coords2 = null) {
+  constructor(config, coords1 = null, coords2 = null) {
     this.config = config;
     this.coords1 = coords1;
     this.coords2 = coords2;
@@ -25,7 +25,7 @@ export default class AspectLister {
 
         const aspect = aspectWasAlreadyCompared
           ? null
-          : this._parseAspect(
+          : this.parseAspect(
             transitingPlanetName,
             transitingPlanets[transitingPlanetName],
             natalPlanetName,
@@ -43,7 +43,7 @@ export default class AspectLister {
     return aspectList;
   }
  
-  _parseAspect(pname1, plong1, pname2, plong2) {
+  parseAspect(pname1, plong1, pname2, plong2) {
     let orb = null;
 
     // Conjunction

@@ -56,11 +56,6 @@ export default function Chart(props) {
     };
   });
 
-  const getChartName = () => {
-    return props.outerChart
-      ? props.outerChart.name
-      : props.innerChart.name
-  };
   const getChartLocalDatetime = () => {
     return props.outerChart
       ? moment.tz(props.outerChart.local_datetime, props.outerChart.tz).toString()
@@ -130,7 +125,7 @@ export default function Chart(props) {
           <Group>
             {/* Components for uni and biwheels */}
             <ChartInfo
-              name={getChartName()}
+              name={props.name}
               longitude={props.innerChart.longitude}
               latitude={props.innerChart.latitude}
               localDatetime={getChartLocalDatetime()}

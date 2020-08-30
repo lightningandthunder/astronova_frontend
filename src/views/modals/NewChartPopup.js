@@ -73,7 +73,7 @@ export default class NewChartPopup extends React.Component {
       return;
     }
 
-    const dt = moment(this.state.currentSelectedDatetime)
+    const dt = moment(this.state.currentSelectedDatetime).utc(true).toISOString().slice(0, -1);
     const radixQuery = new RadixQuery(dt, locationQuery);
 
     logIfDebug("Radix query: ", radixQuery);
@@ -134,7 +134,9 @@ export default class NewChartPopup extends React.Component {
             <div className="form-group row">
               <label className="col-sm-2 col-form-label" htmlFor="datetimeInput">Date</label>
               <div className="col-sm-10">
-                <input className="form-control" type="datetime-local" id="datetimeInput" onChange={this.handleDateTimeChange} />
+                <input className="form-control" type="datetime-local" id="datetimeInput"
+                  onChange={this.handleDateTimeChange}
+                />
               </div>
             </div>
             <div className="form-group row">

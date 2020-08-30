@@ -205,6 +205,7 @@ class App extends React.Component {
             {
               this.state.selectedChart &&
               <Chart
+                name={this.state.selectedChart.name}
                 innerChart={
                   this.state.selectedChart && this.state.selectedChart.radix
                     ? this.state.selectedChart.radix
