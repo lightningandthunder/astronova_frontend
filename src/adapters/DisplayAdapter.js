@@ -1,5 +1,4 @@
-import { getOrb, getAdjustedLongitude } from "../utils/geometry";
-import { logIfDebug } from "../utils/utils";
+import { getOrb, getAdjustedLongitude, greater, less } from "../utils/geometry";
 
 export default class DisplayAdapter {
   constructor(coords, cusps, radius) {
@@ -17,13 +16,17 @@ export default class DisplayAdapter {
         display: cusps[key],
       };
     });
-    this.getRenderCoords(radius);
-    // this.smooth(coords, 0, 360, this.minAngle);
+    this._minAngle = (500 - radius) * 0.022;
+    this._smoothDisplayCoords(radius);
+  }
+
+  get chartPoints() {
+    return this.planets.concat(this.cusps);
   }
 
   get planets() {
     return Object.keys(this)
-      .filter(key => !parseInt(key))
+      .filter(key => !parseInt(key) && key !== "_minAngle")
       .map(key => this[key]);
   }
 
@@ -33,73 +36,97 @@ export default class DisplayAdapter {
       .map(key => this[key]);
   }
 
-  smooth_v1(coords, lowerBound, upperBound, minAngle) {
-    let prev = { renderCoord: lowerBound };
+  /* 
+  ** Private 
+  */
 
-    // Iterate from first to last planet
-    for (let planet of coords) {
-      // Abort if too close to the upper bound
-      if (getOrb(planet.renderCoord, upperBound, 0, minAngle) <= minAngle) {
-        break;
-      }
-
-      // Otherwise, proceed
-      const overlap = getOrb(planet.renderCoord, prev.renderCoord, 0, minAngle);
-      if (overlap < minAngle) {
-        coords[planet.name].renderCoord = getAdjustedLongitude(coords[planet.name].renderCoord, overlap)
-      }
-      prev = coords[planet.name];
-    }
-
-    // Iterate from last back to first
-    coords = coords.reverse();
-    prev = { renderCoord: upperBound };
-
-    for (let planet of coords) {
-      // If there's no overlap, we're done
-      if (getOrb(prev.renderCoord, planet.rawCoord, 0, minAngle) >= minAngle) {
-        break;
-      }
-
-      // If we're too close to the lower bound, the house is too small; just abort
-      if (getOrb(planet.renderCoord, lowerBound, 0, minAngle) <= minAngle) {
-        logIfDebug('House too small to fit planets; aborting the de-clumping process');
-        break;
-      }
-
-      const overlap = getOrb(prev.renderCoord, planet.renderCoord, 0, minAngle);
-      coords[planet.name].renderCoord = getAdjustedLongitude(coords[planet.name].rawCoord, -1 * overlap);
-      prev = coords[planet.name];
-    }
-
-    return coords;
+  _isPrimaryCusp(name) {
+    return this._isCusp(name) && ["1", "4", "7", "10"].indexOf(name) >= 0;
   }
 
-  getRenderCoords(radius) {
-    const minAngle = (500 - radius) * 0.022;
-    const sorted = this.mergeSortCoordinates(this);
-
-    let prev = null;
-    sorted.forEach((obj, index) => {
-      const key = obj.name;
-      if (parseInt(key))
-        return;  // skip cusps
-
-      if (!prev) {
-        prev = this[key];
-        return;
-      }
-
-      let overlap = minAngle - (this[key].raw - prev.display);
-      if (overlap > 0) {
-        this[key].display = getAdjustedLongitude(this[key].raw, overlap)
-      }
-      prev = this[key];
-    });
-    return;
+  _isCusp(name) {
+    return !!parseInt(name)
   }
 
-  mergeSortCoordinates(coords) {
+  _smoothDisplayCoords() {
+    const sorted = this._mergeSortCoordinates(this.chartPoints);
+    // Rearrange so that 1st cusp begins array
+    while (sorted[0].name !== "1") {
+      sorted.push(sorted.shift());
+    }
+    sorted[sorted.length] = sorted[0]  // Artificially connect array back to itself
+
+    const arr = [];
+    let lowerBound = null;
+    let upperBound = null;
+
+    for (let el of sorted) {
+      // First element is 1st cusp
+      if (!lowerBound) {
+        lowerBound = el;
+        continue;
+      }
+
+      if (!this._isCusp(el.name)) {
+        arr.push(el);
+        continue;
+      }
+
+      if (this._isPrimaryCusp(el.name)) {
+        // Iterate through sub-array in order, smoothing it out
+        upperBound = el;
+        let prev = lowerBound;
+        for (let e of arr) {
+          this._adjust(prev, e);
+          prev = e;
+        }
+        // Iterate back in reverse order
+        let cloneArray = [...arr].reverse();
+        prev = upperBound;
+        for (let element of cloneArray) {
+          // stop if we're back at the lower bound again
+          if (getOrb(element.display, lowerBound.display, 0, this._minAngle)) {
+            break;  // reversed loop
+          }
+          this._adjust(prev, element, true);
+          prev = element;
+        }
+        // reset array
+        arr.length = 0;
+        lowerBound = upperBound;
+      }
+    }  // for loop over sorted array
+
+    return sorted;
+  }
+
+  _adjust(el1, el2, invert = false) {
+    const overlapOrb = getOrb(el1.display, el2.display, 0, this._minAngle);
+    let adjustmentAngle;
+
+    // Check to see if leftmost element was pushed so far it's on the right
+    if (!invert && less(el1.raw, el2.raw) && greater(el1.display, el2.display))
+      adjustmentAngle = el1.display - el2.display + this._minAngle;
+
+    // Or vice-versa
+    else if (invert && greater(el1.raw, el2.raw) && less(el1.display, el2.display))
+      adjustmentAngle = el2.display - el1.display + this._minAngle;
+
+    else
+      adjustmentAngle = overlapOrb ? this._minAngle - overlapOrb : null;
+
+    // If iterating backwards, adjustment angle needs to be negative
+    if (adjustmentAngle && invert)
+      adjustmentAngle *= -1;
+
+    if (adjustmentAngle) {
+      let adjusted = getAdjustedLongitude(el2.display, adjustmentAngle);
+      el2.display = adjusted;
+      this[el2.name].display = adjusted;
+    }
+  }
+
+  _mergeSortCoordinates(coords) {
     if (coords.length < 2)
       return coords;
 
@@ -116,10 +143,10 @@ export default class DisplayAdapter {
     const left = arrayOfCoords.slice(0, middle);
     const right = arrayOfCoords.slice(middle);
 
-    return this.merge(this.mergeSortCoordinates(left), this.mergeSortCoordinates(right));
+    return this._merge(this._mergeSortCoordinates(left), this._mergeSortCoordinates(right));
   }
 
-  merge(left, right) {
+  _merge(left, right) {
     let arr = [];
     while (left.length && right.length) {
       if (left[0].raw < right[0].raw) {

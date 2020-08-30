@@ -45,6 +45,20 @@ export function getOrb(longitude1, longitude2, lowbound, highbound) {
   return null;
 }
 
+export function greater(first, second) {
+  // If on opposite sides of coordinate range, use inverted logic
+  return (Math.abs(first - second) > 180)
+    ? first < second
+    : first > second;
+}
+
+export function less(first, second) {
+  // If on opposite sides of coordinate range, use inverted logic
+  return (Math.abs(first - second) > 180)
+    ? first > second
+    : first < second;
+}
+
 export function derivePoint(origin, pos, radius, rotationalOffset = 0) {
   // Calculate any point on the circle with an angle ("position") and circle radius
   const angleRotated = pos - rotationalOffset;

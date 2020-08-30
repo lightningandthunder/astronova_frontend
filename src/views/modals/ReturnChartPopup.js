@@ -148,8 +148,8 @@ export default class ReturnChartPopup extends React.Component {
           className="btn btn-blue"
           disabled={!this.props.enabled}
           onClick={this.openPopup}>
-          New Solunar Return
-                </button>
+          Solunar Return
+        </button>
         <Popup
           position="right center"
           modal

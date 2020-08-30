@@ -63,18 +63,21 @@ export default class RelocatePopup extends React.Component {
         { headers: QUERY_HEADERS }
       );
 
-      const err = response.data.err;
-      if (err)
-        this.setState({ err: err });
+      const data = JSON.parse(response.data);
+      if (data.err) {
+        this.closePopup();
+        errorService.reportError(`API error: ${data.err}`);
+        return;
+      }
 
       logIfDebug("Response: ", JSON.parse(response.data));
 
       const newChart = this.props.chart.type === WheelTypes.BIWHEEL
-        ? Biwheel.fromJSON(response.data)
+        ? Biwheel.fromJSON(data)
           .setName(`${this.props.chart.name} (Relocated)`)
           .setRadixName(`${this.props.chart.radix.name} Radix (Relocated)`)
           .setSolunarName(`${this.props.chart.solunar.name} Solunar (Relocated)`)
-        : Uniwheel.fromJSON(response.data)
+        : Uniwheel.fromJSON(data)
           .setName(`${this.props.chart.name} (Relocated)`)
 
       logIfDebug("New chart: ", newChart);
