@@ -5,27 +5,29 @@ export default function ChartItem(props) {
   return (
     <div className={`chart-item ${props.selected ? "selected" : ""}`}
       onClick={() => props.onChangeSelectedChart(props.chart)}>
-      <span>
+      <span className="chart-name">
         {props.chart.name}
       </span>
 
-      {
-        props.chart.type !== WheelTypes.UNIWHEEL &&
-        <div className="action-icon">
+      <div className="action-icons">
+        {
+          props.chart.type !== WheelTypes.UNIWHEEL &&
+          <div className="icon">
+            <box-icon
+              name="collection"
+              type="solid"
+              onClick={() => props.splitCharts(props.chart)}>
+            </box-icon>
+          </div>
+        }
+
+        <div className="icon">
           <box-icon
-            name="collection"
+            name="x-circle"
             type="solid"
-            onClick={() => props.splitCharts(props.chart)}>
+            onClick={() => props.deleteChart(props.chart)}>
           </box-icon>
         </div>
-      }
-
-      <div className="action-icon">
-        <box-icon
-          name="x-circle"
-          type="solid"
-          onClick={() => props.deleteChart(props.chart)}>
-        </box-icon>
       </div>
     </div>
   );
