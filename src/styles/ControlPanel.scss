@@ -9,16 +9,28 @@
 
 .btn-blue {
   align-items: center;
-  background-color: $cyan-process;
+  background-color: $white;
   border-color: $jet;
   border-radius: 6px;
-  color: white;
+  color: $cyan-process;
   display: flex;
   font-weight: bold;
   height: 1.5rem;
   justify-content: center;
   letter-spacing: 0.05em;
   width: 100%;
+}
+
+.btn-blue:hover {
+  background-color: $cyan-process;
+}
+
+.btn-blue:disabled {
+  background-color: gray;
+  color: black;
+}
+.btn-blue:hover:disabled{
+  color: black;
 }
 
 .btn-red {

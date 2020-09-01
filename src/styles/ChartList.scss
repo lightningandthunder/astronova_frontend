@@ -7,12 +7,11 @@
   width: 100%;
 }
 
-
-
 .chart-item {
   display: flex;
-  justify-items: baseline;
+  justify-items: center;
   justify-content: space-between;
+  padding: 2px 0px;
 }
 
 .chart-name {
@@ -20,27 +19,29 @@
 }
 
 .action-icons {
-  display: none;
+  display: flex;
+  visibility: hidden;
 }
 
 .chart-item:hover {
   background-color: $amethyst;
   
+  // Display action icons when hovering over line
   .action-icons {
-    display: flex;
+    visibility: visible;
   }
 }
 
 .icon {
-  margin-left: 0;
   color: $jet;
-  font-size: 0.9rem;
+  font-size: 0.1rem;
 }
 
 .selected {
-  border: 2px solid $jet;
+  outline: 2px solid $jet;
 
+  // Display action icons for selected line
   .action-icons {
-    display: flex;
+    visibility: visible;
   }
 }

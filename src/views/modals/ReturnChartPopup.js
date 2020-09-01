@@ -75,9 +75,9 @@ export default class ReturnChartPopup extends React.Component {
         case AspectEnum.CONJUNCTION:
           return "Solar Return";
         case AspectEnum.OPPOSITION:
-          return "Demi-Solar Return";
+          return "Demi-Solar";
         case AspectEnum.SQUARE:
-          return "Quarti-Solar Return";
+          return "Quarti-Solar";
         default:
           // Parse ennead manually
           if (Math.abs(transit - radix) % 40 <= 1)
@@ -92,11 +92,11 @@ export default class ReturnChartPopup extends React.Component {
         case AspectEnum.CONJUNCTION:
           return "Lunar Return";
         case AspectEnum.OPPOSITION:
-          return "Demi-Lunar Return";
+          return "Demi-Lunar";
         case AspectEnum.SQUARE:
-          return "Quarti-Lunar Return";
+          return "Quarti-Lunar";
         default:
-          return "Unknown Lunar Return";
+          return "Unknown Return";
       }
     }
   }
