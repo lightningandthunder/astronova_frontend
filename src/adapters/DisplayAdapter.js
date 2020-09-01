@@ -54,7 +54,7 @@ export default class DisplayAdapter {
     while (sorted[0].name !== "1") {
       sorted.push(sorted.shift());
     }
-    sorted[sorted.length] = sorted[0]  // Artificially connect array back to itself
+    sorted[sorted.length] = sorted[0];  // Artificially connect array back to itself
 
     const arr = [];
     let lowerBound = null;
@@ -86,9 +86,9 @@ export default class DisplayAdapter {
         for (let element of cloneArray) {
           // stop if we're back at the lower bound again
           if (getOrb(element.display, lowerBound.display, 0, this._minAngle)) {
-            break;  // reversed loop
+            break;
           }
-          this._adjust(prev, element, true);
+          this._adjust(prev, element, { invert: true });
           prev = element;
         }
         // reset array
@@ -100,29 +100,33 @@ export default class DisplayAdapter {
     return sorted;
   }
 
-  _adjust(el1, el2, invert = false) {
-    const overlapOrb = getOrb(el1.display, el2.display, 0, this._minAngle);
+  _adjust(prev, el, params={}) {
+    const invert = params.invert;
+
+    // Edge planets closer to cusps than to other planets
+    const minimum = this._isCusp(prev.name) ? this._minAngle / 1.5 : this._minAngle;
+    const overlapOrb = getOrb(prev.display, el.display, 0, minimum);
     let adjustmentAngle;
 
     // Check to see if leftmost element was pushed so far it's on the right
-    if (!invert && less(el1.raw, el2.raw) && greater(el1.display, el2.display))
-      adjustmentAngle = el1.display - el2.display + this._minAngle;
+    if (!invert && less(prev.raw, el.raw) && greater(prev.display, el.display))
+      adjustmentAngle = prev.display - el.display + minimum;
 
     // Or vice-versa
-    else if (invert && greater(el1.raw, el2.raw) && less(el1.display, el2.display))
-      adjustmentAngle = el2.display - el1.display + this._minAngle;
+    else if (invert && greater(prev.raw, el.raw) && less(prev.display, el.display))
+      adjustmentAngle = el.display - prev.display + minimum;
 
     else
-      adjustmentAngle = overlapOrb ? this._minAngle - overlapOrb : null;
+      adjustmentAngle = overlapOrb ? minimum - overlapOrb : null;
 
     // If iterating backwards, adjustment angle needs to be negative
     if (adjustmentAngle && invert)
       adjustmentAngle *= -1;
 
     if (adjustmentAngle) {
-      let adjusted = getAdjustedLongitude(el2.display, adjustmentAngle);
-      el2.display = adjusted;
-      this[el2.name].display = adjusted;
+      let adjusted = getAdjustedLongitude(el.display, adjustmentAngle);
+      el.display = adjusted;
+      this[el.name].display = adjusted;
     }
   }
 
