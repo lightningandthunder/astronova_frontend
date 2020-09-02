@@ -12,7 +12,7 @@
   background-color: $white;
   border-color: $jet;
   border-radius: 6px;
-  color: $cyan-process;
+  color: $blue-crayola;
   display: flex;
   font-weight: bold;
   height: 1.5rem;
@@ -22,29 +22,35 @@
 }
 
 .btn-blue:hover {
-  background-color: $cyan-process;
+  background-color: $blue-crayola;
+  color: $white;
 }
 
 .btn-blue:disabled {
   background-color: gray;
-  color: black;
+  color: $white;
 }
 .btn-blue:hover:disabled{
-  color: black;
+  color: $white;
 }
 
 .btn-red {
   align-items: center;
-  background-color: $radical-red;
+  background-color: $white;
   border-radius: 6px;
   border-color: black;
-  color: #fff;
+  color: $radical-red;
   display: flex;
   font-weight: bold;
   height: 1.5rem;
   justify-content: center;
   letter-spacing: 0.05em;
   width: 100%;
+}
+
+.btn-red:hover {
+  color: $white;
+  background-color: $radical-red;
 }
 
 .view-buttons {

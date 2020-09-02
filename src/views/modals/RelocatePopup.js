@@ -9,6 +9,7 @@ import RelocationQuery from "../../models/RelocationQuery";
 import Uniwheel from "../../models/Uniwheel";
 import Biwheel from "../../models/Biwheel";
 import ErrorAlert from "../ErrorAlert";
+import "../../styles/modals.scss";
 
 
 export default class RelocatePopup extends React.Component {
@@ -105,14 +106,13 @@ export default class RelocatePopup extends React.Component {
           Relocate
         </button>
         <Popup
-          className="popup"
           position="right center"
           modal
           open={this.state.isOpen}
           closeOnDocumentClick
           onClose={this.closePopup}
         >
-          <div className="RelocateChartDialog">
+          <div className="input-modal">
             <div className="mb-3">
               <ErrorAlert
                 err={this.state.err}

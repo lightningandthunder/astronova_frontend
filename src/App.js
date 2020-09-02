@@ -17,7 +17,6 @@ import AspectPanel from "./views/AspectPanel";
 import ControlPanel from "./views/ControlPanel";
 import NovaNavbar from "./views/NovaNavbar";
 import UserSettings from "./views/UserSettings";
-require('dotenv').config({debug: true});
 
 
 class App extends React.Component {
@@ -71,10 +70,11 @@ class App extends React.Component {
       logIfDebug("Found no charts in LS to load");
 
     const selectedChartFromLS = JSON.parse(localStorage.getItem('selectedChart'));
-    if (selectedChartFromLS)
+    if (selectedChartFromLS) {
       this.setState({ selectedChart: selectedChartFromLS },
         () => this.setAspectsForSelectedChart(this.state.selectedChart));
-    else {
+
+    } else {
       logIfDebug("Found no selected chart in LS");
       this.loadRandomChart()
     }
@@ -89,10 +89,7 @@ class App extends React.Component {
   saveChart(...charts) {
     // Saves to both state and localStorage
     this.setState({ charts: [...this.state.charts, ...charts] },
-      () => {
-        localStorage.setItem('charts', JSON.stringify(this.state.charts));
-        logIfDebug("Saved charts to LS: " + this.state.charts.length);
-      }
+      () => localStorage.setItem('charts', JSON.stringify(this.state.charts))
     );
   }
 
@@ -155,6 +152,7 @@ class App extends React.Component {
   }
 
   /* ================= Event handlers ================= */
+
 
   onChangeSelectedChart(chart) {
     let selection = chart;

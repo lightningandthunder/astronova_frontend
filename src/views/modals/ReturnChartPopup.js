@@ -13,6 +13,8 @@ import { errorService } from "../../services/errorService";
 import AspectLister from "../../models/AspectLister";
 import { AspectEnum } from "../../settings";
 import UserConfig from "../../models/UserConfig";
+import "../../styles/modals.scss";
+
 
 export default class ReturnChartPopup extends React.Component {
   constructor(props) {
@@ -190,7 +192,7 @@ export default class ReturnChartPopup extends React.Component {
           closeOnDocumentClick
           onClose={this.closePopup}
         >
-          <div className="return-chart-dialog">
+          <div className="input-modal">
             <div className="mb-3">
               <ErrorAlert
                 err={this.state.err}

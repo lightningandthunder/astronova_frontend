@@ -9,6 +9,7 @@ import Uniwheel from "../../models/Uniwheel";
 import RadixQuery from "../../models/RadixQuery";
 import { errorService } from "../../services/errorService";
 import ErrorAlert from "../ErrorAlert";
+import "../../styles/modals.scss";
 
 export default class NewChartPopup extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ export default class NewChartPopup extends React.Component {
   };
 
   openPopup() {
-    this.setState({ isOpen: true, err: undefined })
+    this.setState({ isOpen: true, err: undefined });
   }
   closePopup() {
     this.setState({ isOpen: false })
@@ -109,16 +110,15 @@ export default class NewChartPopup extends React.Component {
       <div onKeyDown={this.handleKeyDown}>
         <button className="btn btn-blue" onClick={this.openPopup}>
           New Chart
-                </button>
+        </button>
         <Popup
-          className="popup"
           position="right center"
           modal
           open={this.state.isOpen}
           closeOnDocumentClick
           onClose={this.closePopup}
         >
-          <div className="new-chart-dialogue">
+          <div className="input-modal">
             <div className="mb-3">
               <ErrorAlert
                 err={this.state.err}
