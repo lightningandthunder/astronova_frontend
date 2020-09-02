@@ -8,50 +8,54 @@ import Kofi from "./ko-fi/Kofi";
 
 export default function AspectPanel(props) {
   return (
-    <div className="aspect-panel">
-      <table>
-        <thead>
-          <tr>
-            <th>T</th>
-            <th>Asp</th>
-            <th>R</th>
-            <th>Orb</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            props.aspects.map(a => {
-              if (a && a.aspectType) {
+    <>
+      <div className="aspect-panel">
+        <table>
+          <thead>
+            <tr>
+              <th>T</th>
+              <th>Asp</th>
+              <th>R</th>
+              <th>Orb</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              props.aspects.map(a => {
+                if (a && a.aspectType) {
 
-                const orbDegrees = Math.trunc(a.orb) % 30;
-                const orbMins = degToMin(a.orb)
-                  .toString()
-                  .padStart(2, "0");
+                  const orbDegrees = Math.trunc(a.orb) % 30;
+                  const orbMins = degToMin(a.orb)
+                    .toString()
+                    .padStart(2, "0");
 
-                return (
-                  <tr key={`aspect-${a.planet1}-${a.planet2}`}>
-                    <td className={`symbol ${a.planet1}`}>
-                      {`${getSymbol(a.planet1)} `}
-                    </td>
-                    <td className={`symbol ${a.aspectType}`}>
-                      {`${getSymbol(a.aspectType)} `}
-                    </td>
-                    <td className={`symbol ${a.planet2}`}>
-                      {`${getSymbol(a.planet2)} `}
-                    </td>
-                    <td>
-                      {`${orbDegrees}\u00B0 ${orbMins}'`}
-                    </td>
-                  </tr>
-                )
-              }
-              return null;
-            })
-          }
-        </tbody>
-      </table>
-      <Kofi></Kofi>
-    </div >
+                  return (
+                    <tr key={`aspect-${a.planet1}-${a.planet2}`}>
+                      <td className={`symbol ${a.planet1}`}>
+                        {`${getSymbol(a.planet1)} `}
+                      </td>
+                      <td className={`symbol ${a.aspectType}`}>
+                        {`${getSymbol(a.aspectType)} `}
+                      </td>
+                      <td className={`symbol ${a.planet2}`}>
+                        {`${getSymbol(a.planet2)} `}
+                      </td>
+                      <td>
+                        {`${orbDegrees}\u00B0 ${orbMins}'`}
+                      </td>
+                    </tr>
+                  )
+                }
+                return null;
+              })
+            }
+          </tbody>
+        </table>
+      </div >
+      <div className="aspect-panel-kofi">
+        <Kofi></Kofi>
+      </div>
+    </>
   )
 }
 

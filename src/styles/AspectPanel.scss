@@ -1,13 +1,10 @@
+@import "./variables.scss";
+
 .aspect-panel {
   border-left: 1px solid black;
-  height: calc(100vh - 40px);
-  min-height: 80%;
-  overflow-y: scroll;
+  height: calc(100vh - 40px - 36px);
+  overflow-y: auto;
   width: 20%;
-}
-
-.aspect-panel thead {
-  border-bottom: 1px solid darkgrey;
 }
 
 .aspect-panel tr:nth-child(even) {
@@ -15,14 +12,25 @@
 }
 
 .aspect-panel table {
+  border-collapse: collapse;
   width: 100%;
 }
 
 .aspect-panel th {
+  background-color: $white;
+  border-bottom: 1px solid darkgrey;
+  box-shadow: 0 1px 0 black;
+  position: sticky;
   text-align: center;
+  top: 0;
 }
 
 .aspect-panel td {
-  padding: px 10px;
+  padding: 2px;
   text-align: center;
+}
+
+.aspect-panel-kofi {
+  background-color: $white;
+  height: 36px;
 }

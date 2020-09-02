@@ -1,4 +1,7 @@
+@import "./variables.scss";
+
 .kofi {
+  background-color: $white;
   height: 36px;
   text-align: center;
 }
