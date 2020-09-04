@@ -138,7 +138,7 @@ export default class ReturnChartPopup extends React.Component {
 
     logIfDebug("Solunar return query: ", query);
     const response = await axios.post(
-      API_ADDRESS + "/returns",
+      API_ADDRESS + "/solunar",
       query,
       { headers: QUERY_HEADERS }
     );
