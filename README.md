@@ -4,7 +4,7 @@ The core calculation routines are handled by the Swiss Ephemeris library and eph
 <br>
 This project is open source under the GNU General Public License V3.
 
-### TODO list for full release
+### TODO list
 [] Unit tests
 [] Add Asc/MC/EP to aspect list
 [] Use Propstyles
@@ -17,3 +17,6 @@ This project is open source under the GNU General Public License V3.
 [] Export chart as text
 [] Konva -> D3 for chart visuals?
 [] Retrograde indicator in chart, aspect panel
+[] Transit calendar
+[] Progressed charts
+[] Kinetic charts (triwheels)
