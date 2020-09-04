@@ -8,7 +8,7 @@ import Kofi from "./ko-fi/Kofi";
 
 export default function AspectPanel(props) {
   return (
-    <>
+    <div className="aspect-panel-container">
       <div className="aspect-panel">
         <table>
           <thead>
@@ -55,7 +55,7 @@ export default function AspectPanel(props) {
       <div className="aspect-panel-kofi">
         <Kofi></Kofi>
       </div>
-    </>
+    </div>
   )
 }
 

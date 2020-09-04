@@ -1,17 +1,16 @@
 @import "./variables.scss";
 
-.chartList{
-  background-image: linear-gradient(to top right, $cyan-process, $blue-crayola);
-  height: calc(82% - 36px);
-  overflow-y: scroll;
+.chart-list{
+  background-image: linear-gradient(to bottom, $byzantine, $amethyst, $oxford-blue);
   width: 100%;
 }
 
 .chart-item {
+  color: $white;
   display: flex;
   justify-items: center;
   justify-content: space-between;
-  padding: 2px 0px;
+  padding: 2px 4px;
 }
 
 .chart-name {
@@ -24,7 +23,7 @@
 }
 
 .chart-item:hover {
-  background-color: $amethyst;
+  background-color: $byzantine;
   
   // Display action icons when hovering over line
   .action-icons {
@@ -33,12 +32,12 @@
 }
 
 .icon {
-  color: $jet;
+  color: $xiketic;
   font-size: 0.1rem;
 }
 
 .selected {
-  outline: 2px solid $jet;
+  outline: 2px solid $white;
 
   // Display action icons for selected line
   .action-icons {

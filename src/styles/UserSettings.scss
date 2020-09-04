@@ -1,7 +1,10 @@
+.user-settings-container {
+  background-color: lightskyblue;
+}
+
 .user-settings {
   align-items: center; 
-  background-color: lightskyblue;
-  height: calc(100vh - 40px - 36px);
+  height: calc(100vh - 40px - 48px);
   overflow-y: auto;
   text-align: center;
   width: 20%;

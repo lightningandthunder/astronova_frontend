@@ -15,8 +15,8 @@ export default function ChartItem(props) {
           <div className="icon">
             <box-icon
               name="collection"
-              type="solid"
               size="sm"
+              color="white"
               onClick={() => props.splitCharts(props.chart)}>
             </box-icon>
           </div>
@@ -25,8 +25,8 @@ export default function ChartItem(props) {
         <div className="icon">
           <box-icon
             name="x-circle"
-            type="solid"
             size="sm"
+            color="white"
             onClick={() => props.deleteChart(props.chart)}>
           </box-icon>
         </div>

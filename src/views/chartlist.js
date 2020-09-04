@@ -5,7 +5,7 @@ import ChartItem from "./chartItem";
 
 export default function ChartList(props) {
     return (
-        <div className="chartList">
+        <div className="chart-list">
             {props.charts.map((item, index) => (
                 <ChartItem
                     value={index}

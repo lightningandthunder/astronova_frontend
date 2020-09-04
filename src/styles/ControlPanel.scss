@@ -1,16 +1,27 @@
 @import "./variables.scss";
 
-.ControlPanel {
-  background-image: linear-gradient(to top right, $cyan-process, $blue-crayola);
-  height: calc(100vh - 40px - 36px);
-  overflow-y: auto;
+.control-panel-container {
+  background-image: linear-gradient(to bottom, $byzantine, $amethyst, $oxford-blue);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  justify-content: space-between;
   width: 20%;
+}
+
+.chartlist-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.control-panel-buttons {
+  height: auto;
 }
 
 .btn-blue {
   align-items: center;
   background-color: $white;
-  border-color: $jet;
+  border-color: $xiketic;
   border-radius: 6px;
   color: $blue-crayola;
   display: flex;
@@ -54,6 +65,7 @@
 }
 
 .view-buttons {
+  color: $white;
   display: flex;
   justify-content: space-evenly;
 }

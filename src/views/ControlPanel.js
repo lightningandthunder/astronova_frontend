@@ -12,8 +12,8 @@ import "../styles/Kofi.scss";
 
 export default function ControlPanel(props) {
   return (
-    <>
-      <div className="ControlPanel">
+    <div className="control-panel-container">
+      <div className="control-panel-buttons">
         <ViewButtons
           view={props.view}
           onChangeView={props.onChangeView}
@@ -28,7 +28,6 @@ export default function ControlPanel(props) {
           setSelectedChartToNewest={props.setSelectedChartToNewest}
           enabled={props.selectedChart}
         />
-
         <ReturnChartPopup
           saveChart={props.saveChart}
           setSelectedChartToNewest={props.setSelectedChartToNewest}
@@ -38,7 +37,9 @@ export default function ControlPanel(props) {
         />
         <button className="btn btn-red" onClick={props.resetCharts}>
           Reset Charts
-      </button>
+        </button>
+      </div>
+      <div className="chartlist-container">
         <Chartlist
           charts={props.charts ? props.charts : []}
           selectedChart={props.selectedChart}
@@ -49,6 +50,6 @@ export default function ControlPanel(props) {
         />
       </div>
       <Kofi></Kofi>
-    </>
+    </div>
   );
 }
