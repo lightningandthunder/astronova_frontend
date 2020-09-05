@@ -9,7 +9,7 @@ import Uniwheel from "../../models/Uniwheel";
 import RadixQuery from "../../models/RadixQuery";
 import { errorService } from "../../services/errorService";
 import ErrorAlert from "../ErrorAlert";
-import "../../styles/modals.scss";
+import "./modals.scss";
 
 export default class NewChartPopup extends React.Component {
   constructor(props) {

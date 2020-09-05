@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../../styles/Faq.scss";
+import "./Faq.scss";
 
 export default function Faq(props) {
   return (

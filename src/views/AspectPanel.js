@@ -1,8 +1,8 @@
 import React from "react";
 import { getSymbol } from "../utils/utils";
 import { degToMin } from "../utils/geometry";
-import "../styles/AspectPanel.scss";
-import "../styles/ColorsAndFonts.scss";
+import "./AspectPanel.scss";
+import "../shared/ColorsAndFonts.scss";
 
 import Kofi from "./ko-fi/Kofi";
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import FontFaceObserver from "fontfaceobserver";
 import "boxicons";
-import './styles/App.scss';
-import './styles/index.css';
+import './App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { DEFAULT_CHARTS } from './defaultCharts'

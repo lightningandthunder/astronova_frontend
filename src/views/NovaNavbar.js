@@ -3,7 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Popup from "reactjs-popup";
 
 import Faq from "./faqPage/Faq";
-import "../styles/NovaNavbar.scss";
+import "./NovaNavbar.scss";
 
 export default function NovaNavbar(props) {
   const [faqIsOpen, openFaq] = useState(false);

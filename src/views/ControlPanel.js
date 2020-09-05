@@ -4,11 +4,10 @@ import ViewButtons from "./ViewButtons";
 import NewChartPopup from "./modals/NewChartPopup";
 import RelocatePopup from "./modals/RelocatePopup";
 import ReturnChartPopup from "./modals/ReturnChartPopup";
-import Chartlist from "./chartlist";
+import ChartList from "./ChartList";
 import Kofi from "./ko-fi/Kofi";
 import { WheelTypes } from "../settings";
-import "../styles/ControlPanel.scss";
-import "../styles/Kofi.scss";
+import "./ControlPanel.scss";
 
 export default function ControlPanel(props) {
   return (
@@ -40,7 +39,7 @@ export default function ControlPanel(props) {
         </button>
       </div>
       <div className="chartlist-container">
-        <Chartlist
+        <ChartList
           charts={props.charts ? props.charts : []}
           selectedChart={props.selectedChart}
           onChangeSelectedChart={props.onChangeSelectedChart}

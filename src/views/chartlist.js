@@ -1,7 +1,8 @@
 import React from 'react';
-import '../styles/ChartList.scss';
 
-import ChartItem from "./chartItem";
+import ChartItem from "./ChartItem";
+import './ChartList.scss';
+
 
 export default function ChartList(props) {
     return (

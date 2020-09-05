@@ -1,6 +1,5 @@
 import React from "react";
-import "../styles/UserSettings.scss";
-import "../styles/Kofi.scss";
+import "./UserSettings.scss";
 
 import Kofi from "./ko-fi/Kofi";
 

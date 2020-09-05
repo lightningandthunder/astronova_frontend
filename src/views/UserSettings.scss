@@ -1,9 +1,12 @@
+@import "../shared/variables.scss";
+
 .user-settings-container {
-  background-color: lightskyblue;
+  background-color: $blue-crayola;
 }
 
 .user-settings {
   align-items: center; 
+  color: $white;
   height: calc(100vh - 40px - 48px);
   overflow-y: auto;
   text-align: center;

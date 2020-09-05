@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@import "./shared/variables.scss";
 
 html, body {
   height: 100vh;
@@ -10,7 +10,6 @@ html, body {
   float: left;
   outline: 1px solid black;
 }
-
 
 /* 
 * Nova, a free sidereal astrological tool.

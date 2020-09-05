@@ -9,7 +9,7 @@ import RelocationQuery from "../../models/RelocationQuery";
 import Uniwheel from "../../models/Uniwheel";
 import Biwheel from "../../models/Biwheel";
 import ErrorAlert from "../ErrorAlert";
-import "../../styles/modals.scss";
+import "./modals.scss";
 
 
 export default class RelocatePopup extends React.Component {

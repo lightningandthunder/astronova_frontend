@@ -13,7 +13,7 @@ import { errorService } from "../../services/errorService";
 import AspectLister from "../../models/AspectLister";
 import { AspectEnum } from "../../settings";
 import UserConfig from "../../models/UserConfig";
-import "../../styles/modals.scss";
+import "./modals.scss";
 
 
 export default class ReturnChartPopup extends React.Component {
