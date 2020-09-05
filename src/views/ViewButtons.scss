@@ -1,0 +1,14 @@
+@import "../shared/variables.scss";
+
+.view-buttons {
+  align-items: center;
+  color: $white;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0px;
+  padding: 0px;
+
+  label {
+    margin: 0px;
+  }
+}

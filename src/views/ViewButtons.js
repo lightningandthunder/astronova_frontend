@@ -1,5 +1,7 @@
 import React from "react";
 
+import "./ViewButtons.scss";
+
 export default function ViewButtons(props) {
   return (
     <div className="view-buttons">

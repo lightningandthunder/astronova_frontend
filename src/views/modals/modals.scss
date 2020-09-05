@@ -1,4 +1,65 @@
+@import "../../shared/variables.scss";
+
 .input-modal {
+  font-family: Arial, Helvetica, sans-serif;
   height: auto;
   padding: 10px;
+
+  input {
+    align-items: center;
+    display: inline-flex;
+    margin: 0.3rem 0;
+  }
+  
+  label {
+    align-items: center;
+    display: inline-flex;
+    margin-bottom: 0rem;
+  }
+}
+
+.btn-blue {
+  align-items: center;
+  background-color: $white;
+  border-color: $xiketic;
+  border-radius: 6px;
+  color: $blue-crayola;
+  display: flex;
+  font-weight: bold;
+  height: 1.5rem;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+
+.btn-blue:hover {
+  background-color: $blue-crayola;
+  color: $white;
+}
+
+.btn-blue:disabled {
+  background-color: gray;
+  color: $white;
+}
+.btn-blue:hover:disabled{
+  color: $white;
+}
+
+.btn-red {
+  align-items: center;
+  background-color: $white;
+  border-radius: 6px;
+  border-color: black;
+  color: $radical-red;
+  display: flex;
+  font-weight: bold;
+  height: 1.5rem;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+
+.btn-red:hover {
+  color: $white;
+  background-color: $radical-red;
 }

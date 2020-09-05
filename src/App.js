@@ -16,6 +16,7 @@ import AspectPanel from "./views/AspectPanel";
 import ControlPanel from "./views/ControlPanel";
 import NovaNavbar from "./views/NovaNavbar";
 import UserSettings from "./views/UserSettings";
+import NewsPopup from "./views/modals/NewsPopup";
 
 
 class App extends React.Component {
@@ -196,6 +197,7 @@ class App extends React.Component {
           err={this.state.error}
           resetError={() => errorService.clearErrors()}
         />
+        <NewsPopup />
         {
           this.state.fontsLoaded &&
           <div className="chart-container">
