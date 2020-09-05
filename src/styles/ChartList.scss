@@ -1,7 +1,7 @@
 @import "./variables.scss";
 
 .chart-list{
-  background-image: linear-gradient(to bottom, $byzantine, $amethyst, $oxford-blue);
+  // background-image: linear-gradient(to bottom, $byzantine, $amethyst, $oxford-blue);
   width: 100%;
 }
 
@@ -15,6 +15,10 @@
 
 .chart-name {
   font-size: 1rem;
+  overflow: hidden;
+  max-width: 90%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .action-icons {
