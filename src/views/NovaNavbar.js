@@ -16,7 +16,7 @@ export default function NovaNavbar(props) {
       <div className="nav-icon-group">
         {
           props.panelState !== "control" &&
-          <div className="nav-icon">
+          <div className="nav-icon" title="Control Panel">
             <box-icon
               name="customize"
               type="solid"
@@ -26,14 +26,14 @@ export default function NovaNavbar(props) {
         }
         {
           props.panelState !== "aspects" &&
-          <div className="nav-icon">
+          <div className="nav-icon" title="Aspect Panel">
             <box-icon
               name="shape-triangle"
               onClick={() => props.handleIconClick("aspects")}>
             </box-icon>
           </div>
         }
-        {
+        {/* {
           props.panelState !== "settings" &&
           <div className="nav-icon">
             <box-icon
@@ -42,8 +42,8 @@ export default function NovaNavbar(props) {
               onClick={() => props.handleIconClick("settings")}>
             </box-icon>
           </div>
-        }
-        <div className="nav-icon">
+        } */}
+        <div className="nav-icon" title="FAQ">
           <box-icon
             name="help-circle"
             type="solid"
@@ -58,7 +58,6 @@ export default function NovaNavbar(props) {
         modal
         open={faqIsOpen}
         closeOnDocumentClick
-        onClose={() => openFaq(false)}
       >
         <Faq></Faq>
       </Popup>

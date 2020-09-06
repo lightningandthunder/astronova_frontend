@@ -5,10 +5,9 @@
   height: calc(100vh - 40px - 48px);
   overflow-y: auto;
   width: 20%;
-}
-
-.aspect-panel tr:nth-child(even) {
-  background-color: whitesmoke;
+  tr:nth-child(even) {
+    background-color: whitesmoke;
+  }
 }
 
 .aspect-panel table {
@@ -28,9 +27,4 @@
 .aspect-panel td {
   padding: 2px;
   text-align: center;
-}
-
-.aspect-panel-kofi {
-  background-color: $white;
-  height: 36px;
 }

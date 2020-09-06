@@ -34,9 +34,14 @@ export default function ControlPanel(props) {
           enabled={props.selectedChart
             && props.selectedChart.type === WheelTypes.UNIWHEEL}
         />
-        <button className="btn btn-red" onClick={props.resetCharts}>
+        <div
+          className="btn btn-red"
+          onClick={props.resetCharts}
+          role="button"
+          aria-label="reset charts"
+        >
           Reset Charts
-        </button>
+        </div>
       </div>
       <div className="chartlist-container">
         <ChartList

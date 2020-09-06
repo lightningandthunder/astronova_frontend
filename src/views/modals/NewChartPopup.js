@@ -108,9 +108,14 @@ export default class NewChartPopup extends React.Component {
   render() {
     return (
       <div onKeyDown={this.handleKeyDown}>
-        <button className="btn btn-blue" onClick={this.openPopup}>
+        <div
+          className="btn btn-blue"
+          onClick={this.openPopup}
+          role="button"
+          aria-label="new chart"
+        >
           New Chart
-        </button>
+        </div>
         <Popup
           position="right center"
           modal

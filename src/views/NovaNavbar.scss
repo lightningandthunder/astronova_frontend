@@ -16,12 +16,17 @@
 
 .nav-icon-group {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-icon {
+  display: flex;
   fill: $blue-crayola;
   stroke: $blue-crayola;
   stroke-width: 0.15;
+
   animation: fadeIn ease 750ms;
   -webkit-animation: fadeIn ease 750ms;
   -moz-animation: fadeIn ease 750ms;

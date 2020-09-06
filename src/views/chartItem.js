@@ -12,7 +12,7 @@ export default function ChartItem(props) {
       <div className="action-icons">
         {
           props.chart.type !== WheelTypes.UNIWHEEL &&
-          <div className="icon">
+          <div className="icon" title="Split Charts" aria-label="split charts">
             <box-icon
               name="collection"
               size="sm"
@@ -22,7 +22,7 @@ export default function ChartItem(props) {
           </div>
         }
 
-        <div className="icon">
+        <div className="icon" title="Delete" aria-label="delete chart">
           <box-icon
             name="x-circle"
             size="sm"

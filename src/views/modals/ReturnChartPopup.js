@@ -179,12 +179,15 @@ export default class ReturnChartPopup extends React.Component {
   render() {
     return (
       <div onKeyDown={this.handleKeyDown}>
-        <button
+        <div
           className="btn btn-blue"
           disabled={!this.props.enabled}
-          onClick={this.openPopup}>
+          onClick={this.openPopup}
+          role="button"
+          aria-label="new solunar return chart"
+        >
           Solunar Return
-        </button>
+        </div>
         <Popup
           position="right center"
           modal

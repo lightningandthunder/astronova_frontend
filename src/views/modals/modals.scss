@@ -24,12 +24,16 @@
   border-color: $xiketic;
   border-radius: 6px;
   color: $blue-crayola;
-  display: flex;
   font-weight: bold;
   height: 1.5rem;
   justify-content: center;
   letter-spacing: 0.05em;
   width: 100%;
+
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
 }
 
 .btn-blue:hover {

@@ -50,23 +50,18 @@ export default class DisplayAdapter {
 
   _smoothDisplayCoords() {
     const sorted = this._mergeSortCoordinates(this.chartPoints);
-    // Rearrange so that 1st cusp begins array
-    while (sorted[0].name !== "1") {
+    // Rearrange so that 1st cusp ends array 
+    while (sorted[sorted.length - 1].name !== "1") {
       sorted.push(sorted.shift());
     }
-    sorted[sorted.length] = sorted[0];  // Artificially connect array back to itself
+
+    // TODO: This smoothing process is highly inefficient and can be greatly improved.
 
     const arr = [];
-    let lowerBound = null;
+    let lowerBound = sorted[sorted.length - 1];  // 1st cusp
     let upperBound = null;
 
     for (let el of sorted) {
-      // First element is 1st cusp
-      if (!lowerBound) {
-        lowerBound = el;
-        continue;
-      }
-
       if (!this._isCusp(el.name)) {
         arr.push(el);
         continue;
@@ -91,7 +86,7 @@ export default class DisplayAdapter {
           this._adjust(prev, element, { invert: true });
           prev = element;
         }
-        // reset array
+        // reset sub-array
         arr.length = 0;
         lowerBound = upperBound;
       }
@@ -124,7 +119,7 @@ export default class DisplayAdapter {
       adjustmentAngle *= -1;
 
     if (adjustmentAngle) {
-      let adjusted = getAdjustedLongitude(el.display, adjustmentAngle);
+      const adjusted = getAdjustedLongitude(el.display, adjustmentAngle);
       el.display = adjusted;
       this[el.name].display = adjusted;
     }

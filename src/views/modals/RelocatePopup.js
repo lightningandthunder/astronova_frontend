@@ -98,13 +98,15 @@ export default class RelocatePopup extends React.Component {
   render() {
     return (
       <div onKeyDown={this.handleKeyDown}>
-        <button
+        <div
           className="btn btn-blue"
           disabled={!this.props.enabled}
           onClick={this.openPopup}
+          role="button"
+          aria-label="relocate selected chart"
         >
           Relocate
-        </button>
+        </div>
         <Popup
           position="right center"
           modal

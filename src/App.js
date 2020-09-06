@@ -102,10 +102,10 @@ class App extends React.Component {
       return;
 
     allCharts.splice(chartIndex, 1);
-    this.setState({ charts: [...allCharts] },
-      () => {
-        localStorage.setItem('charts', JSON.stringify(this.state.charts));
-      })
+    this.setState(
+      { charts: [...allCharts] },
+      () => { localStorage.setItem('charts', JSON.stringify(this.state.charts)) }
+    )
     if (allCharts.indexOf(currentSelectedChart) >= 0)
       this.onChangeSelectedChart(currentSelectedChart)
     else
