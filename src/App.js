@@ -224,7 +224,7 @@ class App extends React.Component {
             {
               this.state.panelState === "control" &&
               <ControlPanel
-                // enabled={this.state.panelState === "control"}
+                enabled={this.state.panelState === "control"}
                 view={this.state.view}
                 charts={this.state.charts}
                 selectedChart={this.state.selectedChart}
