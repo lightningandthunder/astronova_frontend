@@ -20,7 +20,7 @@ const DEFAULT_CUSPS = {
 };
 
 export default function Chart(props) {
-  // Use 80% of the window width if the window is wide enough to have a side panel
+  // Use 75% of the window width if the window is wide enough to have a side panel
   const calcStageWidth = () => window.innerWidth < 576 ? window.innerWidth : window.innerWidth * 0.75;
   // Leave room for nav bar
   const calcStageHeight = () => window.innerWidth < 576 ? window.innerHeight : window.innerHeight - 40;
@@ -28,7 +28,7 @@ export default function Chart(props) {
   // Diameter of the chart, with padding
   const defaultScaleFactor = Math.min(calcStageHeight() / 680, calcStageWidth() / 680);
 
-  const [scaleFactor, setScaleFactor] = useState(defaultScaleFactor)
+  const [scaleFactor, setScaleFactor] = useState(defaultScaleFactor);
   const [width, setWidth] = useState(calcStageWidth());
   const [height, setHeight] = useState(calcStageHeight());
 
@@ -45,14 +45,17 @@ export default function Chart(props) {
     "mozfullscreenchange",  // Firefox
     "webkitfullscreenchange",  // Chrome, Opera, Safari
     "msfullscreenchange",  // IE and Edge
+    "orientationchange",  // Any mobile browser
   ];
   useEffect(() => {
-    for (let event of resizeEvents)
+    for (let event of resizeEvents) {
       window.addEventListener(event, setDimensions);
+    }
 
     return () => {
-      for (let event of resizeEvents)
+      for (let event of resizeEvents) {
         window.removeEventListener(event, setDimensions);
+      }
     };
   });
 
@@ -79,7 +82,7 @@ export default function Chart(props) {
   const cusps = isZodiacal
     ? (props.outerChart && props.outerChart.cusps) || props.innerChart.cusps
     : DEFAULT_CUSPS;
-  
+
   // Lock Ascendant to left side of chart in zodiacal view
   const rotationalOffset = isZodiacal ? cusps["1"] : 0;
 

@@ -5,16 +5,12 @@ The core calculation routines are handled by the Swiss Ephemeris library and eph
 
 This project is open source under the GNU General Public License V3.
 
-
 ### Running this project
-Make sure that the API is already running
+Make sure that the API is already running locally.
 ```js
 npm i
 npm start
 ```
-
-
-
 
 ### TODO list
 [] Add Asc/MC/EP to aspect list
