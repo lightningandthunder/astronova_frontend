@@ -1,34 +1,42 @@
-@import "../shared/variables.scss";
+@use "../shared/variables.scss";
+@use "../shared/mixins.scss";
 
 .aspect-panel-container {
-    width: 400px;
+    float: right;
+    width: 24%;
 }
 
 .aspect-panel {
-  border-left: 1px solid black;
-  height: calc(100vh - 40px - 48px);
-  overflow-y: auto;
-  width: 100;
-  tr:nth-child(even) {
-    background-color: whitesmoke;
-  }
+    border-left: 1px solid black;
+    height: calc(100vh - 40px - 48px);
+    overflow-y: auto;
+    width: 400px;
+
+    @include mixins.breakpoint(mobile) {
+        display: none;
+    }
+
+    tr:nth-child(even) {
+        background-color: lightgray;
+    }
 }
 
 .aspect-panel table {
-  border-collapse: collapse;
-  width: 100%;
+    border-collapse: collapse;
+    display: table;
+    width: 100%;
 }
 
 .aspect-panel th {
-  background-color: $white;
-  border-bottom: 1px solid darkgrey;
-  box-shadow: 0 1px 0 black;
-  position: sticky;
-  text-align: center;
-  top: 0;
+    background-color: variables.$white;
+    border-bottom: 1px solid darkgrey;
+    box-shadow: 0 1px 0 black;
+    position: sticky;
+    text-align: center;
+    top: 0;
 }
 
 .aspect-panel td {
-  padding: 2px;
-  text-align: center;
+    padding: 2px;
+    text-align: center;
 }

@@ -1,49 +1,49 @@
-@import "../shared/variables.scss";
+@use "../shared/variables.scss";
 
 .chart-list{
-  width: 100%;
+    width: 100%;
 }
 
 .chart-item {
-  color: $white;
-  display: flex;
-  justify-items: center;
-  justify-content: space-between;
-  padding: 2px 4px;
+    color: variables.$white;
+    display: flex;
+    justify-items: center;
+    justify-content: space-between;
+    padding: 2px 4px;
 }
 
 .chart-name {
-  font-size: 1rem;
-  overflow: hidden;
-  max-width: 90%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    font-size: 1rem;
+    overflow: hidden;
+    max-width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .action-icons {
-  display: flex;
-  visibility: hidden;
+    display: flex;
+    visibility: hidden;
 }
 
 .chart-item:hover {
-  background-color: $byzantine;
-  
-  // Display action icons when hovering over line
-  .action-icons {
-    visibility: visible;
-  }
+    background-color: variables.$byzantine;
+
+    // Display action icons when hovering over line
+    .action-icons {
+        visibility: visible;
+    }
 }
 
 .icon {
-  color: $xiketic;
-  font-size: 0.1rem;
+    color: variables.$xiketic;
+    font-size: 0.1rem;
 }
 
 .selected {
-  outline: 2px solid $white;
+    outline: 2px solid variables.$white;
 
-  // Display action icons for selected line
-  .action-icons {
-    visibility: visible;
-  }
+    // Display action icons for selected line
+    .action-icons {
+        visibility: visible;
+    }
 }

@@ -1,15 +1,15 @@
-@import "../shared/variables.scss";
+@use "../shared/variables.scss";
 
 .user-settings-container {
-  background-color: $blue-crayola;
+    background-color: variables.$blue-crayola;
 }
 
 .user-settings {
-  align-items: center; 
-  color: $white;
-  height: calc(100vh - 40px - 48px);
-  overflow-y: auto;
-  text-align: center;
-  width: 20%;
+    align-items: center; 
+    color: variables.$white;
+    height: calc(100vh - 40px - 48px);
+    overflow-y: auto;
+    text-align: center;
+    width: 20%;
 }
 

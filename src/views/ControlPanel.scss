@@ -1,19 +1,25 @@
-@import "../shared/variables.scss";
+@use "../shared/variables.scss";
+@use '../shared/mixins.scss';
 
 .control-panel-container {
-  background-image: linear-gradient(to bottom, $byzantine, $amethyst, $oxford-blue);
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 40px);
-  justify-content: space-between;
-  width: 400px;
+    background-image: linear-gradient(to bottom, variables.$byzantine, variables.$amethyst, variables.$oxford-blue);
+    display: flex;
+    float: right;
+    flex-direction: column;
+    height: calc(100vh - 40px);
+    justify-content: space-between;
+    width: 400px;
+
+    @include mixins.breakpoint(mobile) {
+        display: none;
+    }
 }
 
 .chartlist-container {
-  flex: 1 1 auto;
-  overflow-y: auto;
+    flex: 1 1 auto;
+    overflow-y: auto;
 }
 
 .control-panel-buttons {
-  height: auto;
+    height: auto;
 }

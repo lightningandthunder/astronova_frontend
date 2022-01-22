@@ -1,14 +1,13 @@
 @import "./shared/variables.scss";
 
 html, body {
-  height: 100vh;
-  box-sizing: border-box !important;
+    height: 100vh;
+    box-sizing: border-box !important;
 }
 
 .chart {
-  background-color: $white;
-  float: left;
-  outline: 1px solid black;
+    background-color: $white;
+    float: left;
 }
 
 /* 

@@ -1,60 +1,60 @@
-@import "../shared/variables.scss";
+@use "../shared/variables.scss";
 
 .navbar {
-  height: 40px;
-  background-color: $white;
-  border-bottom: 1px solid $xiketic;
-  justify-content: space-between;
+    height: 40px;
+    background-color: variables.$white;
+    border-bottom: 1px solid variables.$xiketic;
+    justify-content: space-between;
 }
 
 .nova-logo {
-  color: $amethyst;
-  font-size: 2rem;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
+    color: variables.$amethyst;
+    font-size: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 
 .nav-icon-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-icon {
-  display: flex;
-  fill: $blue-crayola;
-  stroke: $blue-crayola;
-  stroke-width: 0.15;
+    display: flex;
+    fill: variables.$blue-crayola;
+    stroke: variables.$blue-crayola;
+    stroke-width: 0.15;
 
-  animation: fadeIn ease 750ms;
-  -webkit-animation: fadeIn ease 750ms;
-  -moz-animation: fadeIn ease 750ms;
-  -o-animation: fadeIn ease 750ms;
-  -ms-animation: fadeIn ease 750ms;
+    animation: fadeIn ease 750ms;
+    -webkit-animation: fadeIn ease 750ms;
+    -moz-animation: fadeIn ease 750ms;
+    -o-animation: fadeIn ease 750ms;
+    -ms-animation: fadeIn ease 750ms;
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity:1; }
 }
 
 @-moz-keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity:1; }
 }
 
 @-webkit-keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity:1; }
 }
 
 @-o-keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity:1; }
 }
 
 @-ms-keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity:1; }
+    0% { opacity: 0; }
+    100% { opacity:1; }
 }
