@@ -12,13 +12,7 @@
     overflow-y: auto;
     width: 400px;
 
-    @include mixins.breakpoint(mobile) {
-        display: none;
-    }
-
-    tr:nth-child(even) {
-        background-color: lightgray;
-    }
+    @include mixins.sidebar
 }
 
 .aspect-panel table {

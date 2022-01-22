@@ -9,3 +9,12 @@
         @media (max-width: 37.5em) { @content ; }
     }
 }
+
+@mixin sidebar {
+    max-width: 500px;
+    width: calc(25vw - 15px);
+
+    @include breakpoint(mobile) {
+        display: none;
+    }
+}

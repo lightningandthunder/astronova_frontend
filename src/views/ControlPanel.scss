@@ -8,11 +8,8 @@
     flex-direction: column;
     height: calc(100vh - 40px);
     justify-content: space-between;
-    width: 400px;
-
-    @include mixins.breakpoint(mobile) {
-        display: none;
-    }
+  
+    @include mixins.sidebar
 }
 
 .chartlist-container {
